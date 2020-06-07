@@ -1,0 +1,12 @@
+{
+    "name": "@cxist/xcloud-grid",
+    "version": "0.0.0",
+    "peerDependencies": {
+        "@angular/common": "^9.1.3",
+        "@angular/core": "^9.1.3",
+        "tslib": "^1.10.0",
+        "primeng": "^9.0.6",
+        "@byzan/orion2": "^0.2.42743",
+        "uuid": "^8.1.0"
+    }
+}

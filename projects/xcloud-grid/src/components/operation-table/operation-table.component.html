@@ -1,0 +1,23 @@
+<table #table>
+    <thead>
+        <tr class="table-row">
+            <ng-container>
+                <th class="table-cell operation">操作</th>
+            </ng-container>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor='let rowData of datas;trackBy:trackByDataFn'>
+            <tr class="table-row" [class.hidden]='rowData["_hidden"]' [tableStateRow]='rowData'
+                [enableRowState]='enableRowState' [class.active]='rowData["_active"]'>
+                <td class="table-cell operation">
+                    <byz-button class="op-button" icon="byz-icon bi-arrow-ios-downward"
+                        (click)='showAdvanceSetting($event,rowData)'></byz-button>
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
+
+<p-slideMenu appendTo="body" #menu [model]="advanceButtonMenu" [popup]="true" #advanceButtonMenuCt>
+</p-slideMenu>

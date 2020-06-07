@@ -1,0 +1,8 @@
+<div class="filter-item-box" (click)='editItem()'>
+    <span class="field" *ngIf='field'>
+        {{fieldName}}
+        {{operatorName}}
+    </span>
+    <span class="value" *ngIf='text'>{{text}}</span>
+</div>
+<div class="close" *ngIf='text' (click)='deleteItem()'>×</div>
