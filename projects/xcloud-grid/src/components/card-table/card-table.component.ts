@@ -34,16 +34,6 @@ export class CardTableComponent implements OnInit {
             .subscribe(views => {
                 let view: IFilterView = views.filter(x => x['_active'])[0];
                 this.columns = view.columns.filter(x => !x['_invisibale']);
-                console.log(1, this.columns,this.datas);
-                // if (this.nestedDataLevel > 1) {
-                //     if (this.tableType === 'unfrozen') {
-                //         this.shownNestedData = !cols.some(x => x['_frozen']);
-                //     } else if (this.tableType === 'frozen') {
-                //         this.shownNestedData = cols.some(x => x['_frozen']);
-                //     } else {
-                //         //
-                //     }
-                // }
             });
     }
 
