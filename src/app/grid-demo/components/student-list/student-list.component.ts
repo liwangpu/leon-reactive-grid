@@ -34,13 +34,18 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
             },
             {
                 field: 'age',
-                name: '年纪',
+                name: '年纪很长很长的名字哈哈哈哈12323213',
                 fieldType: ColumnTypeEnum.String,
                 sort: true
             },
             {
                 field: 'address',
                 name: '地址',
+                fieldType: ColumnTypeEnum.String
+            },
+            {
+                field: 'remark',
+                name: '备注',
                 fieldType: ColumnTypeEnum.String
             }
         ];

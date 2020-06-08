@@ -1,0 +1,32 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    // table-layout: fixed;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+        tr {
+            &.event {
+                background-color: #F9F9F9;
+            }
+
+            td {
+                // text-align: center;
+                padding: .5em;
+                border: none;
+
+                &:first-of-type {
+                    // width: 5em;
+                    // overflow: hidden;
+                    font-weight: bold;
+                    // white-space: nowrap;
+                    // text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+}

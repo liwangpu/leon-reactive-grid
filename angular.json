@@ -114,7 +114,7 @@
             "projectType": "library",
             "root": "projects/xcloud-grid",
             "sourceRoot": "projects/xcloud-grid/src",
-            "prefix": "@cxist/xcloud-grid",
+            "prefix": "xcloud-grid",
             "schematics": {
                 "@schematics/angular:component": {
                     "style": "scss",

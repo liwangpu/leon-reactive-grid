@@ -8,7 +8,7 @@ import { IQueryResult } from '@cxist/xcloud-grid';
 @Injectable()
 export class StudentService {
 
-    private uri: string = 'http://localhost:3000/student';
+    private uri: string = 'http://192.168.69.155:3000/student';
     public constructor(private http: HttpClient) { }
 
     public query(param?: { [key: string]: any }): Observable<IQueryResult> {

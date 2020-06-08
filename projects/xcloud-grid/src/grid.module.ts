@@ -33,16 +33,18 @@ import { DynamicStyleWidthDirective } from './directives/dynamic-style-width.dir
 import { SortTableColumnDirective } from './directives/sort-table-column.directive';
 import { SyncScrollAreaDirective } from './directives/sync-scroll-area.directive';
 import { TableStateRowDirective } from './directives/table-state-row.directive';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CardTableComponent } from './components/card-table/card-table.component';
 
 @NgModule({
-    declarations: [SortTableColumnDirective, ColumResizerHandlerDirective, GridHeaderComponent, ColumnVisualEditingPanelComponent, ColumnFilterPanelComponent, FilterItemBoxComponent, FilterItemSettingPanelComponent, ColumnFilterViewEditPanelComponent, GridContentComponent, GridFooterComponent, DynamicStyleWidthDirective, GridComponent, SyncScrollPanelComponent, ToolTableComponent, UnFrozenTableComponent, FrozenTableComponent, OperationTableComponent, TableStateRowDirective, SyncScrollAreaDirective, TransferComponent],
+    declarations: [SortTableColumnDirective, ColumResizerHandlerDirective, GridHeaderComponent, ColumnVisualEditingPanelComponent, ColumnFilterPanelComponent, FilterItemBoxComponent, FilterItemSettingPanelComponent, ColumnFilterViewEditPanelComponent, GridContentComponent, GridFooterComponent, DynamicStyleWidthDirective, GridComponent, SyncScrollPanelComponent, ToolTableComponent, UnFrozenTableComponent, FrozenTableComponent, OperationTableComponent, TableStateRowDirective, SyncScrollAreaDirective, TransferComponent, CardTableComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,
         FormsModule,
         DragDropModule,
         ScrollingModule,
-        // DynamicDialogModule,
+        FlexLayoutModule,
         SlideMenuModule,
         PaginatorModule,
         ButtonModule,

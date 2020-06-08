@@ -1,0 +1,17 @@
+<table>
+    <!-- <tr *ngFor='let rowData of datas;trackBy:trackByDataFn'>
+        <ng-container *ngFor='let col of columns'>
+            <td>{{col.name}}</td>
+            <td>{{rowData[col.field]}}</td>
+        </ng-container>
+    </tr> -->
+
+    <ng-container *ngFor='let rowData of datas;let i=index;trackBy:trackByDataFn'>
+        <ng-container *ngFor='let col of columns'>
+            <tr [class]='i%2==0?"odd":"event"'>
+                <td>{{col.name}}</td>
+                <td>{{rowData[col.field]}}</td>
+            </tr>
+        </ng-container>
+    </ng-container>
+</table>

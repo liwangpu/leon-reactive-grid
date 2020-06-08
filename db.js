@@ -9,7 +9,8 @@ module.exports = () => {
             id: `${Date.now()}@${i}@${faker.random.uuid()}`,
             name: faker.name.findName(),
             age: faker.random.number({ min: 5, max: 35 }),
-            address: faker.address.streetAddress()
+            address: faker.address.streetAddress(),
+            remark: faker.random.words()
         };
         data.student.push(s);
     }

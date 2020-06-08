@@ -1,7 +1,7 @@
-import { Component, Inject, inject, OnInit, Optional } from '@angular/core';
+import { Component, Inject, inject, OnInit, Optional, OnDestroy } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
-import { combineLatest, from, Observable } from 'rxjs';
-import { auditTime, take, tap } from 'rxjs/operators';
+import { combineLatest, from, Observable, Subject } from 'rxjs';
+import { auditTime, take, tap, takeUntil } from 'rxjs/operators';
 import { ColumnTypeEnum } from '../../enums/column-type-enum.enum';
 import { DataFlowTopicEnum } from '../../enums/data-flow-topic.enum';
 import { MessageFlowEnum } from '../../enums/message-flow.enum';
@@ -19,6 +19,7 @@ import { ArrayTool } from '../../utils/array-tool';
 import { ExpressionTranslater } from '../../utils/expression-translater';
 import { dataMap, topicFilter, tupleMap } from '../../utils/grid-tool';
 import { ObjectTool } from '../../utils/object-tool';
+import { MediaObserver } from '@angular/flex-layout';
 
 @Component({
     selector: 'xcloud-grid',
@@ -31,13 +32,14 @@ import { ObjectTool } from '../../utils/object-tool';
         GridMessageFlowService
     ]
 })
-export class GridComponent implements OnInit {
+export class GridComponent implements OnInit, OnDestroy {
 
     public noPagination: boolean = false;
     private columns: Array<ITableColumn>;
     private nestedDataLevel: number = 0;
     private nestedToggleField: string;
     private latestFilterViews: [Array<IFilterView>] = [null];
+    private destroy$: Subject<boolean> = new Subject<boolean>();
     public constructor(
         @Optional() @Inject(QUERYPARAMTRANSFORMPOLICY)
         private queryParamTransformPolicy: IQueryParamTransformPolicy,
@@ -46,7 +48,8 @@ export class GridComponent implements OnInit {
         private dstore: DStore,
         private cache: GridDataService,
         private dataFlow: GridDataFlowService,
-        private messageFlow: GridMessageFlowService
+        private messageFlow: GridMessageFlowService,
+        public mediaObserver: MediaObserver
     ) {
         this.dstore.registryGridStartup(option => {
             // console.log('option', option);
@@ -85,10 +88,15 @@ export class GridComponent implements OnInit {
             // this.dataFlow.publish(DataFlowTopicEnum._History, option.otherQueryParams || {});
             this.dataFlow.publish(DataFlowTopicEnum._History, this.cache.getHistory());
         });
-
         // log整个表格通讯信息
         // this.dataFlow.message.subscribe(ms => console.log('dt message:', ms));
         // this.messageFlow.message.subscribe(ms => console.log('ms message:', ms));
+    }
+
+    public ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
+        this.destroy$.unsubscribe();
     }
 
     public refreshQuery(history?: { view?: string; keyword?: string; page?: number; limit?: number; field?: string; direction?: string }): void {
