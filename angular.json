@@ -172,6 +172,70 @@
                     }
                 }
             }
+        },
+        "dgrid": {
+            "projectType": "library",
+            "root": "projects/dgrid",
+            "sourceRoot": "projects/dgrid/src",
+            "prefix": "dgrid",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss",
+                    "skipTests": true
+                },
+                "@schematics/angular:class": {
+                    "skipTests": true
+                },
+                "@schematics/angular:directive": {
+                    "skipTests": true
+                },
+                "@schematics/angular:guard": {
+                    "skipTests": true
+                },
+                "@schematics/angular:module": {
+                    "skipTests": true
+                },
+                "@schematics/angular:pipe": {
+                    "skipTests": true
+                },
+                "@schematics/angular:service": {
+                    "skipTests": true
+                }
+            },
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "options": {
+                        "tsConfig": "projects/dgrid/tsconfig.lib.json",
+                        "project": "projects/dgrid/ng-package.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "tsConfig": "projects/dgrid/tsconfig.lib.prod.json"
+                        }
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/dgrid/src/test.ts",
+                        "tsConfig": "projects/dgrid/tsconfig.spec.json",
+                        "karmaConfig": "projects/dgrid/karma.conf.js"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "projects/dgrid/tsconfig.lib.json",
+                            "projects/dgrid/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
         }
     },
     "defaultProject": "leon-reactive-grid",

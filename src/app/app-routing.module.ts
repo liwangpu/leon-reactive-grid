@@ -12,8 +12,12 @@ const routes: Routes = [
         path: 'grid-demo',
         loadChildren: () => import('./grid-demo/grid-demo.module').then(m => m.GridDemoModule)
     },
-    // { path: '**', redirectTo: '' }
-    { path: '**', redirectTo: 'grid-demo/student-list' }
+    {
+        path: 'dgrid-demo',
+        loadChildren: () => import('./dgrid-demo/dgrid-demo.module').then(m => m.DGridDemoModule)
+    },
+    { path: '**', redirectTo: '' }
+    // { path: '**', redirectTo: 'grid-demo/student-list' }
 ];
 
 @NgModule({
