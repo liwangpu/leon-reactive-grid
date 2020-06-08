@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { DStore } from '../../models';
 
 @Component({
-  selector: 'dgrid',
-  templateUrl: './grid.component.html',
-  styleUrls: ['./grid.component.scss']
+    selector: 'dgrid',
+    templateUrl: './grid.component.html',
+    styleUrls: ['./grid.component.scss']
 })
 export class GridComponent implements OnInit {
 
-  constructor() { }
+    constructor(
+        private dstore: DStore
+    ) { }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+    }
 
 }

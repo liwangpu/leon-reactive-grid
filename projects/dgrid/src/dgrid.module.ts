@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GridComponent } from './components/grid/grid.component';
-import { GridHeaderComponent } from './components/grid-header/grid-header.component';
-import { GridContentComponent } from './components/grid-content/grid-content.component';
-import { GridFooterComponent } from './components/grid-footer/grid-footer.component';
+import { GridComponent, GridHeaderComponent, GridContentComponent, GridFooterComponent } from './components';
+
 
 @NgModule({
-  declarations: [GridComponent, GridHeaderComponent, GridContentComponent, GridFooterComponent],
-  imports: [
-    CommonModule
-  ]
+    declarations: [GridComponent, GridHeaderComponent, GridContentComponent, GridFooterComponent],
+    imports: [
+        CommonModule
+    ],
+    exports: [
+        GridComponent
+    ]
 })
 export class DGridModule { }
