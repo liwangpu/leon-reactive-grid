@@ -1,7 +1,7 @@
 <div class="grid-header">
     <div class="left-part">
-        <ng-content select='[headerLeftPartPanelTopTemplate]'></ng-content>
-        <div class="view slm">
+        <ng-content select='[headerLeftPartPanelTopTemplate]' *ngIf='displayMode==="browser"'></ng-content>
+        <div class="view slm" *ngIf='displayMode==="browser"'>
             <byz-select *ngIf='enableFilterView' [options]="allViews" [ngModel]="activeView"
                 (ngModelChange)='activeView=$event;changeActiveView()' [showClear]="false"></byz-select>
             <p class="filter-tip" [class.show]='sortTip||filterTip'>
@@ -26,11 +26,11 @@
                 tooltipPosition="bottom"></byz-button>
             <byz-button class="slm" type="default" icon="byz-icon bi-settings"
                 (click)="closeFilterPanel();advanceSettingMenuCt.toggle($event)" byzTooltip="设置"
-                tooltipPosition="bottom"></byz-button>
+                tooltipPosition="bottom" *ngIf='displayMode==="browser"'></byz-button>
             <byz-button class="slm" type="default" icon="byz-icon bi-refresh" (click)='refresh()' byzTooltip="刷新"
                 tooltipPosition="bottom"></byz-button>
             <byz-button class="slm" type="default" icon="byz-icon bi-funnel" (click)='toggleFilterPanel()'
-                byzTooltip="筛选器" tooltipPosition="bottom">
+                byzTooltip="筛选器" tooltipPosition="bottom" *ngIf='displayMode==="browser"'>
             </byz-button>
         </div>
     </div>

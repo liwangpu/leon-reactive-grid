@@ -7,6 +7,7 @@
             "primeng/dropdown": "primeng/dropdown",
             "primeng/inputtext": "primeng/inputtext",
             "primeng/button": "primeng/button",
+            "@angular/flex-layout": "@angular/flex-layout",
             "@byzan/orion2": "@byzan/orion2",
             "primeng/checkbox": "primeng/checkbox",
             "primeng/overlaypanel": "primeng/overlaypanel",

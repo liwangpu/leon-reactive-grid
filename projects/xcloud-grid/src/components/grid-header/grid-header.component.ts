@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogService } from '@byzan/orion2';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Observable } from 'rxjs';
@@ -23,6 +23,8 @@ import { ITransferItem } from '../transfer/transfer.component';
 })
 export class GridHeaderComponent implements OnInit {
 
+    @Input()
+    public displayMode: string;
     public sortTip: string;
     public filterTip: string;
     public enableFilterView: boolean = false;

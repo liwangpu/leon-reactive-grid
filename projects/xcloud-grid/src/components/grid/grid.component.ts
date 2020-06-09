@@ -1,7 +1,8 @@
-import { Component, Inject, inject, OnInit, Optional, OnDestroy } from '@angular/core';
+import { Component, Inject, inject, OnDestroy, OnInit, Optional } from '@angular/core';
+import { MediaObserver } from '@angular/flex-layout';
 import { DialogService } from 'primeng/dynamicdialog';
 import { combineLatest, from, Observable, Subject } from 'rxjs';
-import { auditTime, take, tap, takeUntil } from 'rxjs/operators';
+import { auditTime, map, take, takeUntil, tap } from 'rxjs/operators';
 import { ColumnTypeEnum } from '../../enums/column-type-enum.enum';
 import { DataFlowTopicEnum } from '../../enums/data-flow-topic.enum';
 import { MessageFlowEnum } from '../../enums/message-flow.enum';
@@ -19,7 +20,6 @@ import { ArrayTool } from '../../utils/array-tool';
 import { ExpressionTranslater } from '../../utils/expression-translater';
 import { dataMap, topicFilter, tupleMap } from '../../utils/grid-tool';
 import { ObjectTool } from '../../utils/object-tool';
-import { MediaObserver } from '@angular/flex-layout';
 
 @Component({
     selector: 'xcloud-grid',
@@ -34,6 +34,7 @@ import { MediaObserver } from '@angular/flex-layout';
 })
 export class GridComponent implements OnInit, OnDestroy {
 
+    public displayMode: string;
     public noPagination: boolean = false;
     private columns: Array<ITableColumn>;
     private nestedDataLevel: number = 0;
@@ -88,6 +89,12 @@ export class GridComponent implements OnInit, OnDestroy {
             // this.dataFlow.publish(DataFlowTopicEnum._History, option.otherQueryParams || {});
             this.dataFlow.publish(DataFlowTopicEnum._History, this.cache.getHistory());
         });
+
+        // tslint:disable-next-line: deprecation
+        mediaObserver.media$
+            .pipe(takeUntil(this.destroy$))
+            .pipe(map(m => m.mqAlias === 'xs' ? 'mobile' : 'browser'))
+            .subscribe(mode => this.displayMode = mode);
         // log整个表格通讯信息
         // this.dataFlow.message.subscribe(ms => console.log('dt message:', ms));
         // this.messageFlow.message.subscribe(ms => console.log('ms message:', ms));

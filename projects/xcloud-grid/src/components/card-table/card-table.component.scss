@@ -18,14 +18,16 @@
                 // text-align: center;
                 padding: .5em;
                 border: none;
+                // white-space: ;
+                // overflow-wrap: break-word;
+                word-break: break-all;
 
                 &:first-of-type {
-                    // width: 5em;
-                    // overflow: hidden;
+                    min-width: 7em;
                     font-weight: bold;
-                    // white-space: nowrap;
-                    // text-overflow: ellipsis;
                 }
+
+                &:last-of-type {}
             }
         }
     }

@@ -2,6 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule as OrionButtonModule, CheckboxModule as OrionCheckboxModule, DynamicDialogModule as OrionDynamicDialogModule, DynamicDialogService, FormModule as OrionFormModule, InputModule as OrionInputModule, RadioButtonModule as OrionRadioButtonModule, SelectModule as OrionSelectModule, SplitButtonModule as OrionSplitButtonModule, TooltipModule as OrionTooltipModule } from '@byzan/orion2';
 import { ButtonModule } from 'primeng/button';
@@ -13,6 +14,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SlideMenuModule } from 'primeng/slidemenu';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { CardTableComponent } from './components/card-table/card-table.component';
 import { ColumnFilterPanelComponent } from './components/column-filter-panel/column-filter-panel.component';
 import { ColumnFilterViewEditPanelComponent } from './components/column-filter-view-edit-panel/column-filter-view-edit-panel.component';
 import { ColumnVisualEditingPanelComponent } from './components/column-visual-editing-panel/column-visual-editing-panel.component';
@@ -33,8 +35,6 @@ import { DynamicStyleWidthDirective } from './directives/dynamic-style-width.dir
 import { SortTableColumnDirective } from './directives/sort-table-column.directive';
 import { SyncScrollAreaDirective } from './directives/sync-scroll-area.directive';
 import { TableStateRowDirective } from './directives/table-state-row.directive';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { CardTableComponent } from './components/card-table/card-table.component';
 
 @NgModule({
     declarations: [SortTableColumnDirective, ColumResizerHandlerDirective, GridHeaderComponent, ColumnVisualEditingPanelComponent, ColumnFilterPanelComponent, FilterItemBoxComponent, FilterItemSettingPanelComponent, ColumnFilterViewEditPanelComponent, GridContentComponent, GridFooterComponent, DynamicStyleWidthDirective, GridComponent, SyncScrollPanelComponent, ToolTableComponent, UnFrozenTableComponent, FrozenTableComponent, OperationTableComponent, TableStateRowDirective, SyncScrollAreaDirective, TransferComponent, CardTableComponent],

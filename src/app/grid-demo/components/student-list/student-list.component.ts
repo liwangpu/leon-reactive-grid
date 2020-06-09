@@ -20,7 +20,9 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.gridStartup();
+        this.gridStartup({
+            selectMode: 'single'
+        });
     }
 
 
@@ -54,6 +56,10 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
 
     public onQuery(queryParam?: { [key: string]: any; }): Promise<IQueryResult<any>> {
         return this.studentSrv.query(queryParam).toPromise();
+    }
+
+    public async onDataSelected(datas: Array<any>): Promise<void> {
+        console.log('selected', datas);
     }
 
 }
