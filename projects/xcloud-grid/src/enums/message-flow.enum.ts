@@ -9,5 +9,6 @@ export enum MessageFlowEnum {
     RowSelected = 'RowSelected',
     LinkFieldClick = 'LinkFieldClick',
     OperationButtonClick = 'OperationButtonClick',
-    ResetQueryParam = 'ResetQueryParam'
+    ResetQueryParam = 'ResetQueryParam',
+    GridDisplayMode = 'GridDisplayMode'
 }

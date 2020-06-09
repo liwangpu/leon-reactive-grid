@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { DataFlowTopicEnum } from '../../enums/data-flow-topic.enum';
@@ -18,6 +18,8 @@ import { dataMap, topicFilter } from '../../utils/grid-tool';
 })
 export class GridFooterComponent implements OnInit {
 
+    @Input()
+    public displayMode: string;
     public rows: number;
     public rowsPerPageOptions: Array<number>;
     public dataTotal: number = 0;

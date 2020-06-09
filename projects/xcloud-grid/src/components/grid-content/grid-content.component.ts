@@ -1,6 +1,6 @@
-import { Component, ComponentFactoryResolver, HostListener, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Component, ComponentFactoryResolver, HostListener, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { forkJoin, merge, Observable, Subject } from 'rxjs';
-import { delay, take, takeUntil, map } from 'rxjs/operators';
+import { delay, take } from 'rxjs/operators';
 import { DataFlowTopicEnum } from '../../enums/data-flow-topic.enum';
 import { MessageFlowEnum } from '../../enums/message-flow.enum';
 import { DStoreOption } from '../../models/i-dstore';
@@ -16,7 +16,6 @@ import { ArrayTool } from '../../utils/array-tool';
 import { dataMap, topicFilter } from '../../utils/grid-tool';
 import { ColumnFilterPanelComponent } from '../column-filter-panel/column-filter-panel.component';
 import { SyncScrollPanelComponent } from '../sync-scroll-panel/sync-scroll-panel.component';
-import { MediaObserver } from '@angular/flex-layout';
 
 @Component({
     selector: 'xcloud-grid-content',
@@ -25,6 +24,8 @@ import { MediaObserver } from '@angular/flex-layout';
 })
 export class GridContentComponent implements OnInit, OnDestroy {
 
+    @Input()
+    public displayMode: string;
     public radioSelect: string;
     public enableColumnFrozen: boolean = true;
     public selectMode: string;
@@ -38,7 +39,6 @@ export class GridContentComponent implements OnInit, OnDestroy {
     public showFilterView: boolean = false;
     public showOperationTable: boolean = false;
     public syncMasterAreaConfirm: boolean = false;
-    public displayMode: 'table' | 'card' = 'table';
     @ViewChildren(ResizableTable) public tables: QueryList<ResizableTable>;
     @ViewChild(SyncScrollPanelComponent, { static: true })
     private syncScrollPanel: SyncScrollPanelComponent;
@@ -51,15 +51,8 @@ export class GridContentComponent implements OnInit, OnDestroy {
         private cache: GridDataService,
         private dataFlow: GridDataFlowService,
         private messageFlow: GridMessageFlowService,
-        private cfr: ComponentFactoryResolver,
-        public mediaObserver: MediaObserver
+        private cfr: ComponentFactoryResolver
     ) {
-        mediaObserver.media$
-            .pipe(takeUntil(this.destroy$))
-            .pipe(map(m => m.mqAlias === 'xs'))
-            .subscribe(card => {
-                this.displayMode = card ? 'card' : 'table';
-            });
     }
 
     public ngOnDestroy(): void {
@@ -126,9 +119,6 @@ export class GridContentComponent implements OnInit, OnDestroy {
                 // console.log(1,this.unfrozenColumns);
                 // console.log(1,this.frozenColumns);
             });
-
-        // closePanelObs
-        //     .subscribe(() => this.showFilterView = false);
 
         togglePanelObs
             .subscribe(open => {
