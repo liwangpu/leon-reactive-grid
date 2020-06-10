@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-
+import { StoreModule } from '@ngrx/store';
+import { gridReducer } from './reducer';
 
 @NgModule({
-    providers: [
-
+    imports: [
+        StoreModule.forFeature('grid', gridReducer)
     ]
 })
 export class GridStoreModule { }

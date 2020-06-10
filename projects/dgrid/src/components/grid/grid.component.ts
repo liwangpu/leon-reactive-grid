@@ -13,7 +13,8 @@ import { GridStoreService } from '../../services/grid-store.service';
 export class GridComponent implements OnInit {
 
     public constructor(
-        private dstore: DStore
+        private dstore: DStore,
+        private srv:GridStoreService
     ) { }
 
     public ngOnInit(): void {
