@@ -12,11 +12,11 @@ import { GridStoreService } from '../../services/grid-store.service';
 })
 export class GridComponent implements OnInit {
 
-    constructor(
+    public constructor(
         private dstore: DStore
     ) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
     }
 
 }

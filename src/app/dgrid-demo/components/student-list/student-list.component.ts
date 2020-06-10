@@ -20,7 +20,7 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.gridStartup();
+        // this.gridStartup();
     }
 
     public async getColumns(): Promise<Array<ITableColumn>> {
