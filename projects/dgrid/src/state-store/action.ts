@@ -11,4 +11,4 @@ export class SingleValue<T = any> {
 
 export const initializeGridData = createAction('[grid] grid init', props<SingleValue>());
 
-export const initPagination = createAction('[grid] pagination init', props<IGridPagination>());
+export const changePagination = createAction('[grid] pagination init', props<IGridPagination>());

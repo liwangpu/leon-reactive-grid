@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { DStore } from '../../models';
-import { GridStoreService } from '../../services';
+import { GridToolService } from '../../services';
 import { GRIDCONFIG, IGridConfig } from '../../tokens';
 
 @Component({
@@ -8,7 +8,7 @@ import { GRIDCONFIG, IGridConfig } from '../../tokens';
     templateUrl: './grid.component.html',
     styleUrls: ['./grid.component.scss'],
     providers: [
-        GridStoreService
+        GridToolService
     ]
 })
 export class GridComponent implements OnInit {
@@ -17,9 +17,10 @@ export class GridComponent implements OnInit {
         @Inject(GRIDCONFIG)
         private config: IGridConfig,
         private dstore: DStore,
-        private gridStoreSrv: GridStoreService
+        private toolSrv: GridToolService
     ) {
 
+        this.toolSrv.changePagination(1, this.config.rowsPerPageOptions[0]);
     }
 
     public ngOnInit(): void {

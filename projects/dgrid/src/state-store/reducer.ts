@@ -1,11 +1,14 @@
 import { createReducer, on } from '@ngrx/store';
-import { initializeGridData } from './action';
-import { IGridState } from './state';
-import { SingleValue } from './single-value';
+import { initializeGridData, SingleValue, changePagination } from './action';
+import { IGridState, IGridPagination, IGridData } from './state';
 
 const _gridReducer = createReducer({},
-    on(initializeGridData, (state: IGridState, action: SingleValue<string>) => {
+    on(initializeGridData, (state: { [key: string]: IGridData }, action: SingleValue<string>) => {
         return { ...state, [action.value]: {} };
+    }),
+    on(changePagination, (state: { [key: string]: IGridData }, action: IGridPagination) => {
+        let grid = state[action.id];
+        return { ...state, [action.id]: { ...grid, pagination: { page: action.page, limit: action.limit } } };
     })
 );
 
