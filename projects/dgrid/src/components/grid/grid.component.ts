@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DStore } from '../../models';
-import { GridStoreService } from '../../services/grid-store.service';
+import { GridStoreService } from '../../services';
+import { GRIDCONFIG, IGridConfig } from '../../tokens';
 
 @Component({
     selector: 'dgrid',
@@ -13,9 +14,13 @@ import { GridStoreService } from '../../services/grid-store.service';
 export class GridComponent implements OnInit {
 
     public constructor(
+        @Inject(GRIDCONFIG)
+        private config: IGridConfig,
         private dstore: DStore,
-        private srv:GridStoreService
-    ) { }
+        private gridStoreSrv: GridStoreService
+    ) {
+
+    }
 
     public ngOnInit(): void {
     }

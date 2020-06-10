@@ -1,4 +1,14 @@
 import { createAction, props } from '@ngrx/store';
-import { SingleValue } from './single-value';
+import { IGridPagination } from './state';
 
-export const initializeGridData = createAction('[grid] data init', props<SingleValue>());
+export class SingleValue<T = any> {
+    public constructor(public readonly value: T) { }
+    public static from(value: any): SingleValue {
+        return new SingleValue(value);
+    }
+}
+
+
+export const initializeGridData = createAction('[grid] grid init', props<SingleValue>());
+
+export const initPagination = createAction('[grid] pagination init', props<IGridPagination>());
