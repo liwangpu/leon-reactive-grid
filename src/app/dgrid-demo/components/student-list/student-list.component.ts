@@ -1,5 +1,5 @@
 import { Component, OnInit, forwardRef } from '@angular/core';
-import { DStore } from 'dgrid';
+import { DStore, LocalViewDStore, ITableColumn, IQueryResult } from 'dgrid';
 
 @Component({
     selector: 'app-student-list',
@@ -12,12 +12,23 @@ import { DStore } from 'dgrid';
         }
     ]
 })
-export class StudentListComponent implements OnInit {
+export class StudentListComponent extends LocalViewDStore implements OnInit {
 
-    constructor() { }
+
+    public constructor() {
+        super();
+    }
 
     public ngOnInit(): void {
         this.gridStartup();
+    }
+
+    public async getColumns(): Promise<Array<ITableColumn>> {
+        return [];
+    }
+
+    public async onQuery(queryParam?: { [key: string]: any; }): Promise<IQueryResult<any>> {
+        return {};
     }
 
 }
