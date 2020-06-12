@@ -22,7 +22,6 @@ export class GridStoreService {
         this.store.dispatch(fromStore.changeActiveView({ id: this.gridId, viewId }));
     }
 
-
     public changePagination(page: number, limit: number): void {
         this.store.dispatch(fromStore.changePagination({ id: this.gridId, page, limit }));
     }
