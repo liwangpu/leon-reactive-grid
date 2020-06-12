@@ -20,7 +20,7 @@ export class GridStoreService {
 
     public get views$(): Observable<any> {
         if (!this._views$) {
-            this._views$ = this.store.select(fromStore.selectGrid('234234'));
+            this._views$ = this.store.select(fromStore.selectGrid(this.gridId));
         }
         return this._views$;
     }
