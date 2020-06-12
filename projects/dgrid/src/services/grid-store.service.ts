@@ -3,15 +3,26 @@ import { v4 as uuidv4 } from 'uuid';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../grid-store';
 import * as fromModel from '../models';
+import { Observable } from 'rxjs';
+
+
 
 @Injectable()
 export class GridStoreService {
 
     public readonly gridId: string;
+    private _views$: Observable<Array<fromModel.IFilterView>>;
     public constructor(private store: Store<fromStore.IGridState>) {
         // this.gridId = `${uuidv4()}##${Date.now()}`;
         this.gridId = `${Date.now()}`;
         this.store.dispatch(fromStore.initGrid({ id: this.gridId }));
+    }
+
+    public get views$(): Observable<Array<fromModel.IFilterView>> {
+        if (!this._views$) {
+            this._views$ = this.store.select(fromStore.selectViews(this.gridId));
+        }
+        return this._views$;
     }
 
     public initViews(views: Array<fromModel.IFilterView>): void {
