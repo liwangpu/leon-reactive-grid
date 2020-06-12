@@ -5,3 +5,4 @@ import * as fromModel from '../models';
 export const initGrid = createAction('[DGrid] init grid', props<{ id: string }>());
 export const initViews = createAction('[DGrid] init views', props<{ id: string; views: Array<fromModel.IFilterView> }>());
 export const changePagination = createAction('[DGrid] change pagination', props<{ id: string; page?: number; limit?: number }>());
+export const changeActiveView = createAction('[DGrid] change active view', props<{ id: string, viewId: string }>());

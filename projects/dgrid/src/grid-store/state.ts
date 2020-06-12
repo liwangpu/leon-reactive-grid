@@ -7,6 +7,7 @@ export interface IGridState {
 
 export interface IGridData {
     pagination?: IGridPagination;
+    activeViewId?: string;
     view: { [key: string]: fromModel.IFilterView };
 }
 

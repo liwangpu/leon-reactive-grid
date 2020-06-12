@@ -7,15 +7,18 @@ export const gridReducer = createReducer(
     on(fromAction.initGrid, (state, { id }) => {
         return { ...state, [id]: {} };
     }),
-    on(fromAction.changePagination, (state: { [key: string]: fromState.IGridData }, { id, page, limit }) => {
+    on(fromAction.changePagination, (state: {}, { id, page, limit }) => {
         return { ...state, [id]: { ...state[id], pagination: { page, limit } } };
     }),
-    on(fromAction.initViews, (state: { [key: string]: fromState.IGridData }, { id, views }) => {
+    on(fromAction.initViews, (state: {}, { id, views }) => {
         let view: { [key: string]: any } = {};
         views.forEach(v => {
             view[v.id] = v;
         });
         return { ...state, [id]: { ...state[id], view } };
+    }),
+    on(fromAction.changeActiveView, (state: {}, { id, viewId }) => {
+        return { ...state, [id]: { ...state[id], viewId } };
     })
 );
 
