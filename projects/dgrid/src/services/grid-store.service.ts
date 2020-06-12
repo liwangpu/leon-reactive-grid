@@ -8,14 +8,15 @@ import * as fromStore from '../grid-store';
 export class GridStoreService {
 
     public readonly gridId: string;
-    public constructor(private store: Store<fromStore.GridState>) {
+    public constructor(private store: Store<fromStore.IGridState>) {
         this.gridId = `${uuidv4()}##${Date.now()}`;
-        this.store.dispatch(fromStore.addGrid({ grid: { id: this.gridId } }));
+        this.store.dispatch(fromStore.initGrid({ id: this.gridId }));
+        // console.log(1, this.gridId);
     }
 
 
     public changePagination(page: number, limit: number) {
-        // this.store.dispatch(changePagination({ id: this.gridId, page, limit }));
+        this.store.dispatch(fromStore.changePagination({ id: this.gridId, page, limit }));
     }
 
 }

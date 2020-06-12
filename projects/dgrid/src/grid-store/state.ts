@@ -1,14 +1,13 @@
-import { EntityState } from '@ngrx/entity';
-
-export interface GridState extends EntityState<IGrid> {
-
+export interface IGridState {
+    grid: { [key: string]: IGridData }
 }
 
 
-export interface IGrid {
-    id: string;
+export interface IGridData {
+    pagination?: IGridPagination;
 }
 
-export interface IGrid {
-
+export interface IGridPagination {
+    page?: number;
+    limit?: number;
 }
