@@ -1,5 +1,5 @@
 import { Component, OnInit, forwardRef } from '@angular/core';
-import { DStore, LocalViewDStore, ITableColumn, IQueryResult } from 'dgrid';
+import * as fromDGrid from 'dgrid';
 
 @Component({
     selector: 'app-student-list',
@@ -7,12 +7,12 @@ import { DStore, LocalViewDStore, ITableColumn, IQueryResult } from 'dgrid';
     styleUrls: ['./student-list.component.scss'],
     providers: [
         {
-            provide: DStore,
+            provide: fromDGrid.DStore,
             useExisting: forwardRef(() => StudentListComponent)
         }
     ]
 })
-export class StudentListComponent extends LocalViewDStore implements OnInit {
+export class StudentListComponent extends fromDGrid.LocalViewDStore implements OnInit {
 
 
     public constructor() {
@@ -23,11 +23,35 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
         // this.gridStartup();
     }
 
-    public async getColumns(): Promise<Array<ITableColumn>> {
-        return [];
+    public async getColumns(): Promise<Array<fromDGrid.ITableColumn>> {
+        let cols: Array<fromDGrid.ITableColumn> = [
+            {
+                field: 'name',
+                name: '姓名',
+                fieldType: fromDGrid.ColumnTypeEnum.String,
+                sort: true
+            },
+            {
+                field: 'age',
+                name: '年纪很长很长的名字哈哈哈哈12323213',
+                fieldType: fromDGrid.ColumnTypeEnum.String,
+                sort: true
+            },
+            {
+                field: 'address',
+                name: '地址',
+                fieldType: fromDGrid.ColumnTypeEnum.String
+            },
+            {
+                field: 'remark',
+                name: '备注',
+                fieldType: fromDGrid.ColumnTypeEnum.String
+            }
+        ];
+        return cols;
     }
 
-    public async onQuery(queryParam?: { [key: string]: any; }): Promise<IQueryResult<any>> {
+    public async onQuery(queryParam?: { [key: string]: any; }): Promise<fromDGrid.IQueryResult<any>> {
         return {};
     }
 

@@ -9,6 +9,13 @@ export const gridReducer = createReducer(
     }),
     on(fromAction.changePagination, (state: { [key: string]: fromState.IGridData }, { id, page, limit }) => {
         return { ...state, [id]: { ...state[id], pagination: { page, limit } } };
+    }),
+    on(fromAction.initViews, (state: { [key: string]: fromState.IGridData }, { id, views }) => {
+        let view: { [key: string]: any } = {};
+        views.forEach(v => {
+            view[v.id] = v;
+        });
+        return { ...state, [id]: { ...state[id], view } };
     })
 );
 

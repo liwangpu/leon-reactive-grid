@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DStore } from '../../models';
 import { GridStoreService } from '../../services';
 import { GRIDCONFIG, IGridConfig } from '../../tokens';
+import * as fromConst from '../../consts';
 
 @Component({
     selector: 'dgrid',
@@ -20,10 +21,19 @@ export class GridComponent implements OnInit {
         private storeSrv: GridStoreService
     ) {
 
-        this.storeSrv.changePagination(1, this.config.rowsPerPageOptions[0]);
+        // this.storeSrv.changePagination(1, this.config.rowsPerPageOptions[0]);
     }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
+        let cols = await this.dstore.getColumns();
+        let views = await this.dstore.getFilterViews();
+        // 如果view为空,用column生成一个默认的view
+        if (!views.length) {
+            views.push({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
+        }
+        this.storeSrv.initViews(views);
+        console.log(1, views);
+
     }
 
 }
