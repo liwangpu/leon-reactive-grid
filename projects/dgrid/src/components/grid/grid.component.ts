@@ -21,18 +21,22 @@ export class GridComponent implements OnInit {
         private storeSrv: GridStoreService
     ) {
 
+        this.dstore.registryGridStartup(async (o, h) => {
+            let cols = await this.dstore.getColumns();
+            let views = await this.dstore.getFilterViews();
+            // 如果view为空,用column生成一个默认的view
+            if (!views.length) {
+                views.push({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
+            }
+            this.storeSrv.initViews(views);
+            this.storeSrv.changeActiveView(h?.viewId);
+            console.log(1, views);
+        });
         // this.storeSrv.changePagination(1, this.config.rowsPerPageOptions[0]);
     }
 
     public async ngOnInit(): Promise<void> {
-        let cols = await this.dstore.getColumns();
-        let views = await this.dstore.getFilterViews();
-        // 如果view为空,用column生成一个默认的view
-        if (!views.length) {
-            views.push({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
-        }
-        this.storeSrv.initViews(views);
-        console.log(1, views);
+
 
     }
 
