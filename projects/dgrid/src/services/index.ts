@@ -1,1 +1,1 @@
-export * from './grid-tool.service';
+export * from './grid-store.service';
