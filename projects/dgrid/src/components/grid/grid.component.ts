@@ -29,7 +29,11 @@ export class GridComponent implements OnInit {
                 views.push({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
             }
             this.storeSrv.initViews(views);
-            // this.storeSrv.changeActiveView(h?.viewId || views[0].id);
+            this.storeSrv.changeActiveView(h?.viewId || views[0].id);
+            this.storeSrv.changeActiveView(h?.viewId || views[0].id);
+            this.storeSrv.changeActiveView(h?.viewId || views[0].id);
+            this.storeSrv.changeActiveView(h?.viewId || views[0].id);
+            this.storeSrv.changeActiveView(h?.viewId || views[0].id);
             // console.log(1, views);
         });
         // this.storeSrv.changePagination(1, this.config.rowsPerPageOptions[0]);

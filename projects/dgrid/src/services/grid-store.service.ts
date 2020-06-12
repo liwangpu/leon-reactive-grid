@@ -11,16 +11,16 @@ import { Observable } from 'rxjs';
 export class GridStoreService {
 
     public readonly gridId: string;
-    private _views$: Observable<Array<fromModel.IFilterView>>;
+    private _views$: Observable<any>;
     public constructor(private store: Store<fromStore.IGridState>) {
         // this.gridId = `${uuidv4()}##${Date.now()}`;
         this.gridId = `${Date.now()}`;
         this.store.dispatch(fromStore.initGrid({ id: this.gridId }));
     }
 
-    public get views$(): Observable<Array<fromModel.IFilterView>> {
+    public get views$(): Observable<any> {
         if (!this._views$) {
-            this._views$ = this.store.select(fromStore.selectViews(this.gridId));
+            this._views$ = this.store.select(fromStore.selectGrid('234234'));
         }
         return this._views$;
     }
