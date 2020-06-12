@@ -19,6 +19,7 @@ export const gridReducer = createReducer(
     }),
     on(fromAction.changeActiveView, (state: {}, { id, viewId }) => {
         // console.log(2,state);
+        // let grid=
         return { ...state, [id]: { ...state[id], viewId } };
     })
 );
