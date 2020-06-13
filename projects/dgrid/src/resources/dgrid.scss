@@ -1,0 +1,75 @@
+dgrid-header {
+    div.panel {
+        &.left {
+            div.view {
+                byz-select {
+                    p-dropdown {
+                        &:focus {
+                            outline: none;
+                        }
+
+                        .ui-dropdown {
+                            min-width: 120px;
+                            border-color: transparent !important;
+                            box-shadow: 0 0 0 0 !important;
+                            $lh: 20px;
+
+                            .ui-dropdown-label-container {
+                                &:focus {
+                                    outline: none !important;
+                                }
+
+                                &>.ui-dropdown-label.ui-inputtext {
+                                    position: relative;
+                                    // height: 26px;
+
+                                    .ui-dropdown-label {
+                                        // line-height: 18px;
+                                        font-size: $lh;
+                                        line-height: $lh;
+                                        padding: 0 8px 0 0;
+                                    }
+
+                                    &::after {
+                                        content: '▼';
+                                        position: absolute;
+                                        right: 10px;
+                                        line-height: $lh;
+                                        font-size: 18px;
+                                        line-height: $lh;
+                                    }
+                                }
+                            }
+
+                            .ui-dropdown-trigger {
+                                display: none;
+                            }
+
+
+                        }
+                    }
+                }
+            }
+        }
+
+        &.right {
+            div.buttons {
+                byz-input {
+
+                    .ui-inputtext {
+                        width: 132px;
+                        height: 28px;
+                    }
+                }
+
+                byz-button {
+                    $s: 28px;
+                    .ui-button {
+                        width: $s;
+                        height: $s;
+                    }
+                }
+            }
+        }
+    }
+}

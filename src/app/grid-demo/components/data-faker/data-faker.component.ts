@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as faker from 'faker';
-import { IStudent } from '../../models/i-student';
 import { forkJoin, concat } from 'rxjs';
-import { StudentService } from '../../services/student.service';
+import { StudentService } from 'src/app/services/student.service';
+import { IStudent } from 'src/app/models/i-student';
 
 @Component({
     selector: 'app-data-faker',

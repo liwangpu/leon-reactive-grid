@@ -1,6 +1,6 @@
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { LocalViewDStore, ITableColumn, IQueryResult, ColumnTypeEnum, DStore } from '@cxist/xcloud-grid';
-import { StudentService } from '../../services/student.service';
+import { StudentService } from 'src/app/services/student.service';
 
 @Component({
     selector: 'app-student-list',
@@ -36,7 +36,7 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
             },
             {
                 field: 'age',
-                name: '年纪很长很长的名字哈哈哈哈12323213',
+                name: '年纪',
                 fieldType: ColumnTypeEnum.String,
                 sort: true
             },

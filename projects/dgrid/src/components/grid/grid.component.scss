@@ -1,0 +1,11 @@
+:host {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    height: 100%;
+    padding: 18px;
+
+    dgrid-content {
+        flex: 1;
+    }
+}

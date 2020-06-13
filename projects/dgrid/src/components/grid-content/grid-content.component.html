@@ -1,0 +1,7 @@
+<dgrid-table [columns]='columns' [datas]='datas' [snapline]='snapline'></dgrid-table>
+
+<div class="filter-panel" [class.show]='showFilterView'>
+    <div #filterPanelAnchor></div>
+    <p>{{activeRowIndex}}</p>
+</div>
+<div class="snapline" #snapline></div>

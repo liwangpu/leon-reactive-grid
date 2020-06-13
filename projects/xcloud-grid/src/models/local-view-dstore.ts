@@ -3,6 +3,7 @@ import { ObjectTool } from '../utils/object-tool';
 import { UrlTool } from '../utils/url-tool';
 import { DStore } from './dstore';
 import { IFilterView } from './i-filter-view';
+
 export abstract class LocalViewDStore extends DStore {
 
     private pageKey: string;
