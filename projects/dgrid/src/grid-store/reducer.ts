@@ -21,8 +21,11 @@ function getActiveColumns(state: {}, id): Array<fromModel.ITableColumn> {
 
 export const gridReducer = createReducer(
     {},
-    on(fromAction.initGrid, (state, { id }) => {
-        return { ...state, [id]: {} };
+    on(fromAction.loadData, (state, { id }) => {
+
+
+
+        return { ...state };
     }),
     on(fromAction.changePagination, (state: {}, { id, page, limit }) => {
         return { ...state, ...generatePropertyValue(id, 'pagination', { page, limit }) };
@@ -33,6 +36,9 @@ export const gridReducer = createReducer(
     on(fromAction.changeActiveView, (state: {}, { id, viewId }) => {
         let views: Array<fromModel.IFilterView> = getViews(state, id);
         let activeView: fromModel.IFilterView = views.filter(x => x.id === viewId)[0];
+        if (!activeView) {
+            activeView = views[0];
+        }
         let activeColumns = activeView.columns;
         return { ...state, ...generatePropertyValue(id, 'activeView', activeView), ...generatePropertyValue(id, 'activeColumns', activeColumns) };
     }),

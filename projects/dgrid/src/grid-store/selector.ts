@@ -12,6 +12,11 @@ export const selectActiveViewId = (id: string) => createSelector(
     }
 );
 
+export const selectPagination = (id: string) => createSelector(
+    selectDGridData,
+    grid => grid[(fromReducer.generatePropertyKey(id, 'pagination'))]
+);
+
 export const selectActiveColumns = (id: string) => createSelector(
     selectDGridData,
     grid => grid[(fromReducer.generatePropertyKey(id, 'activeColumns'))]

@@ -45,7 +45,7 @@
 
                     div.cell-wrapper {
                         border-bottom: 1px solid #D5D8E1;
-            
+
 
                         div.tools {
                             display: flex;
@@ -153,6 +153,18 @@
 
         tbody {
             .table-row {
+                &:hover {
+                    .table-cell {
+                        background-color: #EEF3F8;
+                    }
+                }
+
+                &:nth-of-type(even) {
+                    .table-cell {
+                        background-color: #FCFDFE;
+                    }
+                }
+
                 .table-cell {
                     background-color: #fff;
 
@@ -181,10 +193,12 @@
                 text-align: left;
                 font-size: 14px;
                 vertical-align: middle;
+
                 div.cell-wrapper {
                     height: $table_cell_height;
                     padding: 0 0 0 12px;
                 }
+
                 &.frozen {
                     position: sticky;
                     z-index: 9;

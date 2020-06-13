@@ -49,4 +49,8 @@ export class GridHeaderComponent implements OnInit, OnDestroy {
 
     }
 
+    public refresh(): void {
+        this.storeSrv.loadData();
+    }
+
 }

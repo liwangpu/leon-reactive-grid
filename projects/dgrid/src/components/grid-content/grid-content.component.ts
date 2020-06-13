@@ -11,7 +11,6 @@ import { SubSink } from 'subsink';
 export class GridContentComponent implements OnInit, OnDestroy {
 
     public showFilterView: boolean = false;
-    public activeRowIndex: number = -1;
     public columns: Array<fromModel.ITableColumn>;
     public datas: Array<any>;
     private subs = new SubSink();
@@ -25,7 +24,7 @@ export class GridContentComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.subs.sink = this.storeSrv.activeColumns$.subscribe(cols => {
-            console.log('cols', cols);
+            // console.log('cols', cols);
             this.columns = cols;
         });
 

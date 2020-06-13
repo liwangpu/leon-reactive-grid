@@ -3,8 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../grid-store';
 import * as fromModel from '../models';
-import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import * as fromConst from '../consts';
 
 
 
@@ -16,7 +17,10 @@ export class GridStoreService {
     private _activeViewId$: Observable<string>;
     private _activeColumns$: Observable<Array<fromModel.ITableColumn>>;
     private _datas$: Observable<Array<any>>;
-    public constructor(private store: Store<fromStore.IGridState>) {
+    public constructor(
+        private dstore: fromModel.DStore,
+        private store: Store<fromStore.IGridState>
+    ) {
         // this.gridId = `${uuidv4()}##${Date.now()}`;
         this.gridId = `${Date.now()}`;
         // this.store.dispatch(fromStore.initGrid({ id: this.gridId }));
@@ -50,11 +54,31 @@ export class GridStoreService {
         return this._datas$;
     }
 
+    public async loadView(): Promise<void> {
+        let cols = await this.dstore.getColumns();
+        let views = await this.dstore.getFilterViews();
+        // let result = await this.dstore.onQuery({});
+        // 如果view为空,用column生成一个默认的view
+        if (!views.length) {
+            views.push({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
+        }
+        this.initViews(views);
+    }
+
+    public async loadData(): Promise<void> {
+        // this.store.dispatch(fromStore.loadData({ id: this.gridId }));
+        // console.log('load data',this.store.value);
+        let pagination = await this.store.select(fromStore.selectPagination(this.gridId)).pipe(take(1)).toPromise();
+
+        let result = await this.dstore.onQuery();
+        this.setDatas(result.items, result.count);
+    }
+
     public initViews(views: Array<fromModel.IFilterView>): void {
         this.store.dispatch(fromStore.initViews({ id: this.gridId, views }));
     }
 
-    public changeActiveView(viewId: string): void {
+    public changeActiveView(viewId?: string): void {
         this.store.dispatch(fromStore.changeActiveView({ id: this.gridId, viewId }));
     }
 
@@ -62,8 +86,8 @@ export class GridStoreService {
         this.store.dispatch(fromStore.changePagination({ id: this.gridId, page, limit }));
     }
 
-    public setDatas(datas: Array<any>): void {
-        this.store.dispatch(fromStore.setDatas({ id: this.gridId, datas }));
+    public setDatas(datas: Array<any>, count?: number): void {
+        this.store.dispatch(fromStore.setDatas({ id: this.gridId, datas, count }));
     }
 
     public openFilterPanel(): void {
