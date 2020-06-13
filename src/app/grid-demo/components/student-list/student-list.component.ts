@@ -1,6 +1,6 @@
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { LocalViewDStore, ITableColumn, IQueryResult, ColumnTypeEnum, DStore } from '@cxist/xcloud-grid';
-import { StudentService } from '../../services/student.service';
+import { StudentService } from 'src/app/services/student.service';
 
 @Component({
     selector: 'app-student-list',
@@ -20,7 +20,9 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.gridStartup();
+        this.gridStartup({
+            selectMode: 'single'
+        });
     }
 
 
@@ -34,7 +36,7 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
             },
             {
                 field: 'age',
-                name: '年纪很长很长的名字哈哈哈哈12323213',
+                name: '年纪',
                 fieldType: ColumnTypeEnum.String,
                 sort: true
             },
@@ -54,6 +56,10 @@ export class StudentListComponent extends LocalViewDStore implements OnInit {
 
     public onQuery(queryParam?: { [key: string]: any; }): Promise<IQueryResult<any>> {
         return this.studentSrv.query(queryParam).toPromise();
+    }
+
+    public async onDataSelected(datas: Array<any>): Promise<void> {
+        console.log('selected', datas);
     }
 
 }

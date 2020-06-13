@@ -55,6 +55,7 @@
                             "node_modules/@byzan/orion2/resources/orion.scss",
                             "node_modules/@byzan/orion2/resources/orionicons.css",
                             "projects/xcloud-grid/src/resources/grid.scss",
+                            "projects/dgrid/src/resources/dgrid.scss",
                             "src/styles.scss"
                         ],
                         "scripts": []
@@ -93,7 +94,7 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "port": 8768,
+                        "port": 9876,
                         "browserTarget": "leon-reactive-grid:build"
                     },
                     "configurations": {

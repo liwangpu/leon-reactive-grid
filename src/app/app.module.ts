@@ -8,6 +8,8 @@ import { HomeComponent } from './components/home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StudentService } from './services/student.service';
+import { GridQueryParamTransformPolicyService } from './services/grid-query-param-transform-policy.service';
 
 @NgModule({
     declarations: [
@@ -23,7 +25,10 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
         EffectsModule.forRoot(),
         StoreDevtoolsModule.instrument()
     ],
-    providers: [],
+    providers: [
+        StudentService,
+        GridQueryParamTransformPolicyService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

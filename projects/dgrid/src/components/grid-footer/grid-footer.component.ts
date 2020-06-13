@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'dgrid-grid-footer',
+  selector: 'dgrid-footer',
   templateUrl: './grid-footer.component.html',
   styleUrls: ['./grid-footer.component.scss']
 })

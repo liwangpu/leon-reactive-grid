@@ -1,3 +1,11 @@
-<dgrid-grid-header></dgrid-grid-header>
-<dgrid-grid-content></dgrid-grid-content>
-<dgrid-grid-footer></dgrid-grid-footer>
+<dgrid-header>
+    <ng-content select='[headerLeftPanelTopTemplate]' ngProjectAs="[headerLeftPanelTopTemplate]">
+    </ng-content>
+    <ng-content select='[headerLeftPanelBottomTemplate]' ngProjectAs="[headerLeftPanelBottomTemplate]">
+    </ng-content>
+    <ng-content select='[headerRightPartPanelActionButtonTemplate]'
+        ngProjectAs="[headerRightPartPanelActionButtonTemplate]">
+    </ng-content>
+</dgrid-header>
+<dgrid-content></dgrid-content>
+<dgrid-footer></dgrid-footer>

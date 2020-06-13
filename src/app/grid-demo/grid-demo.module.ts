@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { GridDemoRoutingModule } from './grid-demo-routing.module';
 import { StudentListComponent } from './components/student-list/student-list.component';
 import { GridModule, GRIDCONFIG, QUERYPARAMTRANSFORMPOLICY } from '@cxist/xcloud-grid';
-import { GridQueryParamTransformPolicyService } from './services/grid-query-param-transform-policy.service';
 import { DataFakerComponent } from './components/data-faker/data-faker.component';
-import { StudentService } from './services/student.service';
+import { GridQueryParamTransformPolicyService } from '../services/grid-query-param-transform-policy.service';
 
 @NgModule({
     declarations: [StudentListComponent, DataFakerComponent],
@@ -15,8 +14,6 @@ import { StudentService } from './services/student.service';
         GridModule
     ],
     providers: [
-        StudentService,
-        GridQueryParamTransformPolicyService,
         {
             provide: GRIDCONFIG,
             useValue: {

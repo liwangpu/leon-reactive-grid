@@ -84,157 +84,174 @@ xcloud-grid-header {
 }
 
 xcloud-grid-footer {
-    .ui-paginator {
-        $bgc: #F8F9FB;
-        background-color: $bgc !important;
-        border-color: #D5D8E1;
-        border-top: none;
+    p-paginator {
+        &.mobile {
+            .ui-paginator-current {
+                display: none;
+            }
 
-        .ui-paginator-current {
-            font-size: 14px;
-            color: var(--byz-text-color-light);
+            p-dropdown {
+                display: none;
+            }
         }
 
-        &>.ui-paginator-element {
-            height: 32px;
-            outline: none;
+        .ui-paginator {
+            $bgc: #F8F9FB;
+            background-color: $bgc !important;
+            border-color: #D5D8E1;
+            border-top: none;
 
-            &:hover {
-                background-color: $bgc !important;
+            .ui-paginator-current {
+                font-size: 14px;
+                color: var(--byz-text-color-light);
             }
 
-            &:focus {
-                box-shadow: 0 0 0 0 !important;
-            }
+            &>.ui-paginator-element {
+                height: 32px;
+                outline: none;
 
-            $uiPaginatorIconFontSize:25px;
-            $uiPaginatorIconFontWeight:400;
+                &:hover {
+                    background-color: $bgc !important;
+                }
 
-            &.ui-paginator-first {
-                .ui-paginator-icon {
-                    font-size: $uiPaginatorIconFontSize;
-                    font-weight: $uiPaginatorIconFontWeight;
+                &:focus {
+                    box-shadow: 0 0 0 0 !important;
+                }
 
-                    &::before {
-                        content: '\00AB';
+                $uiPaginatorIconFontSize:25px;
+                $uiPaginatorIconFontWeight:400;
+
+                &.ui-paginator-first {
+                    .ui-paginator-icon {
+                        font-size: $uiPaginatorIconFontSize;
+                        font-weight: $uiPaginatorIconFontWeight;
+
+                        &::before {
+                            content: '\00AB';
+                        }
                     }
                 }
-            }
 
-            &.ui-paginator-prev {
-                .ui-paginator-icon {
-                    font-size: $uiPaginatorIconFontSize;
-                    font-weight: $uiPaginatorIconFontWeight;
+                &.ui-paginator-prev {
+                    .ui-paginator-icon {
+                        font-size: $uiPaginatorIconFontSize;
+                        font-weight: $uiPaginatorIconFontWeight;
 
-                    &::before {
-                        content: '\2039';
+                        &::before {
+                            content: '\2039';
+                        }
                     }
                 }
-            }
 
-            &.ui-paginator-next {
-                .ui-paginator-icon {
-                    font-size: $uiPaginatorIconFontSize;
-                    font-weight: $uiPaginatorIconFontWeight;
+                &.ui-paginator-next {
+                    .ui-paginator-icon {
+                        font-size: $uiPaginatorIconFontSize;
+                        font-weight: $uiPaginatorIconFontWeight;
 
-                    &::before {
-                        content: '\203A';
+                        &::before {
+                            content: '\203A';
+                        }
                     }
                 }
-            }
 
-            &.ui-paginator-last {
-                .ui-paginator-icon {
-                    font-size: $uiPaginatorIconFontSize;
-                    font-weight: $uiPaginatorIconFontWeight;
+                &.ui-paginator-last {
+                    .ui-paginator-icon {
+                        font-size: $uiPaginatorIconFontSize;
+                        font-weight: $uiPaginatorIconFontWeight;
 
-                    &::before {
-                        content: '\00BB';
+                        &::before {
+                            content: '\00BB';
+                        }
                     }
                 }
-            }
 
-            &.ui-state-disabled {
+                &.ui-state-disabled {
+                    .ui-paginator-icon {
+                        &:hover {
+                            color: #848484;
+                            background-color: $bgc;
+                        }
+                    }
+                }
+
                 .ui-paginator-icon {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    $size: 20px;
+                    width: $size;
+                    height: $size;
+                    min-width: 0;
+                    min-height: 0;
+                    margin: 6px;
+                    font-size: $size;
+                    border-radius: 4px;
+                    line-height: 14px;
+                    color: #848484;
+
                     &:hover {
-                        color: #848484;
+                        // color: #608CE0;
+                        background-color: #e0e0e0;
+                    }
+                }
+            }
+
+            .ui-paginator-pages {
+                height: 32px;
+
+                .ui-paginator-element {
+                    $size: 20px;
+                    width: $size !important;
+                    height: $size !important;
+                    min-width: 0 !important;
+                    min-height: 0 !important;
+                    margin: 6px !important;
+                    border-radius: 4px !important;
+                    line-height: $size !important;
+                    color: #555C71;
+
+                    &.ui-state-active {
+                        background-color: #608CE0 !important;
+                    }
+                }
+            }
+
+            .ui-dropdown {
+                background-color: $bgc;
+
+                .ui-dropdown-label-container {
+                    .ui-inputtext {
                         background-color: $bgc;
                     }
                 }
-            }
 
-            .ui-paginator-icon {
-                position: relative;
-                top: 0;
-                left: 0;
-                $size: 20px;
-                width: $size;
-                height: $size;
-                min-width: 0;
-                min-height: 0;
-                margin: 6px;
-                font-size: $size;
-                border-radius: 4px;
-                line-height: 14px;
-                color: #848484;
-
-                &:hover {
-                    // color: #608CE0;
-                    background-color: #e0e0e0;
-                }
-            }
-        }
-
-        .ui-paginator-pages {
-            height: 32px;
-
-            .ui-paginator-element {
-                $size: 20px;
-                width: $size !important;
-                height: $size !important;
-                min-width: 0 !important;
-                min-height: 0 !important;
-                margin: 6px !important;
-                border-radius: 4px !important;
-                line-height: $size !important;
-                color: #555C71;
-
-                &.ui-state-active {
-                    background-color: #608CE0 !important;
-                }
-            }
-        }
-
-        .ui-dropdown {
-            background-color: $bgc;
-
-            .ui-dropdown-label-container {
-                .ui-inputtext {
+                .ui-dropdown-trigger {
                     background-color: $bgc;
-                }
-            }
 
-            .ui-dropdown-trigger {
-                background-color: $bgc;
+                    .ui-dropdown-trigger-icon {
+                        // font-size: 12px;
+                        top: -1px;
+                        left: -2px;
+                        right: 0;
+                        bottom: 0;
+                        margin: 0;
+                        padding: 0;
 
-                .ui-dropdown-trigger-icon {
-                    // font-size: 12px;
-                    top: -1px;
-                    left: -2px;
-                    right: 0;
-                    bottom: 0;
-                    margin: 0;
-                    padding: 0;
-                    // transform: scale(1.2);
-                    &::after {
-                        content: '▼';  
-                        font-size: 12px;
-                        font-weight: 900;
+                        // transform: scale(1.2);
+                        &::after {
+                            content: '▼';
+                            font-size: 12px;
+                            font-weight: 900;
+                        }
                     }
                 }
             }
         }
     }
+
+    // &.mobile{
+
+    // }
 }
 
 xcloud-grid-column-filter-panel {

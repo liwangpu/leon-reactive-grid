@@ -3,6 +3,7 @@ import { IFilterView } from './i-filter-view';
 import { IQueryResult } from './i-query-result';
 import { ITableButton } from './i-table-button';
 import { ITableColumn } from './i-table-column';
+import { IHistory } from './i-history';
 
 export abstract class DStore implements IDStore {
 
@@ -18,12 +19,14 @@ export abstract class DStore implements IDStore {
     public async onDataSelected(datas: Array<any>): Promise<void> {/***/ }
     public async onLinkFieldClick(field: string, data: any): Promise<void> {/***/ }
     public async onTableButtonClick(data: any, key: string, button: any, buttonType: 'static' | 'dynamic'): Promise<void> {/***/ }
+    private initialized: boolean = false;
     public async gridStartup(option?: DStoreOption): Promise<void> {
+        if (this.initialized) { return; }
+        this.initialized = true;
         option = option || {};
-
         this.gridStartupFn(option);
     }
-    public registryGridStartup(fn: (option: DStoreOption) => void): void {
+    public registryGridStartup(fn: (option: DStoreOption, history?: IHistory) => void): void {
         this.gridStartupFn = fn;
     }
 }

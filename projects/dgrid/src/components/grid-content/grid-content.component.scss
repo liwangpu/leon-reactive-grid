@@ -1,3 +1,47 @@
 :host {
-    display: block;
+    position: relative;
+    display: flex;
+    flex-flow: row;
+    border-bottom: none;
+    border: 1px solid #D5D8E1;
+    overflow: hidden;
+
+    dgrid-sync-scroll-panel {
+        flex: 1;
+        height: 100%;
+    }
+
+    dgrid-table {
+        flex: 1;
+        height: 100%;
+    }
+
+    div.filter-panel {
+        width: 0;
+        height: 100%;
+        z-index: 100;
+        overflow: hidden;
+        background-color: #fff;
+        // transition: 150ms width;
+
+        &.show {
+            border-left: 1px solid #D5D8E1;
+            width: 248px;
+        }
+    }
+
+    div.snapline {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 100%;
+        background-color: #608CE0;
+        z-index: 9999;
+        opacity: 0;
+    }
+
+    .hidden {
+        width: 0;
+    }
 }

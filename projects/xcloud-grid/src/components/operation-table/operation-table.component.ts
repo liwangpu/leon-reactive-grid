@@ -111,11 +111,7 @@ export class OperationTableComponent extends Table implements OnInit {
     }
 
     public editRow(row: any): void {
-
-        // this.opsat.publish(GridTopicEnum.RowOperating, {
-        //     operation: 'edit',
-        //     data: row
-        // });
+        //
     }
 
 }

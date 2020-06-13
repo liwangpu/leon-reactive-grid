@@ -1,0 +1,64 @@
+<table>
+    <thead>
+        <tr class="table-row header-row">
+            <th class="table-cell frozen" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn' [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' #frozenCell #headerCell>
+                <div class="cell-wrapper">
+                    <div class="tools">
+                        <p class="title">{{col.name}}</p>
+                        <div class="indicator">
+                            <span class="sort"></span>
+                            <div *ngIf='unFrozenAdvanceColSettingMenu?.length' class="advance-setting"
+                                (click)='currentEditColumn=col.field;frozenAdvanceColSettingMenuCt.toggle($event);$event.stopPropagation();'>
+                                <span class="byz-icon col-setting bi-chevron-down"></span>
+                            </div>
+                            <div class="resizer-handler" [columResizerHandler]='frozenCell' [snapline]='snapline'
+                                (beforeResize)='beforeColumnResize()' (afterResize)='afterColumnResize()'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+            <th class="table-cell" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn' [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' #unfrozenCell #headerCell>
+                <div class="cell-wrapper">
+                    <div class="tools">
+                        <p class="title">{{col.name}}</p>
+                        <div class="indicator">
+                            <span class="sort"></span>
+                            <div *ngIf='unFrozenAdvanceColSettingMenu?.length' class="advance-setting"
+                                (click)='currentEditColumn=col.field;unFrozenAdvanceColSettingMenuCt.toggle($event);$event.stopPropagation();'>
+                                <span class="byz-icon col-setting bi-chevron-down"></span>
+                            </div>
+                            <div class="resizer-handler" [columResizerHandler]='unfrozenCell' [snapline]='snapline'
+                                (beforeResize)='beforeColumnResize()' (afterResize)='afterColumnResize()'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="table-row data-row" *ngFor='let rowData of datas;trackBy:trackByDataFn'
+            [class.hidden]='rowData["@hidden"]' #dataRow>
+            <td class="table-cell frozen" [class.last]='l'
+                *ngFor='let col of frozenColumns;let l=last;trackBy:trackByColumnFn;let f=first;'>
+                <div class="cell-wrapper">
+                    <span [class.link-column]='col.link'>{{rowData[col.field]}}</span>
+                </div>
+            </td>
+            <td class="table-cell" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn;let f=first;'>
+                <div class="cell-wrapper">
+                    <span [class.link-column]='col.link'>{{rowData[col.field]}}</span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p-slideMenu styleClass='table-advance-setting-slide-menu' appendTo="body" #frozenAdvanceColSettingMenuCt
+    [model]="frozenAdvanceColSettingMenu" [popup]="true">
+</p-slideMenu>
+
+<p-slideMenu styleClass='table-advance-setting-slide-menu' appendTo="body" #unFrozenAdvanceColSettingMenuCt
+    [model]="unFrozenAdvanceColSettingMenu" [popup]="true">
+</p-slideMenu>
