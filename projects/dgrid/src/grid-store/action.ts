@@ -10,3 +10,6 @@ export const setDatas = createAction('[DGrid] set datas', props<{ id: string, da
 export const freezenColumn = createAction('[DGrid] freezen column', props<{ id: string, field: string }>());
 export const unFreezenColumn = createAction('[DGrid] unfreezen column', props<{ id: string, field: string }>());
 export const changeColumnWidth = createAction('[DGrid] change column width', props<{ id: string, obj: { [key: string]: number } }>());
+export const changeAdvanceSettingPanel = createAction('[DGrid] open advance setting panel', props<{ id: string, panel?: string }>());
+export const toggleColumnVisible = createAction('[DGrid] toggle column visible', props<{ id: string, field?: string }>());
+export const changeColumnOrder = createAction('[DGrid] change column order', props<{ id: string, fields?: Array<string> }>());

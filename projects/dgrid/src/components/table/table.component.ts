@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, ViewChild, ViewChildren, QueryList, ElementRef, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ViewChildren, QueryList, ElementRef, AfterViewInit, Renderer2, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import * as fromModel from '../../models';
 import { MenuItem } from '@byzan/orion2';
 import { GridStoreService } from '../../services';
-import { By } from '@angular/platform-browser';
+import { SubSink } from 'subsink';
 
 @Component({
     selector: 'dgrid-table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit, AfterViewInit {
+export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 
     @Input()
     public snapline: Element;
@@ -32,10 +32,36 @@ export class TableComponent implements OnInit, AfterViewInit {
     private headerCells: QueryList<ElementRef>;
     @ViewChildren('dataRow')
     private dataRows: QueryList<ElementRef>;
+    @ViewChild('tableCt', { static: false })
+    private tableCt: ElementRef;
+    private advanceSettingPanel: string;
+    private reOpenAdvanceSettingPanel: string;
+    private subs = new SubSink();
     public constructor(
         private storeSrv: GridStoreService,
         private renderer2: Renderer2
     ) { }
+
+    public ngOnDestroy(): void {
+        this.subs.unsubscribe();
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+
+        // column赋值时候计算一次列宽
+        if (changes['columns']?.currentValue?.length) {
+            let cols: Array<fromModel.ITableColumn> = changes['columns']?.currentValue;
+            if (!cols.every(x => x.width)) {
+                setTimeout(() => {
+                    this.calculateAndStoreColumnWidth();
+                }, 800);
+            }
+
+            if (cols.every(x => x.hidden) && this.tableCt) {
+                this.renderer2.setStyle(this.tableCt.nativeElement, 'width', '0');
+            }
+        }
+    }
 
     public ngOnInit(): void {
         this.unFrozenAdvanceColSettingMenu = [
@@ -46,8 +72,6 @@ export class TableComponent implements OnInit, AfterViewInit {
                     this.unFrozenAdvanceColSettingMenuCt.hide();
                     this.storeSrv.freezenColumn(this.currentEditColumn);
                     this.calculateStickyPosition();
-                    // this.cache.freezeColumn(this.currentEditColumn);
-                    // this.messageFlow.publish(MessageFlowEnum.FilterViewChange, { view: this.cache.getActiveFilterView(), fetchData: false });
                 }
             }
         ];
@@ -60,23 +84,10 @@ export class TableComponent implements OnInit, AfterViewInit {
                     this.frozenAdvanceColSettingMenuCt.hide();
                     this.storeSrv.unFreezenColumn(this.currentEditColumn);
                     this.calculateStickyPosition();
-                    // if (this.columns.length > 1) {
-                    //     // 取消冻结需要减去该列的宽度,不然冻结表格不会取消占位该列占位宽度
-                    //     let tableWidth: number = 0;
-                    //     let thWdith: number = 0;
-                    //     let tableRect: DOMRect = this.table.nativeElement.getBoundingClientRect();
-                    //     tableWidth = tableRect.width;
-                    //     let thRect: DOMRect = this.currentTableCell.getBoundingClientRect();
-                    //     thWdith = thRect.width;
-                    //     this.renderer2.setStyle(this.table.nativeElement, 'width', `${tableWidth - thWdith}px`);
-                    // } else {
-                    //     this.renderer2.setStyle(this.table.nativeElement, 'width', `auto`);
-                    // }
-                    // this.cache.unfreezenColumn(this.currentEditColumn);
-                    // this.messageFlow.publish(MessageFlowEnum.FilterViewChange, { view: this.cache.getActiveFilterView(), fetchData: false });
                 }
             }
         ];
+        this.subs.sink = this.storeSrv.advanceSettingPanel$.subscribe(panel => this.advanceSettingPanel = panel);
     }
 
     public ngAfterViewInit(): void {
@@ -84,11 +95,15 @@ export class TableComponent implements OnInit, AfterViewInit {
     }
 
     public get frozenColumns(): Array<fromModel.ITableColumn> {
-        return this.columns?.filter(x => x['@frozen'] && !x['@invisibale']);
+        let cols = this.columns?.filter(x => x['@frozen'] && !x['hidden'] && x.field !== this.currentEditColumn);
+        if (this.currentEditColumn && this.columns.some(x => x.field === this.currentEditColumn && x['@frozen'])) {
+            cols.push(this.columns.filter(x => x.field === this.currentEditColumn)[0]);
+        }
+        return cols;
     }
 
     public get unfrozenColumns(): Array<fromModel.ITableColumn> {
-        return this.columns?.filter(x => !x['@frozen'] && !x['@invisibale']);
+        return this.columns?.filter(x => !x['@frozen'] && !x['hidden']);
     }
 
     public calculateStickyPosition(): void {
@@ -117,19 +132,19 @@ export class TableComponent implements OnInit, AfterViewInit {
     }
 
     public beforeColumnResize(): void {
-
+        if (this.advanceSettingPanel) {
+            this.reOpenAdvanceSettingPanel = this.advanceSettingPanel;
+            this.storeSrv.changeAdvanceSettingPanel();
+        }
     }
 
     public afterColumnResize(): void {
         this.calculateStickyPosition();
-
-        let obj: any = {};
-        this.headerCells.forEach(it => {
-            const rect: any = it.nativeElement.getBoundingClientRect();
-            let field = it.nativeElement.getAttribute('field-name');
-            obj[field] = rect.width;
-        });
-        this.storeSrv.changeColumnWidth(obj);
+        this.calculateAndStoreColumnWidth();
+        if (this.reOpenAdvanceSettingPanel) {
+            this.storeSrv.changeAdvanceSettingPanel(this.reOpenAdvanceSettingPanel);
+            this.reOpenAdvanceSettingPanel = null;
+        }
     }
 
     public trackByDataFn(index: number, it: { id: any }): string {
@@ -138,6 +153,16 @@ export class TableComponent implements OnInit, AfterViewInit {
 
     public trackByColumnFn(inde: number, it: { field: string }): string {
         return it.field;
+    }
+
+    private calculateAndStoreColumnWidth(): void {
+        let obj: any = {};
+        this.headerCells.forEach(it => {
+            const rect: any = it.nativeElement.getBoundingClientRect();
+            let field = it.nativeElement.getAttribute('field-name');
+            obj[field] = rect.width;
+        });
+        this.storeSrv.changeColumnWidth(obj);
     }
 
 }

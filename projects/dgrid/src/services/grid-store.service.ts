@@ -6,6 +6,7 @@ import * as fromModel from '../models';
 import { Observable, from } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import * as fromConst from '../consts';
+import { Actions, ofType } from '@ngrx/effects';
 
 
 
@@ -13,45 +14,43 @@ import * as fromConst from '../consts';
 export class GridStoreService {
 
     public readonly gridId: string;
-    private _views$: Observable<any>;
-    private _activeViewId$: Observable<string>;
-    private _activeColumns$: Observable<Array<fromModel.ITableColumn>>;
-    private _datas$: Observable<Array<any>>;
     public constructor(
         private dstore: fromModel.DStore,
-        private store: Store<fromStore.IGridState>
+        private store: Store<fromStore.IGridState>,
+        private actions$: Actions
     ) {
         // this.gridId = `${uuidv4()}##${Date.now()}`;
         this.gridId = `${Date.now()}`;
         // this.store.dispatch(fromStore.initGrid({ id: this.gridId }));
+
+        this.actions$
+            .pipe(ofType(fromStore.loadData))
+            .subscribe(async () => {
+                console.log('load data');
+                let pagination = await this.store.select(fromStore.selectPagination(this.gridId)).pipe(take(1)).toPromise();
+                let result = await this.dstore.onQuery();
+                this.setDatas(result.items, result.count);
+            });
     }
 
     public get activeViewId$(): Observable<string> {
-        if (!this._activeViewId$) {
-            this._activeViewId$ = this.store.select(fromStore.selectActiveViewId(this.gridId));
-        }
-        return this._activeViewId$;
+        return this.store.select(fromStore.selectActiveViewId(this.gridId));
     }
 
     public get activeColumns$(): Observable<Array<fromModel.ITableColumn>> {
-        if (!this._activeColumns$) {
-            this._activeColumns$ = this.store.select(fromStore.selectActiveColumns(this.gridId)).pipe(filter(x => x));
-        }
-        return this._activeColumns$;
+        return this.store.select(fromStore.selectActiveColumns(this.gridId)).pipe(filter(x => x));
     }
 
     public get views$(): Observable<any> {
-        if (!this._views$) {
-            this._views$ = this.store.select(fromStore.selectViews(this.gridId)).pipe(filter(x => x));
-        }
-        return this._views$;
+        return this.store.select(fromStore.selectViews(this.gridId)).pipe(filter(x => x));
     }
 
     public get datas$(): Observable<Array<any>> {
-        if (!this._datas$) {
-            this._datas$ = this.store.select(fromStore.selectDatas(this.gridId)).pipe(filter(x => x));
-        }
-        return this._datas$;
+        return this.store.select(fromStore.selectDatas(this.gridId)).pipe(filter(x => x));
+    }
+
+    public get advanceSettingPanel$(): Observable<string> {
+        return this.store.select(fromStore.selectAdvanceSettingPanel(this.gridId));
     }
 
     public async loadView(): Promise<void> {
@@ -66,12 +65,12 @@ export class GridStoreService {
     }
 
     public async loadData(): Promise<void> {
-        // this.store.dispatch(fromStore.loadData({ id: this.gridId }));
+        this.store.dispatch(fromStore.loadData({ id: this.gridId }));
         // console.log('load data',this.store.value);
-        let pagination = await this.store.select(fromStore.selectPagination(this.gridId)).pipe(take(1)).toPromise();
+        // let pagination = await this.store.select(fromStore.selectPagination(this.gridId)).pipe(take(1)).toPromise();
 
-        let result = await this.dstore.onQuery();
-        this.setDatas(result.items, result.count);
+        // let result = await this.dstore.onQuery();
+        // this.setDatas(result.items, result.count);
     }
 
     public initViews(views: Array<fromModel.IFilterView>): void {
@@ -104,5 +103,17 @@ export class GridStoreService {
 
     public changeColumnWidth(obj: { [key: string]: number }): void {
         this.store.dispatch(fromStore.changeColumnWidth({ id: this.gridId, obj }));
+    }
+
+    public changeAdvanceSettingPanel(panel?: string): void {
+        this.store.dispatch(fromStore.changeAdvanceSettingPanel({ id: this.gridId, panel }));
+    }
+
+    public toggleColumnVisible(field: string): void {
+        this.store.dispatch(fromStore.toggleColumnVisible({ id: this.gridId, field }));
+    }
+
+    public changeColumnOrder(fields: Array<string>): void {
+        this.store.dispatch(fromStore.changeColumnOrder({ id: this.gridId, fields }));
     }
 }

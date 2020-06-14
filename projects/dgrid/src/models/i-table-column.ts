@@ -9,6 +9,7 @@ export interface ITableColumn {
     format?: string;
     reference?: string;
     width?: number;
+    hidden?: boolean;
     frozen?: boolean;
     link?: true;
 }

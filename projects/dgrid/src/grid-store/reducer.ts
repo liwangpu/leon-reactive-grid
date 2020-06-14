@@ -21,12 +21,6 @@ function getActiveColumns(state: {}, id): Array<fromModel.ITableColumn> {
 
 export const gridReducer = createReducer(
     {},
-    on(fromAction.loadData, (state, { id }) => {
-
-
-
-        return { ...state };
-    }),
     on(fromAction.changePagination, (state: {}, { id, page, limit }) => {
         return { ...state, ...generatePropertyValue(id, 'pagination', { page, limit }) };
     }),
@@ -65,10 +59,31 @@ export const gridReducer = createReducer(
         let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
         for (let i = 0, len = activeColumns.length; i < len; i++) {
             let col = { ...activeColumns[i] };
-            col.width = obj[col.field];
-            activeColumns[i] = col;
+            if (obj[col.field]) {
+                col.width = obj[col.field];
+                activeColumns[i] = col;
+            }
         }
         return { ...state, ...generatePropertyValue(id, 'activeColumns', activeColumns) };
+    }),
+    on(fromAction.changeAdvanceSettingPanel, (state: {}, { id, panel }) => {
+        return { ...state, ...generatePropertyValue(id, 'advanceSettingPanel', panel) };
+    }),
+    on(fromAction.toggleColumnVisible, (state: {}, { id, field }) => {
+        let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
+        let index = activeColumns.findIndex(x => x.field === field);
+        let col = { ...activeColumns[index] };
+        col.hidden = !col.hidden;
+        activeColumns[index] = col;
+        return { ...state, ...generatePropertyValue(id, 'activeColumns', activeColumns) };
+    }),
+    on(fromAction.changeColumnOrder, (state: {}, { id, fields }) => {
+        let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
+        let columns: Array<fromModel.ITableColumn> = [];
+        fields.forEach(field => {
+            columns.push(activeColumns.filter(x => x.field === field)[0]);
+        });
+        return { ...state, ...generatePropertyValue(id, 'activeColumns', columns) };
     })
 );
 

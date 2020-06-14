@@ -16,14 +16,24 @@
         height: 100%;
     }
 
-    div.filter-panel {
+    div.header-placeholder {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 48px;
+        background-color: #F8F9FB;
+        border-bottom: 1px solid #D5D8E1;
+        z-index: 1;
+    }
+
+    div.advance-setting-panel {
         width: 0;
         height: 100%;
         z-index: 100;
         overflow: hidden;
-        background-color: #fff;
-        // transition: 150ms width;
-
+        background-color: #F8F9FB;
+        z-index: 2;
         &.show {
             border-left: 1px solid #D5D8E1;
             width: 248px;
@@ -36,7 +46,7 @@
         border-left: 1px solid #D5D8E1;
         background-color: #F8F9FB;
         padding-top: 48px;
-
+        z-index: 2;
         div.setting {
             position: relative;
             width: $s;
@@ -46,6 +56,7 @@
             align-items: center;
             writing-mode: vertical-rl;
             margin-bottom: 1.5em;
+            user-select: none;
 
             &.active {
                 border-left: 2px solid var(--byz-button-default-hover-foreground);

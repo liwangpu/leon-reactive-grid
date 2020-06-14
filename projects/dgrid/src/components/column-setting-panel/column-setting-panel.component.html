@@ -1,0 +1,17 @@
+<div class="header">
+    <div class="search">
+        <byz-input [showClear]="true" [ngModel]='filterColumnKeyword'
+            (ngModelChange)='filterColumnKeywordChange.next($event)' placeholder="搜索列">
+        </byz-input>
+    </div>
+    <span class="byz-icon bi-close-3 close"></span>
+</div>
+<div class="content" cdkDropList (cdkDropListDropped)="dropTarget($event)">
+    <div class="column-setting-panel-item" *ngFor='let col of columns;trackBy:trackByColumnFn'
+        [keywordFilterItem]='col.name' [keyword]='filterColumnKeyword' cdkDrag>
+        <div class="column-setting-panel-item-drag-placeholder" *cdkDragPlaceholder></div>
+        <span class="byz-icon bi-menu drag-handler" cdkDragHandle></span>
+        <byz-checkbox [ngModel]="!col.hidden" (click)='toggleColumnVisible(col.field)'>{{col.name}}
+        </byz-checkbox>
+    </div>
+</div>

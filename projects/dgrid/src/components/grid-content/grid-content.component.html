@@ -1,14 +1,14 @@
 <dgrid-table [columns]='columns' [datas]='datas' [snapline]='snapline'></dgrid-table>
-
-<div class="filter-panel" [class.show]='showFilterView'>
-    <div #filterPanelAnchor></div>
+<div class="header-placeholder"></div>
+<div class="advance-setting-panel" [class.show]='advanceSettingPanel'>
+    <div #advancePanelAnchor></div>
 </div>
 <div class="table-bar">
-    <div class="setting active">
+    <div class="setting" [class.active]='advanceSettingPanel==="column-seting"' (click)='changeAdvanceSettingPanel("column-seting")'>
         <span class="byz-icon bi-menu"></span>
         <span>列设置</span>
     </div>
-    <div class="setting">
+    <div class="setting" [class.active]='advanceSettingPanel==="filter-seting"' (click)='changeAdvanceSettingPanel("filter-seting")'>
         <span class="byz-icon bi-funnel"></span>
         <span>筛选器</span>
     </div>

@@ -17,6 +17,11 @@ export const selectPagination = (id: string) => createSelector(
     grid => grid[(fromReducer.generatePropertyKey(id, 'pagination'))]
 );
 
+export const selectAdvanceSettingPanel = (id: string) => createSelector(
+    selectDGridData,
+    grid => grid[(fromReducer.generatePropertyKey(id, 'advanceSettingPanel'))]
+);
+
 export const selectActiveColumns = (id: string) => createSelector(
     selectDGridData,
     grid => grid[(fromReducer.generatePropertyKey(id, 'activeColumns'))]

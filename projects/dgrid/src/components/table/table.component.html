@@ -1,7 +1,8 @@
-<table>
+<table #tableCt>
     <thead>
         <tr class="table-row header-row">
-            <th class="table-cell frozen" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn' [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' #frozenCell #headerCell>
+            <th class="table-cell frozen" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn'
+                [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' #frozenCell #headerCell>
                 <div class="cell-wrapper">
                     <div class="tools">
                         <p class="title">{{col.name}}</p>
@@ -18,7 +19,8 @@
                     </div>
                 </div>
             </th>
-            <th class="table-cell" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn' [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' #unfrozenCell #headerCell>
+            <th class="table-cell" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn'
+                [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' #unfrozenCell #headerCell>
                 <div class="cell-wrapper">
                     <div class="tools">
                         <p class="title">{{col.name}}</p>
@@ -38,23 +40,25 @@
         </tr>
     </thead>
     <tbody>
-        <tr class="table-row data-row" *ngFor='let rowData of datas;trackBy:trackByDataFn'
-            [class.hidden]='rowData["@hidden"]' #dataRow>
-            <td class="table-cell frozen" [class.last]='l'
-                *ngFor='let col of frozenColumns;let l=last;trackBy:trackByColumnFn;let f=first;'>
-                <div class="cell-wrapper">
-                    <span [class.link-column]='col.link'>{{rowData[col.field]}}</span>
-                </div>
-            </td>
-            <td class="table-cell" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn;let f=first;'>
-                <div class="cell-wrapper">
-                    <span [class.link-column]='col.link'>{{rowData[col.field]}}</span>
-                </div>
-            </td>
-        </tr>
+        <ng-container *ngIf='frozenColumns?.length||unfrozenColumns?.length'>
+            <tr class="table-row data-row" *ngFor='let rowData of datas;trackBy:trackByDataFn'
+                [class.hidden]='rowData["@hidden"]' #dataRow>
+                <td class="table-cell frozen" [class.last]='l'
+                    *ngFor='let col of frozenColumns;let l=last;trackBy:trackByColumnFn;let f=first;'>
+                    <div class="cell-wrapper">
+                        <span [class.link-column]='col.link'>{{rowData[col.field]}}</span>
+                    </div>
+                </td>
+                <td class="table-cell" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn;let f=first;'>
+                    <div class="cell-wrapper">
+                        <span [class.link-column]='col.link'>{{rowData[col.field]}}</span>
+                    </div>
+                </td>
+            </tr>
+        </ng-container>
     </tbody>
 </table>
-<div class="test"></div>
+<!-- <div class="header-placeholder"></div> -->
 <p-slideMenu styleClass='table-advance-setting-slide-menu' appendTo="body" #frozenAdvanceColSettingMenuCt
     [model]="frozenAdvanceColSettingMenu" [popup]="true">
 </p-slideMenu>

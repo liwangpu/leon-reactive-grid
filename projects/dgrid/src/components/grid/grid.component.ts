@@ -3,9 +3,7 @@ import { DStore } from '../../models';
 import * as fromService from '../../services';
 import { GRIDCONFIG, IGridConfig } from '../../tokens';
 import * as fromConst from '../../consts';
-import { USER_PROVIDED_EFFECTS } from '@ngrx/effects';
-import { GridEffectService } from '../../services/grid-effect.service';
-import { GridEffect } from '../../grid-store';
+
 
 @Component({
     selector: 'dgrid',
@@ -13,6 +11,7 @@ import { GridEffect } from '../../grid-store';
     styleUrls: ['./grid.component.scss'],
     providers: [
         fromService.GridStoreService,
+        // GridEffectService,
         // {
         //     provide: GridEffect,
         //     useExisting: GridEffectService
@@ -20,7 +19,7 @@ import { GridEffect } from '../../grid-store';
         // {
         //     provide: USER_PROVIDED_EFFECTS,
         //     multi: true,
-        //     useValue: [GridEffectService],
+        //     useExisting:GridEffectService
         // },
     ]
 })
@@ -49,9 +48,12 @@ export class GridComponent implements OnInit {
             await this.storeSrv.loadView();
             this.storeSrv.changeActiveView();
             this.storeSrv.changePagination(1, this.config.rowsPerPageOptions[0]);
-            await this.storeSrv.loadData();
+            this.storeSrv.loadData();
         });
-     
+
+        // this.actions$.pipe(tap(res=>{
+        //     console.log(111,res);
+        // })).subscribe();
     }
 
     public async ngOnInit(): Promise<void> {
