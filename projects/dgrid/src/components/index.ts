@@ -6,6 +6,7 @@ import { TableComponent } from './table/table.component';
 import { ColumnSettingPanelComponent } from './column-setting-panel/column-setting-panel.component';
 import { FilterSettingPanelComponent } from './filter-setting-panel/filter-setting-panel.component';
 import { SettingPanelKeywordSearchComponent } from './setting-panel-keyword-search/setting-panel-keyword-search.component';
+import { FilterSettingItemComponent } from './filter-setting-item/filter-setting-item.component';
 
 export * from './grid/grid.component';
 export * from './column-setting-panel/column-setting-panel.component';
@@ -19,5 +20,6 @@ export const components = [
     TableComponent,
     ColumnSettingPanelComponent,
     FilterSettingPanelComponent,
-    SettingPanelKeywordSearchComponent
+    SettingPanelKeywordSearchComponent,
+    FilterSettingItemComponent
 ];

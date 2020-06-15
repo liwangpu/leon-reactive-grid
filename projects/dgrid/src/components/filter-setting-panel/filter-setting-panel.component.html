@@ -3,9 +3,17 @@
 </div>
 <div class="content">
     <!-- <div style="height: 1200px;background-color: pink;">ksdf</div> -->
+    <!-- <div class="filter-item" *ngFor='let col of columns;trackBy:trackByColumnFn'>
+        <span class="byz-icon bi-chevron-right collapse-button" [class.expand]='col["@expand"]'
+            (click)='col["@expand"]=!col["@expand"]'></span>
+        <span>{{col.name}}</span>
+    </div> -->
+
+    <dgrid-filter-setting-item *ngFor='let col of columns;trackBy:trackByColumnFn' [column]='col'>
+    </dgrid-filter-setting-item>
 </div>
 <div class="footer">
     <byz-button type="default" label="筛选" (click)='query()'></byz-button>
     <byz-split-button *ngIf='enableFilterView' label="筛选并保存" [class.noMenu]='!operationMenus?.length'
-    (onClick)="saveAndQuery()" [model]="operationMenus"></byz-split-button>
+        (onClick)="saveAndQuery()" [model]="operationMenus"></byz-split-button>
 </div>
