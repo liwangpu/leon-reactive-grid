@@ -9,7 +9,7 @@
         <span>{{col.name}}</span>
     </div> -->
 
-    <dgrid-filter-setting-item *ngFor='let col of columns;trackBy:trackByColumnFn' [column]='col'>
+    <dgrid-filter-setting-item class="fitem" *ngFor='let col of columns;trackBy:trackByColumnFn' [column]='col'>
     </dgrid-filter-setting-item>
 </div>
 <div class="footer">

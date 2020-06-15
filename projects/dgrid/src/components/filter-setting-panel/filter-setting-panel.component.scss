@@ -21,7 +21,6 @@
         flex: 1;
         overflow-x: hidden;
         overflow-y: auto;
-        padding: 1em;
 
         &::-webkit-scrollbar {
             border-top: none;
@@ -29,26 +28,9 @@
             border-bottom: none;
         }
 
-        div.filter-item {
-            display: flex;
-            align-items: center;
-
-            .collapse-button {
-                font-size: 1.2em;
-                font-weight: 500;
-                margin-right: .4em;
-                transition: transform 100ms;
-                &.expand {
-                    transform: rotate(90deg);
-                }
-
-                &:hover {
-                    cursor: pointer;
-                    color: var(--byz-button-default-hover-foreground);
-                }
-            }
+        .fitem {
+            border-bottom: 1px solid #D5D8E1;
         }
-
     }
 
     div.footer {

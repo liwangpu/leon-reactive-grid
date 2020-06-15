@@ -1,0 +1,9 @@
+export const EQ_OPERATOR: string = '@eq';
+export const LIKE_OPERATOR: string = '@like';
+export const NE_OPERATOR: string = '@ne';
+export const LT_OPERATOR: string = '@lt';
+export const GT_OPERATOR: string = '@gt';
+export const LTE_OPERATOR: string = '@lte';
+export const GTE_OPERATOR: string = '@gte';
+export const IN_OPERATOR: string = '@in';
+export const OR_OPERATOR: string = '@or';

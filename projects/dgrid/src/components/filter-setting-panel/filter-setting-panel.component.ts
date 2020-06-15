@@ -35,13 +35,7 @@ export class FilterSettingPanelComponent implements OnInit, OnDestroy {
         this.subs.sink = this.storeSrv.viewMode$.subscribe(enable => {
             this.enableFilterView = enable;
         });
-        this.subs.sink = this.storeSrv.activeColumns$.subscribe(cols => {
-            let ncols = [];
-            cols.forEach(col => {
-                ncols.push({ ...col });
-            });
-            this.columns = ncols;
-        });
+        this.subs.sink = this.storeSrv.activeColumns$.subscribe(cols => this.columns = cols);
     }
 
     public query(): void {

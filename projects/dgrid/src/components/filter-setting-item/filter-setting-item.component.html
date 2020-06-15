@@ -1,2 +1,9 @@
-<span class="byz-icon bi-chevron-right collapse-button" [class.expand]='expand' (click)='expand=!expand'></span>
-<span>{{col.name}}</span>
+<div class="bar" (click)='expand=!expand'>
+    <span class="byz-icon bi-chevron-right" [class.expand]='expand'></span>
+    <p class="title">{{column?.name}}</p>
+</div>
+<div class="filter" [class.hidden]='!expand'>
+    <byz-select [options]="operators" [(ngModel)]="operator" [showClear]="true" placeholder="请选择条件"></byz-select>
+    <byz-input [showClear]="true" placeholder="请输入值">
+    </byz-input>
+</div>
