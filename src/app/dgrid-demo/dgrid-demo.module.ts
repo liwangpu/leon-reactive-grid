@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { DgridDemoRoutingModule } from './dgrid-demo-routing.module';
 import { StudentListComponent } from './components/student-list/student-list.component';
 import { DGridModule, GRIDCONFIG } from 'dgrid';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
-    declarations: [StudentListComponent],
+    declarations: [StudentListComponent, HomeComponent],
     imports: [
         CommonModule,
         DgridDemoRoutingModule,

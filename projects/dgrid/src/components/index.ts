@@ -5,6 +5,7 @@ import { GridHeaderComponent } from './grid-header/grid-header.component';
 import { TableComponent } from './table/table.component';
 import { ColumnSettingPanelComponent } from './column-setting-panel/column-setting-panel.component';
 import { FilterSettingPanelComponent } from './filter-setting-panel/filter-setting-panel.component';
+import { SettingPanelKeywordSearchComponent } from './setting-panel-keyword-search/setting-panel-keyword-search.component';
 
 export * from './grid/grid.component';
 export * from './column-setting-panel/column-setting-panel.component';
@@ -17,5 +18,6 @@ export const components = [
     GridHeaderComponent,
     TableComponent,
     ColumnSettingPanelComponent,
-    FilterSettingPanelComponent
+    FilterSettingPanelComponent,
+    SettingPanelKeywordSearchComponent
 ];

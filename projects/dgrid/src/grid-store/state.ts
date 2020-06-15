@@ -15,3 +15,14 @@ export interface IGridPagination {
     page?: number;
     limit?: number;
 }
+
+
+export enum gridParamEnum {
+    views = 'views',
+    activeColumns = 'activeColumns',
+    pagination = 'pagination',
+    activeView = 'activeView',
+    datas = 'datas',
+    advanceSettingPanel = 'advanceSettingPanel',
+    enableFilterView = 'enableFilterView'
+}

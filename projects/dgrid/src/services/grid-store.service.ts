@@ -1,36 +1,41 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../grid-store';
 import * as fromModel from '../models';
 import { Observable, from } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { filter, take, tap, map } from 'rxjs/operators';
 import * as fromConst from '../consts';
 import { Actions, ofType } from '@ngrx/effects';
+import { SubSink } from 'subsink';
 
 
 
 @Injectable()
-export class GridStoreService {
+export class GridStoreService implements OnDestroy {
 
     public readonly gridId: string;
+    private subs = new SubSink();
     public constructor(
         private dstore: fromModel.DStore,
         private store: Store<fromStore.IGridState>,
         private actions$: Actions
     ) {
-        // this.gridId = `${uuidv4()}##${Date.now()}`;
-        this.gridId = `${Date.now()}`;
-        // this.store.dispatch(fromStore.initGrid({ id: this.gridId }));
+        this.gridId = `${uuidv4().replace(/-/g, '').toUpperCase()}--${Date.now()}`;
 
-        this.actions$
-            .pipe(ofType(fromStore.loadData))
+        this.subs.sink = this.actions$
+            .pipe(ofType(fromStore.loadData), filter(x => x.id === this.gridId))
             .subscribe(async () => {
-                console.log('load data');
+                // console.log('load data');
                 let pagination = await this.store.select(fromStore.selectPagination(this.gridId)).pipe(take(1)).toPromise();
                 let result = await this.dstore.onQuery();
                 this.setDatas(result.items, result.count);
             });
+    }
+
+    public ngOnDestroy(): void {
+        this.subs.unsubscribe();
+        this.store.dispatch(fromStore.clearStoreData({ id: this.gridId }));
     }
 
     public get activeViewId$(): Observable<string> {
@@ -51,6 +56,10 @@ export class GridStoreService {
 
     public get advanceSettingPanel$(): Observable<string> {
         return this.store.select(fromStore.selectAdvanceSettingPanel(this.gridId));
+    }
+
+    public get viewMode$(): Observable<boolean> {
+        return this.store.select(fromStore.selectViewMode(this.gridId)).pipe(map(x => x ? true : false));
     }
 
     public async loadView(): Promise<void> {
@@ -115,5 +124,9 @@ export class GridStoreService {
 
     public changeColumnOrder(fields: Array<string>): void {
         this.store.dispatch(fromStore.changeColumnOrder({ id: this.gridId, fields }));
+    }
+
+    public changeViewMode(enable?: boolean): void {
+        this.store.dispatch(fromStore.changeViewMode({ id: this.gridId, enable }));
     }
 }

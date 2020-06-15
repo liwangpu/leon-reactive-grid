@@ -15,8 +15,7 @@ import { debounceTime } from 'rxjs/operators';
 export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
 
     public columns: Array<fromModel.ITableColumn>;
-    public filterColumnKeyword: string;
-    public filterColumnKeywordChange = new Subject<string>();
+    public keyword: string;
     private subs = new SubSink();
     public constructor(
         private storeSrv: GridStoreService,
@@ -31,10 +30,6 @@ export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
                 ncols.push({ ...col });
             });
             this.columns = ncols;
-        });
-        this.subs.sink = this.filterColumnKeywordChange.pipe(debounceTime(300)).subscribe(keyword => {
-            console.log('filter', keyword);
-            this.filterColumnKeyword = keyword;
         });
     }
 

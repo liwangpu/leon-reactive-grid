@@ -13,3 +13,8 @@ export const changeColumnWidth = createAction('[DGrid] change column width', pro
 export const changeAdvanceSettingPanel = createAction('[DGrid] open advance setting panel', props<{ id: string, panel?: string }>());
 export const toggleColumnVisible = createAction('[DGrid] toggle column visible', props<{ id: string, field?: string }>());
 export const changeColumnOrder = createAction('[DGrid] change column order', props<{ id: string, fields?: Array<string> }>());
+export const changeViewMode = createAction('[DGrid] change view mode', props<{ id: string, enable: boolean }>());
+
+
+
+export const clearStoreData = createAction('[DGrid] clear store data', props<{ id: string }>());

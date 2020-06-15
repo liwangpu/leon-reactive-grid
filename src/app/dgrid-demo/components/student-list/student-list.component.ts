@@ -34,7 +34,8 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
             },
             {
                 field: 'age',
-                name: '年纪是很长很长的一串文本我看你能怎么办',
+                // name: '年纪是很长很长的一串文本我看你能怎么办',
+                name: '年纪',
                 fieldType: fromDGrid.ColumnTypeEnum.String,
                 sort: true
             },

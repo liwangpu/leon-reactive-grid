@@ -7,32 +7,37 @@ const selectDGridData = createFeatureSelector<{ [key: string]: any }>('grid');
 export const selectActiveViewId = (id: string) => createSelector(
     selectDGridData,
     grid => {
-        let view = grid[(fromReducer.generatePropertyKey(id, 'activeView'))];
+        let view = grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.activeView))];
         return view?.id;
     }
 );
 
 export const selectPagination = (id: string) => createSelector(
     selectDGridData,
-    grid => grid[(fromReducer.generatePropertyKey(id, 'pagination'))]
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.pagination))]
 );
 
 export const selectAdvanceSettingPanel = (id: string) => createSelector(
     selectDGridData,
-    grid => grid[(fromReducer.generatePropertyKey(id, 'advanceSettingPanel'))]
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.advanceSettingPanel))]
 );
 
 export const selectActiveColumns = (id: string) => createSelector(
     selectDGridData,
-    grid => grid[(fromReducer.generatePropertyKey(id, 'activeColumns'))]
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.activeColumns))]
 );
 
 export const selectDatas = (id: string) => createSelector(
     selectDGridData,
-    grid => grid[(fromReducer.generatePropertyKey(id, 'datas'))]
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.datas))]
 );
 
 export const selectViews = (id: string) => createSelector(
     selectDGridData,
-    grid => grid[(fromReducer.generatePropertyKey(id, 'views'))]
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.views))]
+);
+
+export const selectViewMode = (id: string) => createSelector(
+    selectDGridData,
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.enableFilterView))]
 );
