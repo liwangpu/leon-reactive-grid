@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { MenuItem as OrionMenuItem } from '@byzan/orion2';
 import { GridStoreService } from '../../services';
 import * as fromModel from '../../models';
@@ -39,7 +39,7 @@ export class FilterSettingPanelComponent implements OnInit, OnDestroy {
     }
 
     public query(): void {
-
+        // this.
     }
 
     public saveAs(): void {

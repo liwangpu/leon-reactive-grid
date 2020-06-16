@@ -95,15 +95,16 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
     }
 
     public get frozenColumns(): Array<fromModel.ITableColumn> {
-        let cols = this.columns?.filter(x => x['@frozen'] && !x['hidden'] && x.field !== this.currentEditColumn);
-        if (this.currentEditColumn && this.columns.some(x => x.field === this.currentEditColumn && x['@frozen'])) {
-            cols.push(this.columns.filter(x => x.field === this.currentEditColumn)[0]);
-        }
-        return cols;
+        // let cols = this.columns?.filter(x => x['frozen'] && !x['hidden'] && x.field !== this.currentEditColumn);
+        // if (this.currentEditColumn && this.columns.some(x => x.field === this.currentEditColumn && x['frozen'])) {
+        //     cols.push(this.columns.filter(x => x.field === this.currentEditColumn)[0]);
+        // }
+        // return cols;
+        return this.columns?.filter(x => x['frozen'] && !x['hidden']);
     }
 
     public get unfrozenColumns(): Array<fromModel.ITableColumn> {
-        return this.columns?.filter(x => !x['@frozen'] && !x['hidden']);
+        return this.columns?.filter(x => !x['frozen'] && !x['hidden']);
     }
 
     public calculateStickyPosition(): void {

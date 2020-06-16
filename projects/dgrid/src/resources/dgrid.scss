@@ -113,6 +113,33 @@ dgrid-filter-setting-panel {
     }
 }
 
+dgrid-filter-setting-item {
+    &>.filter {
+        byz-select {
+            width: 100%;
+            p-dropdown {
+                width: 100%;
+                .ui-dropdown {
+                    width: 100%;
+                    height: 28px;
+
+                    .ui-dropdown-label-container {
+                        .ui-dropdown-label {
+                            height: 26px;
+                            line-height: 18px !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        .ui-inputtext {
+            width: 100%;
+            height: 28px;
+        }
+    }
+}
+
 
 div.column-setting-panel-column-item {
     display: flex;

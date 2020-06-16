@@ -30,15 +30,19 @@
 
         .fitem {
             border-bottom: 1px solid #D5D8E1;
+            &.hidden{
+                visibility: hidden;
+            }
         }
     }
 
     div.footer {
         display: flex;
         justify-content: flex-end;
-        align-content: center;
+        align-items: center;
         height: 40px;
         padding: 0 1em;
+        z-index: 999;
 
         &>* {
             margin-left: 8px;

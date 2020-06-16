@@ -52,7 +52,7 @@ export const gridReducer = createReducer(
         let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
         let index = activeColumns.findIndex(x => x.field === field);
         let colum = { ...activeColumns[index] };
-        colum['@frozen'] = true;
+        colum['frozen'] = true;
         activeColumns[index] = colum;
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, activeColumns) };
     }),
@@ -60,7 +60,7 @@ export const gridReducer = createReducer(
         let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
         let index = activeColumns.findIndex(x => x.field === field);
         let col = { ...activeColumns[index] };
-        col['@frozen'] = false;
+        col['frozen'] = false;
         activeColumns[index] = col;
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, activeColumns) };
     }),
