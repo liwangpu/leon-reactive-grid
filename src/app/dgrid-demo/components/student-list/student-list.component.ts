@@ -21,7 +21,10 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
     }
 
     public ngOnInit(): void {
-        this.gridStartup();
+        this.gridStartup({
+
+        });
+        this.gridRefresh();
     }
 
     public async getColumns(): Promise<Array<fromDGrid.ITableColumn>> {
@@ -78,6 +81,7 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
     }
 
     public onQuery(queryParam?: { [key: string]: any; }): Promise<fromDGrid.IQueryResult<any>> {
+        console.log('query', queryParam);
         return this.studentSrv.query(queryParam).toPromise();
     }
 

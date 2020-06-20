@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import * as fromStore from '../grid-store';
 import * as fromModel from '../models';
 import { Observable } from 'rxjs';
-import { filter, map, first } from 'rxjs/operators';
+import { filter, map, first, skip } from 'rxjs/operators';
 import * as fromConst from '../consts';
 import { Actions, ofType } from '@ngrx/effects';
 import { SubSink } from 'subsink';
@@ -21,21 +21,26 @@ export class GridStoreService implements OnDestroy {
     public readonly gridId: string;
     private subs = new SubSink();
     public constructor(
+        @Inject(fromToken.GRIDCONFIG)
+        private config: fromToken.IGridConfig,
         private dstore: fromModel.DStore,
         private store: Store<fromStore.IGridState>,
         private actions$: Actions
     ) {
         this.gridId = `${uuidv4().replace(/-/g, '').toUpperCase()}--${Date.now()}`;
-
-        // this.subs.sink = this.actions$
-        //     .pipe(this.byGrid(), ofType(fromStore.saveViewAs))
-        //     .pipe(map(x => x.viewName))
-        //     .subscribe(async viewName => {
-        //         console.log('view save as', viewName);
-        //     });
-
-
         // effects
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.initGrid), first()).subscribe(async ({ option }) => {
+            let cols = await this.dstore.getColumns();
+            let views = await this.dstore.getFilterViews();
+            // 如果view为空,用column生成一个默认的view
+            if (!views.some(x => x.id === fromConst.DEFAULT_VIEW_ID)) {
+                views.unshift({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
+            }
+            this.store.dispatch(fromStore.setRowsPerPageOptions({ id: this.gridId, option: this.config.rowsPerPageOptions }));
+            this.store.dispatch(fromStore.setViews({ id: this.gridId, views }));
+            this.changeActiveView();
+        });
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.refreshGrid), skip(1)).subscribe(() => this.loadData());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changeActiveView)).subscribe(() => this.loadData());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changePagination)).subscribe(() => this.loadData());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.setSearchKeyword)).subscribe(() => this.loadData());
@@ -95,23 +100,21 @@ export class GridStoreService implements OnDestroy {
         return this.store.select(fromStore.selectPagination(this.gridId)).pipe(filter(x => x));
     }
 
-    public async loadView(): Promise<void> {
-        let cols = await this.dstore.getColumns();
-        let views = await this.dstore.getFilterViews();
-        // 如果view为空,用column生成一个默认的view
-        if (!views.some(x => x.id === fromConst.DEFAULT_VIEW_ID)) {
-            views.unshift({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
-        }
-        this.setViews(views);
+    public initGrid(option?: fromModel.DStoreOption): void {
+        this.store.dispatch(fromStore.initGrid({ id: this.gridId, option }));
+    }
+
+    public refreshGrid(history?: fromModel.IHistory): void {
+        this.store.dispatch(fromStore.refreshGrid({ id: this.gridId, history }));
     }
 
     public loadData(): void {
         this.store.dispatch(fromStore.loadData({ id: this.gridId }));
     }
 
-    public setViews(views: Array<fromModel.IFilterView>): void {
-        this.store.dispatch(fromStore.setViews({ id: this.gridId, views }));
-    }
+    // public setViews(views: Array<fromModel.IFilterView>): void {
+    //     this.store.dispatch(fromStore.setViews({ id: this.gridId, views }));
+    // }
 
     public changeActiveView(viewId?: string): void {
         this.store.dispatch(fromStore.changeActiveView({ id: this.gridId, viewId }));
@@ -149,9 +152,9 @@ export class GridStoreService implements OnDestroy {
         this.store.dispatch(fromStore.toggleColumnVisible({ id: this.gridId, field }));
     }
 
-    public setRowsPerPageOptions(option: Array<number>): void {
-        this.store.dispatch(fromStore.setRowsPerPageOptions({ id: this.gridId, option }));
-    }
+    // public setRowsPerPageOptions(option: Array<number>): void {
+    //     this.store.dispatch(fromStore.setRowsPerPageOptions({ id: this.gridId, option }));
+    // }
 
     public changeColumnOrder(fields: Array<string>): void {
         this.store.dispatch(fromStore.changeColumnOrder({ id: this.gridId, fields }));
@@ -215,7 +218,7 @@ export class GridStoreService implements OnDestroy {
         }
         let view = { ...activeView, id: null, name: viewName, columns: columns };
         view = await this.dstore.onFilterViewCreate(view);
-        await this.loadView();
+        // await this.loadView();
         this.changeActiveView(view.id);
     }
 

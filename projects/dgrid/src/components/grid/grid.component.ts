@@ -1,8 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { DStore } from '../../models';
 import * as fromService from '../../services';
 import { GRIDCONFIG, IGridConfig } from '../../tokens';
 import * as fromConst from '../../consts';
+import { ActivatedRoute } from '@angular/router';
+import { SubSink } from 'subsink';
 
 
 @Component({
@@ -10,57 +12,41 @@ import * as fromConst from '../../consts';
     templateUrl: './grid.component.html',
     styleUrls: ['./grid.component.scss'],
     providers: [
-        fromService.GridStoreService,
-        // GridEffectService,
-        // {
-        //     provide: GridEffect,
-        //     useExisting: GridEffectService
-        // },
-        // {
-        //     provide: USER_PROVIDED_EFFECTS,
-        //     multi: true,
-        //     useExisting:GridEffectService
-        // },
+        fromService.GridStoreService
     ]
 })
-export class GridComponent implements OnInit {
+export class GridComponent implements OnInit, OnDestroy {
 
+    private enableUrlHistory: boolean;
+    private subs = new SubSink();
     public constructor(
         @Inject(GRIDCONFIG)
         private config: IGridConfig,
         private dstore: DStore,
-        private storeSrv: fromService.GridStoreService
+        private storeSrv: fromService.GridStoreService,
+        private acr: ActivatedRoute
     ) {
 
-        this.dstore.registryGridStartup(async (o, h) => {
-            // let cols = await this.dstore.getColumns();
-            // let views = await this.dstore.getFilterViews();
-            // // let result = await this.dstore.onQuery({});
-            // // 如果view为空,用column生成一个默认的view
-            // if (!views.length) {
-            //     views.push({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
-            // }
-            // this.storeSrv.initViews(views);
-            // this.storeSrv.changeActiveView(h?.viewId || views[0].id);
-            // // this.storeSrv.setDatas(result.items);
-            // this.storeSrv.loadData();
-            // console.log(1, result);
-            await this.storeSrv.loadView();
-            this.storeSrv.setRowsPerPageOptions(this.config.rowsPerPageOptions);
-            this.storeSrv.changeActiveView();
-            // this.storeSrv.changePagination(1, this.config.rowsPerPageOptions[0]);
-          
-            this.storeSrv.changeViewMode(true);
-            this.storeSrv.loadData();
+        this.dstore.registryGridStartup(option => {
+            option = option || {};
+            // console.log('option', option);
+            this.enableUrlHistory = option.enableUrlHistory;
+            this.storeSrv.initGrid(option);
         });
+        this.dstore.registryGridRefresh(history => this.storeSrv.refreshGrid(history));
+    }
 
-        // this.actions$.pipe(tap(res=>{
-        //     console.log(111,res);
-        // })).subscribe();
+    public ngOnDestroy(): void {
+        this.subs.unsubscribe();
     }
 
     public async ngOnInit(): Promise<void> {
-
+        // console.log('on init');
+        // if (this.enableUrlHistory) {
+        //     this.subs.sink = this.acr.queryParams.subscribe(q => {
+        //         console.log(1, q);
+        //     });
+        // }
 
     }
 

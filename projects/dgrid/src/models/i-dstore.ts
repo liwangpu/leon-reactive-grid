@@ -2,6 +2,7 @@ import { IFilterView } from './i-filter-view';
 import { IQueryResult } from './i-query-result';
 import { ITableButton } from './i-table-button';
 import { ITableColumn } from './i-table-column';
+import { IHistory } from './i-history';
 
 export interface DStoreOption {
     selectMode?: 'single' | 'multiple';
@@ -11,6 +12,7 @@ export interface DStoreOption {
     showNestedDataLevel?: number;
     nestedToggleColumn?: string;
     noPagination?: boolean;
+    enableUrlHistory?: boolean;
     otherQueryParams?: { [key: string]: any };
 }
 
@@ -34,6 +36,8 @@ export interface IDStore extends ITableColumnStore, IDataStore, IFilterStore {
     onTableButtonClick(data: any, key: string, button: any, buttonType: 'static' | 'dynamic'): Promise<void>;
     onLinkFieldClick(field: string, data: any): Promise<void>;
     onDataSelected(datas: Array<any>): Promise<void>;
-    gridStartup(option?: DStoreOption): Promise<void>;
+    gridStartup(option?: DStoreOption): void;
+    gridRefresh(history?: IHistory): void;
     registryGridStartup(fn: (option: DStoreOption) => void): void;
+    registryGridRefresh(fn: (history?: IHistory) => void): void
 }

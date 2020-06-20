@@ -59,7 +59,7 @@ export class GridContentComponent implements OnInit, OnDestroy {
 
         setTimeout(() => {
             // this.changeAdvanceSettingPanel('column-seting');
-            this.changeAdvanceSettingPanel('filter-seting');
+            // this.changeAdvanceSettingPanel('filter-seting');
         }, 50);
     }
 

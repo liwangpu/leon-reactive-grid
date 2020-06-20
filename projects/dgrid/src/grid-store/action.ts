@@ -1,6 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import * as fromModel from '../models';
 
+export const initGrid = createAction('[DGrid] init grid', props<{ id: string, option?: fromModel.DStoreOption }>());
+export const refreshGrid = createAction('[DGrid] refresh grid', props<{ id: string, history?: fromModel.IHistory }>());
 export const loadData = createAction('[DGrid] load data', props<{ id: string }>());
 export const setRowsPerPageOptions = createAction('[DGrid] set rows perPage options', props<{ id: string, option: Array<number> }>());
 export const setViews = createAction('[DGrid] set views', props<{ id: string; views: Array<fromModel.IFilterView> }>());
