@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import * as fromState from './state';
 import * as fromModel from '../models';
 
 export const loadData = createAction('[DGrid] load data', props<{ id: string }>());
-export const initViews = createAction('[DGrid] init views', props<{ id: string; views: Array<fromModel.IFilterView> }>());
+export const setRowsPerPageOptions = createAction('[DGrid] set rows perPage options', props<{ id: string, option: Array<number> }>());
+export const setViews = createAction('[DGrid] set views', props<{ id: string; views: Array<fromModel.IFilterView> }>());
 export const changePagination = createAction('[DGrid] change pagination', props<{ id: string; page?: number; limit?: number }>());
 export const changeActiveView = createAction('[DGrid] change active view', props<{ id: string, viewId: string }>());
 export const setDatas = createAction('[DGrid] set datas', props<{ id: string, datas: Array<any>, count?: number }>());
@@ -14,7 +14,9 @@ export const changeAdvanceSettingPanel = createAction('[DGrid] open advance sett
 export const toggleColumnVisible = createAction('[DGrid] toggle column visible', props<{ id: string, field?: string }>());
 export const changeColumnOrder = createAction('[DGrid] change column order', props<{ id: string, fields?: Array<string> }>());
 export const changeViewMode = createAction('[DGrid] change view mode', props<{ id: string, enable: boolean }>());
-
-
-
+export const setSearchKeyword = createAction('[DGrid] set search keyword', props<{ id: string, keyword: string }>());
+export const resetView = createAction('[DGrid] reset view', props<{ id: string }>());
+export const saveView = createAction('[DGrid] save view', props<{ id: string }>());
+export const saveViewAndLoadData = createAction('[DGrid] save view and load data', props<{ id: string }>());
+export const saveViewAs = createAction('[DGrid] save view as', props<{ id: string, viewName: string }>());
 export const clearStoreData = createAction('[DGrid] clear store data', props<{ id: string }>());

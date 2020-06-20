@@ -1,20 +1,25 @@
-import { Component, OnInit, Input, ViewChild, ViewChildren, QueryList, ElementRef, AfterViewInit, Renderer2, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ViewChildren, QueryList, ElementRef, AfterViewInit, Renderer2, OnDestroy } from '@angular/core';
 import * as fromModel from '../../models';
 import { MenuItem } from '@byzan/orion2';
 import { GridStoreService } from '../../services';
 import { SubSink } from 'subsink';
+import { BehaviorSubject } from 'rxjs';
+import { filter, delay } from 'rxjs/operators';
 
 @Component({
     selector: 'dgrid-table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @Input()
     public snapline: Element;
     @Input()
-    public columns: Array<fromModel.ITableColumn> = [];
+    public set columns(val: Array<fromModel.ITableColumn>) {
+        this._columns = val;
+        this.columnChange$.next(val);
+    }
     @Input()
     public selectMode: 'single' | 'multiple' = 'multiple';
     @Input()
@@ -36,31 +41,20 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
     private tableCt: ElementRef;
     private advanceSettingPanel: string;
     private reOpenAdvanceSettingPanel: string;
+    private _columns: Array<fromModel.ITableColumn>;
+    private columnChange$ = new BehaviorSubject<Array<fromModel.ITableColumn>>(null);
     private subs = new SubSink();
     public constructor(
         private storeSrv: GridStoreService,
         private renderer2: Renderer2
     ) { }
 
-    public ngOnDestroy(): void {
-        this.subs.unsubscribe();
+    public get columns(): Array<fromModel.ITableColumn> {
+        return this._columns;
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-
-        // column赋值时候计算一次列宽
-        if (changes['columns']?.currentValue?.length) {
-            let cols: Array<fromModel.ITableColumn> = changes['columns']?.currentValue;
-            if (!cols.every(x => x.width)) {
-                setTimeout(() => {
-                    this.calculateAndStoreColumnWidth();
-                }, 800);
-            }
-
-            if (cols.every(x => x.hidden) && this.tableCt) {
-                this.renderer2.setStyle(this.tableCt.nativeElement, 'width', '0');
-            }
-        }
+    public ngOnDestroy(): void {
+        this.subs.unsubscribe();
     }
 
     public ngOnInit(): void {
@@ -88,6 +82,11 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
             }
         ];
         this.subs.sink = this.storeSrv.advanceSettingPanel$.subscribe(panel => this.advanceSettingPanel = panel);
+        this.subs.sink = this.columnChange$.pipe(filter(x => x?.length > 0), delay(100)).subscribe(cols => {
+            let visibleColCount = cols.filter(x => !x.hidden).length;
+            this.renderer2.setStyle(this.tableCt.nativeElement, 'min-width', `${visibleColCount * 100}px`);
+            this.calculateStickyPosition();
+        });
     }
 
     public ngAfterViewInit(): void {
@@ -148,11 +147,11 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
         }
     }
 
-    public trackByDataFn(index: number, it: { id: any }): string {
+    public trackByDataFn(it: { id: any }): string {
         return it.id;
     }
 
-    public trackByColumnFn(inde: number, it: { field: string }): string {
+    public trackByColumnFn(it: { field: string }): string {
         return it.field;
     }
 

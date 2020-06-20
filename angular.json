@@ -54,7 +54,6 @@
                         "styles": [
                             "node_modules/@byzan/orion2/resources/orion.scss",
                             "node_modules/@byzan/orion2/resources/orionicons.css",
-                            "projects/xcloud-grid/src/resources/grid.scss",
                             "projects/dgrid/src/resources/dgrid.scss",
                             "src/styles.scss"
                         ],
@@ -107,69 +106,6 @@
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
                         "browserTarget": "leon-reactive-grid:build"
-                    }
-                }
-            }
-        },
-        "xcloud-grid": {
-            "projectType": "library",
-            "root": "projects/xcloud-grid",
-            "sourceRoot": "projects/xcloud-grid/src",
-            "prefix": "xcloud-grid",
-            "schematics": {
-                "@schematics/angular:component": {
-                    "style": "scss",
-                    "skipTests": true
-                },
-                "@schematics/angular:class": {
-                    "skipTests": true
-                },
-                "@schematics/angular:directive": {
-                    "skipTests": true
-                },
-                "@schematics/angular:guard": {
-                    "skipTests": true
-                },
-                "@schematics/angular:module": {
-                    "skipTests": true
-                },
-                "@schematics/angular:pipe": {
-                    "skipTests": true
-                },
-                "@schematics/angular:service": {
-                    "skipTests": true
-                }
-            },
-            "architect": {
-                "build": {
-                    "builder": "@angular-devkit/build-ng-packagr:build",
-                    "options": {
-                        "tsConfig": "projects/xcloud-grid/tsconfig.lib.json",
-                        "project": "projects/xcloud-grid/ng-package.json"
-                    },
-                    "configurations": {
-                        "production": {
-                            "tsConfig": "projects/xcloud-grid/tsconfig.lib.prod.json"
-                        }
-                    }
-                },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "projects/xcloud-grid/src/test.ts",
-                        "tsConfig": "projects/xcloud-grid/tsconfig.spec.json",
-                        "karmaConfig": "projects/xcloud-grid/karma.conf.js"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "projects/xcloud-grid/tsconfig.lib.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
                     }
                 }
             }

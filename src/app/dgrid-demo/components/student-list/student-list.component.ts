@@ -40,6 +40,30 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
                 sort: true
             },
             {
+                field: 'country',
+                name: '国籍',
+                fieldType: fromDGrid.ColumnTypeEnum.String,
+                sort: true
+            },
+            {
+                field: 'city',
+                name: '城市',
+                fieldType: fromDGrid.ColumnTypeEnum.String,
+                sort: true
+            },
+            {
+                field: 'department',
+                name: '部门',
+                fieldType: fromDGrid.ColumnTypeEnum.String,
+                sort: true
+            },
+            {
+                field: 'color',
+                name: '颜色',
+                fieldType: fromDGrid.ColumnTypeEnum.String,
+                sort: true
+            },
+            {
                 field: 'address',
                 name: '地址',
                 fieldType: fromDGrid.ColumnTypeEnum.String

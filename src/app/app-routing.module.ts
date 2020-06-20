@@ -9,10 +9,6 @@ const routes: Routes = [
     //     component: HomeComponent
     // },
     {
-        path: 'grid-demo',
-        loadChildren: () => import('./grid-demo/grid-demo.module').then(m => m.GridDemoModule)
-    },
-    {
         path: 'dgrid-demo',
         loadChildren: () => import('./dgrid-demo/dgrid-demo.module').then(m => m.DGridDemoModule)
     },

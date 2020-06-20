@@ -1,15 +1,19 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, Inject } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { Store } from '@ngrx/store';
 import * as fromStore from '../grid-store';
 import * as fromModel from '../models';
-import { Observable, from } from 'rxjs';
-import { filter, take, tap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter, map, first } from 'rxjs/operators';
 import * as fromConst from '../consts';
 import { Actions, ofType } from '@ngrx/effects';
 import { SubSink } from 'subsink';
+import * as  fromToken from '../tokens';
 
 
+function snapshot(obs: Observable<any>): Promise<any> {
+    return obs.pipe(first()).toPromise();
+}
 
 @Injectable()
 export class GridStoreService implements OnDestroy {
@@ -23,19 +27,36 @@ export class GridStoreService implements OnDestroy {
     ) {
         this.gridId = `${uuidv4().replace(/-/g, '').toUpperCase()}--${Date.now()}`;
 
-        this.subs.sink = this.actions$
-            .pipe(ofType(fromStore.loadData), filter(x => x.id === this.gridId))
-            .subscribe(async () => {
-                // console.log('load data');
-                let pagination = await this.store.select(fromStore.selectPagination(this.gridId)).pipe(take(1)).toPromise();
-                let result = await this.dstore.onQuery();
-                this.setDatas(result.items, result.count);
-            });
+        // this.subs.sink = this.actions$
+        //     .pipe(this.byGrid(), ofType(fromStore.saveViewAs))
+        //     .pipe(map(x => x.viewName))
+        //     .subscribe(async viewName => {
+        //         console.log('view save as', viewName);
+        //     });
+
+
+        // effects
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changeActiveView)).subscribe(() => this.loadData());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changePagination)).subscribe(() => this.loadData());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.setSearchKeyword)).subscribe(() => this.loadData());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.resetView)).subscribe(() => this.loadData());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveViewAs)).subscribe(async ({ viewName }) => await this._saveAsView(viewName));
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changeColumnWidth)).subscribe(async () => await this._saveCurrentView());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveView)).subscribe(async () => await this._saveCurrentView());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveViewAndLoadData)).subscribe(async () => {
+            await this._saveCurrentView();
+            this.loadData();
+        });
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.loadData)).subscribe(async () => await this._queryData());
     }
 
     public ngOnDestroy(): void {
         this.subs.unsubscribe();
         this.store.dispatch(fromStore.clearStoreData({ id: this.gridId }));
+    }
+
+    public get activeView$(): Observable<fromModel.IFilterView> {
+        return this.store.select(fromStore.selectActiveView(this.gridId));
     }
 
     public get activeViewId$(): Observable<string> {
@@ -54,6 +75,10 @@ export class GridStoreService implements OnDestroy {
         return this.store.select(fromStore.selectDatas(this.gridId)).pipe(filter(x => x));
     }
 
+    public get dataCount$(): Observable<number> {
+        return this.store.select(fromStore.selectDataCount(this.gridId));
+    }
+
     public get advanceSettingPanel$(): Observable<string> {
         return this.store.select(fromStore.selectAdvanceSettingPanel(this.gridId));
     }
@@ -62,28 +87,30 @@ export class GridStoreService implements OnDestroy {
         return this.store.select(fromStore.selectViewMode(this.gridId)).pipe(map(x => x ? true : false));
     }
 
+    public get searchKeyword$(): Observable<string> {
+        return this.store.select(fromStore.selectSearchKeyword(this.gridId));
+    }
+
+    public get pagination$(): Observable<{ page: number, limit: number }> {
+        return this.store.select(fromStore.selectPagination(this.gridId)).pipe(filter(x => x));
+    }
+
     public async loadView(): Promise<void> {
         let cols = await this.dstore.getColumns();
         let views = await this.dstore.getFilterViews();
-        // let result = await this.dstore.onQuery({});
         // 如果view为空,用column生成一个默认的view
-        if (!views.length) {
-            views.push({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
+        if (!views.some(x => x.id === fromConst.DEFAULT_VIEW_ID)) {
+            views.unshift({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
         }
-        this.initViews(views);
+        this.setViews(views);
     }
 
-    public async loadData(): Promise<void> {
+    public loadData(): void {
         this.store.dispatch(fromStore.loadData({ id: this.gridId }));
-        // console.log('load data',this.store.value);
-        // let pagination = await this.store.select(fromStore.selectPagination(this.gridId)).pipe(take(1)).toPromise();
-
-        // let result = await this.dstore.onQuery();
-        // this.setDatas(result.items, result.count);
     }
 
-    public initViews(views: Array<fromModel.IFilterView>): void {
-        this.store.dispatch(fromStore.initViews({ id: this.gridId, views }));
+    public setViews(views: Array<fromModel.IFilterView>): void {
+        this.store.dispatch(fromStore.setViews({ id: this.gridId, views }));
     }
 
     public changeActiveView(viewId?: string): void {
@@ -122,11 +149,92 @@ export class GridStoreService implements OnDestroy {
         this.store.dispatch(fromStore.toggleColumnVisible({ id: this.gridId, field }));
     }
 
+    public setRowsPerPageOptions(option: Array<number>): void {
+        this.store.dispatch(fromStore.setRowsPerPageOptions({ id: this.gridId, option }));
+    }
+
     public changeColumnOrder(fields: Array<string>): void {
         this.store.dispatch(fromStore.changeColumnOrder({ id: this.gridId, fields }));
     }
 
     public changeViewMode(enable?: boolean): void {
         this.store.dispatch(fromStore.changeViewMode({ id: this.gridId, enable }));
+    }
+
+    public saveViewAs(viewName: string): void {
+        this.store.dispatch(fromStore.saveViewAs({ id: this.gridId, viewName }));
+    }
+
+    public saveView(): void {
+        this.store.dispatch(fromStore.saveView({ id: this.gridId }));
+    }
+
+    public saveViewAndLoadData(): void {
+        this.store.dispatch(fromStore.saveViewAndLoadData({ id: this.gridId }));
+    }
+
+    public setSearchKeyword(keyword: string): void {
+        this.store.dispatch(fromStore.setSearchKeyword({ id: this.gridId, keyword }));
+    }
+
+    public resetView(): void {
+        this.store.dispatch(fromStore.resetView({ id: this.gridId }));
+    }
+
+    private async _saveCurrentView(): Promise<void> {
+        let activeView = await snapshot(this.activeView$);
+        if (activeView.id === fromConst.DEFAULT_VIEW_ID) {
+            return;
+        }
+        let activeColumns = await snapshot(this.activeColumns$);
+
+        let columns = [...activeColumns];
+        // 清除100默认高度
+        for (let idx = columns.length - 1; idx >= 0; idx--) {
+            if (columns[idx].width > 100) { continue; }
+            let col = { ...columns[idx] };
+            col.width = col.width > 100 ? col.width : null;
+            columns[idx] = col;
+        }
+        let view = { ...activeView, columns: columns };
+
+        console.log(1, view);
+    }
+
+    private async _saveAsView(viewName: string): Promise<void> {
+        let activeView = await snapshot(this.activeView$);
+        let activeColumns = await snapshot(this.activeColumns$);
+
+        let columns = [...activeColumns];
+        // 清除100默认高度
+        for (let idx = columns.length - 1; idx >= 0; idx--) {
+            if (columns[idx].width > 100) { continue; }
+            let col = { ...columns[idx] };
+            col.width = col.width > 100 ? col.width : null;
+            columns[idx] = col;
+        }
+        let view = { ...activeView, id: null, name: viewName, columns: columns };
+        view = await this.dstore.onFilterViewCreate(view);
+        await this.loadView();
+        this.changeActiveView(view.id);
+    }
+
+    private async _queryData(): Promise<void> {
+        let viewId = await snapshot(this.activeViewId$);
+        let pagination = await snapshot(this.pagination$);
+        let keyword = await snapshot(this.searchKeyword$);
+
+        // console.log('query data', keyword, pagination);
+        let history: fromModel.IHistory = {
+            viewId: viewId !== fromConst.DEFAULT_VIEW_ID ? viewId : null,
+            keyword,
+            pagination
+        };
+        let result = await this.dstore.onQuery(history);
+        this.setDatas(result.items, result.count);
+    }
+
+    private byGrid(): any {
+        return filter(x => x['id'] === this.gridId);
     }
 }

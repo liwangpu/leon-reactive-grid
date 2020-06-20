@@ -2,10 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GridStoreService } from '../../services';
 import * as fromModel from '../../models';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
 import { SubSink } from 'subsink';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
     selector: 'dgrid-column-setting-panel',
@@ -23,7 +20,7 @@ export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.subs.sink = this.storeSrv.activeColumns$.subscribe(cols => {
-            console.log('cols', cols);
+            // console.log('cols', cols);
             let ncols = [];
             // columns因为要给drag list使用改变属性,所以这里对columns展开,允许修改
             cols.forEach(col => {

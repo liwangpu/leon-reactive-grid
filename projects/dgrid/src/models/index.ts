@@ -7,5 +7,4 @@ export * from './i-table-column';
 export * from './i-sort-event';
 export * from './i-table-button';
 export * from './i-query-result';
-export * from './resizable-table';
-export * from './table';
+export * from './i-history';

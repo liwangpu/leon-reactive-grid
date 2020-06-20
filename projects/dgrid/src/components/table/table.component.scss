@@ -204,6 +204,7 @@
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
+                        padding: 0 12px;
 
                         &>span {
                             line-height: $table_cell_height - 1px;
@@ -233,6 +234,7 @@
                 text-align: left;
                 font-size: 14px;
                 vertical-align: middle;
+                min-width: 120px;
 
                 div.cell-wrapper {
                     height: $table_cell_height;

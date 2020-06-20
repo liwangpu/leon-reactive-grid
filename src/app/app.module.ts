@@ -9,7 +9,6 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StudentService } from './services/student.service';
-import { GridQueryParamTransformPolicyService } from './services/grid-query-param-transform-policy.service';
 
 @NgModule({
     declarations: [
@@ -26,8 +25,7 @@ import { GridQueryParamTransformPolicyService } from './services/grid-query-para
         StoreDevtoolsModule.instrument()
     ],
     providers: [
-        StudentService,
-        GridQueryParamTransformPolicyService
+        StudentService
     ],
     bootstrap: [AppComponent]
 })

@@ -19,6 +19,14 @@ function getActiveColumns(state: {}, id): Array<fromModel.ITableColumn> {
     return [...state[generatePropertyKey(id, fromState.gridParamEnum.activeColumns)]];
 }
 
+function getPagination(state: {}, id): { page: number; limit: number } {
+    return { ...state[generatePropertyKey(id, fromState.gridParamEnum.pagination)] };
+}
+
+function getRowsPerPageOptions(state: {}, id): Array<number> {
+    return [...state[generatePropertyKey(id, fromState.gridParamEnum.rowsPerPageOptions)]];
+}
+
 export const gridReducer = createReducer(
     {},
     on(fromAction.clearStoreData, (state: {}, { id }) => {
@@ -30,10 +38,17 @@ export const gridReducer = createReducer(
         }
         return { ...store };
     }),
+    on(fromAction.setRowsPerPageOptions, (state: {}, { id, option }) => {
+        return {
+            ...state
+            , ...generatePropertyValue(id, fromState.gridParamEnum.rowsPerPageOptions, option)
+            , ...generatePropertyValue(id, fromState.gridParamEnum.pagination, { page: 1, limit: option[0] })
+        };
+    }),
     on(fromAction.changePagination, (state: {}, { id, page, limit }) => {
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.pagination, { page, limit }) };
     }),
-    on(fromAction.initViews, (state: {}, { id, views }) => {
+    on(fromAction.setViews, (state: {}, { id, views }) => {
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.views, views) };
     }),
     on(fromAction.changeActiveView, (state: {}, { id, viewId }) => {
@@ -43,18 +58,27 @@ export const gridReducer = createReducer(
             activeView = views[0];
         }
         let activeColumns = activeView.columns;
-        return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeView, activeView), ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, activeColumns) };
+        let rowsPerPageOptions = getRowsPerPageOptions(state, id);
+        return {
+            ...state
+            , ...generatePropertyValue(id, fromState.gridParamEnum.searchKeyword, null)
+            , ...generatePropertyValue(id, fromState.gridParamEnum.pagination, { page: 1, limit: rowsPerPageOptions[0] })
+            , ...generatePropertyValue(id, fromState.gridParamEnum.activeView, activeView)
+            , ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, activeColumns)
+        };
     }),
-    on(fromAction.setDatas, (state: {}, { id, datas }) => {
-        return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.datas, datas) };
+    on(fromAction.setDatas, (state: {}, { id, datas, count }) => {
+        return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.datas, datas), ...generatePropertyValue(id, fromState.gridParamEnum.dataCount, count) };
     }),
     on(fromAction.freezenColumn, (state: {}, { id, field }) => {
         let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
+        let freezenColumns = activeColumns.filter(x => x.frozen);
+        let unFreezenColumns = activeColumns.filter(x => !x.frozen && x.field != field);
         let index = activeColumns.findIndex(x => x.field === field);
         let colum = { ...activeColumns[index] };
         colum['frozen'] = true;
-        activeColumns[index] = colum;
-        return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, activeColumns) };
+        freezenColumns.push(colum);
+        return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, freezenColumns.concat(unFreezenColumns)) };
     }),
     on(fromAction.unFreezenColumn, (state: {}, { id, field }) => {
         let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
@@ -96,6 +120,23 @@ export const gridReducer = createReducer(
     }),
     on(fromAction.changeViewMode, (state: {}, { id, enable }) => {
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.enableFilterView, enable) };
+    }),
+    on(fromAction.setSearchKeyword, (state: {}, { id, keyword }) => {
+        let pagination = getPagination(state, id);
+        pagination.page = 1;
+        return {
+            ...state
+            , ...generatePropertyValue(id, fromState.gridParamEnum.pagination, pagination)
+            , ...generatePropertyValue(id, fromState.gridParamEnum.searchKeyword, keyword)
+        };
+    }),
+    on(fromAction.resetView, (state: {}, { id }) => {
+        let rowsPerPageOptions = getRowsPerPageOptions(state, id);
+        return {
+            ...state
+            , ...generatePropertyValue(id, fromState.gridParamEnum.pagination, { page: 1, limit: rowsPerPageOptions[0] })
+            , ...generatePropertyValue(id, fromState.gridParamEnum.searchKeyword, null)
+        };
     })
 );
 

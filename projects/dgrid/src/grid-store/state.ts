@@ -23,6 +23,9 @@ export enum gridParamEnum {
     pagination = 'pagination',
     activeView = 'activeView',
     datas = 'datas',
+    dataCount = 'dataCount',
     advanceSettingPanel = 'advanceSettingPanel',
-    enableFilterView = 'enableFilterView'
+    enableFilterView = 'enableFilterView',
+    searchKeyword = 'searchKeyword',
+    rowsPerPageOptions = 'rowsPerPageOptions'
 }

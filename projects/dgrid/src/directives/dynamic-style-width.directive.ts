@@ -9,7 +9,7 @@ export class DynamicStyleWidthDirective {
     public width: string;
     @Input('dynamicStyleWidth')
     public set dynamicStyleWidth(val: number) {
-        this.width = val > 0 ? `${val}px` : 'auto';
+        this.width = val > 0 ? `${val}px` : '100px';
     }
 
 }

@@ -1,13 +1,23 @@
 <div class="header">
     <dgrid-setting-panel-keyword-search [(keyword)]='keyword'></dgrid-setting-panel-keyword-search>
 </div>
-<div class="content" #content>
+<div class="content">
     <dgrid-filter-setting-item class="fitem" *ngFor='let col of columns;trackBy:trackByColumnFn'
         [keywordFilterItem]='col.name' [keyword]='keyword' [column]='col'>
     </dgrid-filter-setting-item>
 </div>
 <div class="footer" #footer>
-    <byz-button type="default" label="筛选" (click)='query()'></byz-button>
-    <byz-split-button *ngIf='enableFilterView' label="筛选并保存" [class.noMenu]='!operationMenus?.length'
+    <byz-button type="default" *ngIf='!defaultView' label="筛选" (click)='query()'></byz-button>
+    <byz-split-button *ngIf='enableFilterView' [label]="defaultView?'筛选':'筛选并保存'" [class.noMenu]='!operationMenus?.length'
         (onClick)="saveAndQuery()" [model]="operationMenus"></byz-split-button>
+</div>
+
+<div class="view-panel" [class.show]='showViewPanel'>
+    <label>视图名称</label>
+    <byz-input [showClear]="true" placeholder="请输入视图名称" [(ngModel)]='viewName'>
+    </byz-input>
+    <div class="button">
+        <byz-button type="default" label="取消" (click)='showViewPanel=false;viewName=""'></byz-button>
+        <byz-button type="primary" label="保存" [disabled]='!viewName' (click)='saveAs()'></byz-button>
+    </div>
 </div>

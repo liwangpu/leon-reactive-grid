@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import * as fromModel from '../../models';
-import { SelectItem } from '@byzan/orion2';
+import * as fromOrion from '@byzan/orion2';
 import * as fromConst from '../../consts';
 import * as  fromEnum from '../../enums';
 
@@ -25,12 +25,19 @@ export class FilterSettingItemComponent {
         return this._column;
     }
     public expand: boolean;
+    public value: any;
     public operator: string;
-    public operators: Array<SelectItem>
+    public operators: Array<fromOrion.SelectItem>
     private _column: fromModel.ITableColumn;
 
+    public operatorChange(): void {
+        if (!this.operator) {
+            this.value = null;
+        }
+    }
+
     private settingStringOperations(): void {
-        const opts: Array<SelectItem> = [
+        const opts: Array<fromOrion.SelectItem> = [
             { label: '包含', value: fromConst.LIKE_OPERATOR },
             { label: '等于', value: fromConst.EQ_OPERATOR }
         ];
@@ -38,7 +45,7 @@ export class FilterSettingItemComponent {
     }
 
     private settingNumberOperations(): void {
-        const opts: Array<SelectItem> = [
+        const opts: Array<fromOrion.SelectItem> = [
             { label: '等于', value: fromConst.EQ_OPERATOR },
             { label: '不等于', value: fromConst.NE_OPERATOR },
             { label: '小于', value: fromConst.LT_OPERATOR },

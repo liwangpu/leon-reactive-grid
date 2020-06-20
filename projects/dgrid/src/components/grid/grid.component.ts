@@ -46,8 +46,10 @@ export class GridComponent implements OnInit {
             // this.storeSrv.loadData();
             // console.log(1, result);
             await this.storeSrv.loadView();
+            this.storeSrv.setRowsPerPageOptions(this.config.rowsPerPageOptions);
             this.storeSrv.changeActiveView();
-            this.storeSrv.changePagination(1, this.config.rowsPerPageOptions[0]);
+            // this.storeSrv.changePagination(1, this.config.rowsPerPageOptions[0]);
+          
             this.storeSrv.changeViewMode(true);
             this.storeSrv.loadData();
         });

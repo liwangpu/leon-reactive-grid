@@ -81,7 +81,7 @@ export class ColumResizerHandlerDirective implements OnDestroy {
             if (!this.size || this.size === thNodeClientRect.width) { return; }
             let tableWidth: number = tableNodeClientRect.width + (this.size - thNodeClientRect.width);
             // tslint:disable-next-line: restrict-plus-operands
-            this.renderer2.setStyle(this.tableNodeEl, 'width', `${tableWidth}px`);
+            // this.renderer2.setStyle(this.tableNodeEl, 'width', `${tableWidth}px`);
             this.renderer2.setAttribute(this.tableNodeEl, 'sign-width', `${tableWidth}`);
             this.renderer2.setStyle(this.thNodeEl, 'width', `${this.size}px`);
             this.renderer2.setAttribute(this.thNodeEl, 'sign-width', `${this.size}`);

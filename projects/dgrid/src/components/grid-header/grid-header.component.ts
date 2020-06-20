@@ -28,29 +28,30 @@ export class GridHeaderComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.subs.sink = this.storeSrv.views$.subscribe(views => {
-            // console.log(111, views);
             this.allViews = views.map(x => ({ value: x.id, label: x.name }));
         });
 
         this.subs.sink = this.storeSrv.activeViewId$.subscribe(viewId => {
-            // console.log(11111,viewId);
             this.activeViewId = viewId;
         });
+
+        this.subs.sink = this.storeSrv.searchKeyword$.subscribe(keyword => this.keyword = keyword);
     }
 
     public changeActiveView(): void {
-        // this.cache.initializeHistory();
-        // this.messageFlow.publish(MessageFlowEnum.ToggleFilterSettingPanel, false);
-        // this.cache.setActiveViewId(this.activeView);
-        // this.dataFlow.publish(DataFlowTopicEnum._History, this.cache.getHistory());
+        this.storeSrv.changeActiveView(this.activeViewId);
     }
 
     public search(): void {
-
+        this.storeSrv.setSearchKeyword(this.keyword);
     }
 
     public refresh(): void {
         this.storeSrv.loadData();
+    }
+
+    public reset(): void {
+        this.storeSrv.resetView();
     }
 
 }

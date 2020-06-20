@@ -19,9 +19,6 @@
       "@env/*": [
         "src/environments/*"
       ],
-      "@cxist/xcloud-grid": [
-        "projects/xcloud-grid/src/public-api.ts"
-      ],
       "dgrid": [
         "projects/dgrid/src/public-api.ts"
       ]
