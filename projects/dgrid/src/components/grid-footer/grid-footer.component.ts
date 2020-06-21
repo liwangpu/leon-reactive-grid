@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import * as fromToken from '../../tokens';
 import { GridStoreService } from '../../services';
 import { SubSink } from 'subsink';
+import { first } from 'rxjs/operators';
 
 @Component({
     selector: 'dgrid-footer',
@@ -17,21 +17,20 @@ export class GridFooterComponent implements OnInit, OnDestroy {
     public rowsPerPageOptions: Array<number>;
     private subs = new SubSink();
     public constructor(
-        @Inject(fromToken.GRIDCONFIG) private gridConfig: fromToken.IGridConfig,
         private storeSrv: GridStoreService,
-    ) {
-        this.rowsPerPageOptions = this.gridConfig.rowsPerPageOptions;
-        this.rows = this.rowsPerPageOptions[0];
-    }
+    ) { }
 
     public ngOnDestroy(): void {
         this.subs.unsubscribe();
     }
 
     public ngOnInit(): void {
+        this.subs.sink = this.storeSrv.rowsPerPageOptions$.pipe(first()).subscribe(options => {
+            this.rowsPerPageOptions = options;
+            this.rows = this.rowsPerPageOptions[0];
+        });
         this.subs.sink = this.storeSrv.dataCount$.subscribe(count => this.dataTotal = count);
         this.subs.sink = this.storeSrv.pagination$.subscribe(p => {
-            // console.log('pagination', p);
             this.paginatorFirst = (p.page - 1) * p.limit;
         });
     }

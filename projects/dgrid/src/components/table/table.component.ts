@@ -5,6 +5,7 @@ import { GridStoreService } from '../../services';
 import { SubSink } from 'subsink';
 import { BehaviorSubject } from 'rxjs';
 import { filter, delay } from 'rxjs/operators';
+import * as fromDirective from '../../directives';
 
 @Component({
     selector: 'dgrid-table',
@@ -27,6 +28,7 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
     public currentEditColumn: string;
     public unFrozenAdvanceColSettingMenu: Array<MenuItem>;
     public frozenAdvanceColSettingMenu: Array<MenuItem>;
+    public sort: fromModel.ISortEvent;
     @ViewChild('unFrozenAdvanceColSettingMenuCt', { static: false })
     private unFrozenAdvanceColSettingMenuCt: any;
     @ViewChild('frozenAdvanceColSettingMenuCt', { static: false })
@@ -51,6 +53,19 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public get columns(): Array<fromModel.ITableColumn> {
         return this._columns;
+    }
+
+    public get frozenColumns(): Array<fromModel.ITableColumn> {
+        // let cols = this.columns?.filter(x => x['frozen'] && !x['hidden'] && x.field !== this.currentEditColumn);
+        // if (this.currentEditColumn && this.columns.some(x => x.field === this.currentEditColumn && x['frozen'])) {
+        //     cols.push(this.columns.filter(x => x.field === this.currentEditColumn)[0]);
+        // }
+        // return cols;
+        return this.columns?.filter(x => x['frozen'] && !x['hidden']);
+    }
+
+    public get unfrozenColumns(): Array<fromModel.ITableColumn> {
+        return this.columns?.filter(x => !x['frozen'] && !x['hidden']);
     }
 
     public ngOnDestroy(): void {
@@ -87,24 +102,19 @@ export class TableComponent implements OnInit, AfterViewInit, OnDestroy {
             this.renderer2.setStyle(this.tableCt.nativeElement, 'min-width', `${visibleColCount * 100}px`);
             this.calculateStickyPosition();
         });
+        this.subs.sink = this.storeSrv.sort$.subscribe(sort => {
+            this.sort = sort;
+        });
     }
 
     public ngAfterViewInit(): void {
         // this.calculateStickyPosition();
     }
 
-    public get frozenColumns(): Array<fromModel.ITableColumn> {
-        // let cols = this.columns?.filter(x => x['frozen'] && !x['hidden'] && x.field !== this.currentEditColumn);
-        // if (this.currentEditColumn && this.columns.some(x => x.field === this.currentEditColumn && x['frozen'])) {
-        //     cols.push(this.columns.filter(x => x.field === this.currentEditColumn)[0]);
-        // }
-        // return cols;
-        return this.columns?.filter(x => x['frozen'] && !x['hidden']);
+    public onSort(sort: fromModel.ISortEvent): void {
+        this.storeSrv.changeSort(sort);
     }
 
-    public get unfrozenColumns(): Array<fromModel.ITableColumn> {
-        return this.columns?.filter(x => !x['frozen'] && !x['hidden']);
-    }
 
     public calculateStickyPosition(): void {
         // 延时计算,给dom渲染留时间

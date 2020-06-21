@@ -76,13 +76,8 @@
                     div.cell-wrapper {
                         border-bottom: 1px solid #D5D8E1;
 
-                        div.tools {
-                            display: flex;
-                            flex-flow: row nowrap;
-                            align-items: center;
-                            height: $table_cell_height - 1;
-
-                            &[sort=asc] {
+                        &[sort=asc] {
+                            div.tools {
                                 div.indicator {
                                     span.sort {
                                         &::before {
@@ -91,8 +86,10 @@
                                     }
                                 }
                             }
+                        }
 
-                            &[sort=desc] {
+                        &[sort=desc] {
+                            div.tools {
                                 div.indicator {
                                     span.sort {
                                         &::before {
@@ -101,6 +98,15 @@
                                     }
                                 }
                             }
+                        }
+
+                        div.tools {
+                            display: flex;
+                            flex-flow: row nowrap;
+                            align-items: center;
+                            height: $table_cell_height - 1;
+
+
 
                             p {
                                 height: 100%;

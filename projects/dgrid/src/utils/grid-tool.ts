@@ -1,20 +1,15 @@
-import { filter, map } from 'rxjs/operators';
+import * as queryString from 'query-string';
 
-export function topicFilter(topic: string): any {
-    return filter((x: { topic: string; data: any }) => x.topic === topic);
+export function parseUrlQueryParams(url: string): { [key: string]: any } {
+    if (!url) { return {}; }
+    let urlArr = url.split('?');
+    let queryStr = urlArr[1];
+    let queryObj = queryString.parse(queryStr);
+    if (queryObj.page) {
+        queryObj.page = Number(queryObj.page);
+    }
+    if (queryObj.limit) {
+        queryObj.limit = Number(queryObj.limit);
+    }
+    return queryObj;
 }
-
-export function topicFilters(...topics: Array<string>): any {
-    return filter((x: { topic: string; data: any }) => topics.indexOf(x.topic) > -1);
-}
-
-export function tupleMap(t: [any]): any {
-    return map(v => {
-        t[0] = v;
-        return t;
-    });
-}
-
-export const dataMap: any = map((ms: { topic: string; data?: any }) => ms.data);
-
-export const topicMap: any = map((ms: { topic: string; data?: any }) => ms.topic);

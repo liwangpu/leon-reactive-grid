@@ -3,7 +3,7 @@
         <tr class="table-row header-row">
             <th class="table-cell frozen" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn'
                 [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' #frozenCell #headerCell>
-                <div class="cell-wrapper">
+                <div class="cell-wrapper" [sortTableColumn]='col' [state]='sort' (sort)='onSort($event)'>
                     <div class="tools">
                         <p class="title">{{col.name}}</p>
                         <div class="indicator">
@@ -21,7 +21,7 @@
             </th>
             <th class="table-cell" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn'
                 [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' #unfrozenCell #headerCell>
-                <div class="cell-wrapper">
+                <div class="cell-wrapper" [sortTableColumn]='col' [state]='sort' (sort)='onSort($event)'>
                     <div class="tools">
                         <p class="title">{{col.name}}</p>
                         <div class="indicator">
@@ -58,7 +58,6 @@
         </ng-container>
     </tbody>
 </table>
-<!-- <div class="header-placeholder"></div> -->
 <p-slideMenu styleClass='table-advance-setting-slide-menu' appendTo="body" #frozenAdvanceColSettingMenuCt
     [model]="frozenAdvanceColSettingMenu" [popup]="true">
 </p-slideMenu>

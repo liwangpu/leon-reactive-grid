@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { DStore } from '../../models';
 import * as fromService from '../../services';
-import { GRIDCONFIG, IGridConfig } from '../../tokens';
 import * as fromConst from '../../consts';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
+import { skip } from 'rxjs/operators';
+import * as fromUtils from '../../utils';
 
 
 @Component({
@@ -18,22 +19,29 @@ import { SubSink } from 'subsink';
 export class GridComponent implements OnInit, OnDestroy {
 
     private enableUrlHistory: boolean;
+    private initialized: boolean = false;
     private subs = new SubSink();
     public constructor(
-        @Inject(GRIDCONFIG)
-        private config: IGridConfig,
         private dstore: DStore,
         private storeSrv: fromService.GridStoreService,
-        private acr: ActivatedRoute
+        private acr: ActivatedRoute,
+        private router: Router
     ) {
 
-        this.dstore.registryGridStartup(option => {
-            option = option || {};
-            // console.log('option', option);
+        this.dstore.registryGridStartup((option = { rowsPerPageOptions: [25, 50, 100] }) => {
+            if (this.initialized) {
+                console.warn('dgrid已经初始化,多余的startup将不生效');
+                return;
+            }
+            this.initialized = true;
+            let queryParams = {};
             this.enableUrlHistory = option.enableUrlHistory;
-            this.storeSrv.initGrid(option);
+            if (this.enableUrlHistory) {
+                queryParams = fromUtils.parseUrlQueryParams(this.router.url);
+            }
+            this.storeSrv.initGrid(option, queryParams);
         });
-        this.dstore.registryGridRefresh(history => this.storeSrv.refreshGrid(history));
+        this.dstore.registryGridRefresh(queryParams => this.storeSrv.refreshGrid(queryParams));
     }
 
     public ngOnDestroy(): void {
@@ -41,12 +49,12 @@ export class GridComponent implements OnInit, OnDestroy {
     }
 
     public async ngOnInit(): Promise<void> {
-        // console.log('on init');
-        // if (this.enableUrlHistory) {
-        //     this.subs.sink = this.acr.queryParams.subscribe(q => {
-        //         console.log(1, q);
-        //     });
-        // }
+        if (this.enableUrlHistory) {
+            this.subs.sink = this.acr.queryParams.pipe(skip(1)).subscribe(queryParams => {
+                // console.log('url query change', queryParams);
+                this.storeSrv.refreshGrid(queryParams)
+            });
+        }
 
     }
 

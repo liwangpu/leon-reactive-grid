@@ -8,8 +8,9 @@ import { filter, map, first, skip } from 'rxjs/operators';
 import * as fromConst from '../consts';
 import { Actions, ofType } from '@ngrx/effects';
 import { SubSink } from 'subsink';
-import * as  fromToken from '../tokens';
-
+import { Router } from '@angular/router';
+import * as queryString from 'query-string';
+import { Location } from '@angular/common';
 
 function snapshot(obs: Observable<any>): Promise<any> {
     return obs.pipe(first()).toPromise();
@@ -19,30 +20,39 @@ function snapshot(obs: Observable<any>): Promise<any> {
 export class GridStoreService implements OnDestroy {
 
     public readonly gridId: string;
+    private urlQueryObj: { [key: string]: any } = {};
+    private enableUrlHistory: boolean;
     private subs = new SubSink();
     public constructor(
-        @Inject(fromToken.GRIDCONFIG)
-        private config: fromToken.IGridConfig,
+        // @Inject(fromToken.GRIDCONFIG)
+        // private config: fromToken.IGridConfig,
         private dstore: fromModel.DStore,
         private store: Store<fromStore.IGridState>,
+        private router: Router,
+        private location: Location,
         private actions$: Actions
     ) {
         this.gridId = `${uuidv4().replace(/-/g, '').toUpperCase()}--${Date.now()}`;
         // effects
-        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.initGrid), first()).subscribe(async ({ option }) => {
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.initGrid), first()).subscribe(async ({ option, queryParams }) => {
+            this.enableUrlHistory = option?.enableUrlHistory;
             let cols = await this.dstore.getColumns();
             let views = await this.dstore.getFilterViews();
             // 如果view为空,用column生成一个默认的view
             if (!views.some(x => x.id === fromConst.DEFAULT_VIEW_ID)) {
                 views.unshift({ id: fromConst.DEFAULT_VIEW_ID, name: fromConst.DEFAULT_VIEW_NAME, columns: cols });
             }
-            this.store.dispatch(fromStore.setRowsPerPageOptions({ id: this.gridId, option: this.config.rowsPerPageOptions }));
             this.store.dispatch(fromStore.setViews({ id: this.gridId, views }));
-            this.changeActiveView();
+            this.changeActiveView(queryParams.viewId, true);
         });
-        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.refreshGrid), skip(1)).subscribe(() => this.loadData());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.refreshGrid)).subscribe(({ queryParams }) => {
+            // this.urlQueryObj = { ...this.urlQueryObj, ...queryParams };
+            // console.log(112, this.urlQueryObj);
+            this.loadData();
+        });
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changeActiveView)).subscribe(() => this.loadData());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changePagination)).subscribe(() => this.loadData());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changeSort)).subscribe(() => this.loadData());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.setSearchKeyword)).subscribe(() => this.loadData());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.resetView)).subscribe(() => this.loadData());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveViewAs)).subscribe(async ({ viewName }) => await this._saveAsView(viewName));
@@ -96,16 +106,24 @@ export class GridStoreService implements OnDestroy {
         return this.store.select(fromStore.selectSearchKeyword(this.gridId));
     }
 
+    public get sort$(): Observable<fromModel.ISortEvent> {
+        return this.store.select(fromStore.selectSort(this.gridId));
+    }
+
     public get pagination$(): Observable<{ page: number, limit: number }> {
         return this.store.select(fromStore.selectPagination(this.gridId)).pipe(filter(x => x));
     }
 
-    public initGrid(option?: fromModel.DStoreOption): void {
-        this.store.dispatch(fromStore.initGrid({ id: this.gridId, option }));
+    public get rowsPerPageOptions$(): Observable<Array<number>> {
+        return this.store.select(fromStore.selectRowsPerPageOptions(this.gridId)).pipe(filter(x => x));
     }
 
-    public refreshGrid(history?: fromModel.IHistory): void {
-        this.store.dispatch(fromStore.refreshGrid({ id: this.gridId, history }));
+    public initGrid(option?: fromModel.DStoreOption, queryParams?: { [key: string]: any }): void {
+        this.store.dispatch(fromStore.initGrid({ id: this.gridId, option, queryParams }));
+    }
+
+    public refreshGrid(queryParams?: { [key: string]: any }): void {
+        this.store.dispatch(fromStore.refreshGrid({ id: this.gridId, queryParams }));
     }
 
     public loadData(): void {
@@ -116,8 +134,8 @@ export class GridStoreService implements OnDestroy {
     //     this.store.dispatch(fromStore.setViews({ id: this.gridId, views }));
     // }
 
-    public changeActiveView(viewId?: string): void {
-        this.store.dispatch(fromStore.changeActiveView({ id: this.gridId, viewId }));
+    public changeActiveView(viewId?: string, initial?: boolean): void {
+        this.store.dispatch(fromStore.changeActiveView({ id: this.gridId, viewId, initial }));
     }
 
     public changePagination(page: number, limit: number): void {
@@ -158,6 +176,10 @@ export class GridStoreService implements OnDestroy {
 
     public changeColumnOrder(fields: Array<string>): void {
         this.store.dispatch(fromStore.changeColumnOrder({ id: this.gridId, fields }));
+    }
+
+    public changeSort(sort: fromModel.ISortEvent): void {
+        this.store.dispatch(fromStore.changeSort({ id: this.gridId, sort }));
     }
 
     public changeViewMode(enable?: boolean): void {
@@ -225,16 +247,52 @@ export class GridStoreService implements OnDestroy {
     private async _queryData(): Promise<void> {
         let viewId = await snapshot(this.activeViewId$);
         let pagination = await snapshot(this.pagination$);
+        let sorting: fromModel.ISortEvent = await snapshot(this.sort$);
         let keyword = await snapshot(this.searchKeyword$);
-
-        // console.log('query data', keyword, pagination);
-        let history: fromModel.IHistory = {
-            viewId: viewId !== fromConst.DEFAULT_VIEW_ID ? viewId : null,
-            keyword,
+        let queryParam: fromModel.IQueryParam = {
             pagination
         };
-        let result = await this.dstore.onQuery(history);
+
+        if (viewId && viewId !== fromConst.DEFAULT_VIEW_ID) {
+            queryParam.viewId = viewId;
+        }
+        if (keyword) {
+            queryParam.keyword = keyword;
+        }
+        if (sorting && sorting.field && sorting.direction) {
+            queryParam.sorting = sorting;
+        }
+        let result = await this.dstore.onQuery(queryParam);
+        // if (this.enableUrlHistory) { this.recordUrlHistory(queryParam); }
         this.setDatas(result.items, result.count);
+    }
+
+    private async recordUrlHistory(queryParam: fromModel.IQueryParam): Promise<void> {
+        let url = this.router.url;
+        let urlArr = url.split('?');
+        let originQueryStr = urlArr[1];
+        let originQueryObj = queryString.parse(originQueryStr);
+        // let currentQueryObj: { [key: string]: any } = {
+        //     ...this.urlQueryObj
+        //     , page: `${queryParam.pagination.page}`
+        //     , limit: `${queryParam.pagination.limit}`
+
+        // };
+
+        // if (queryParam.viewId) {
+        //     currentQueryObj.viewId = queryParam.viewId;
+        // }
+        // if (queryParam.keyword) {
+        //     currentQueryObj.keyword = queryParam.keyword;
+        // }
+
+        console.log('origin', originQueryObj);
+        console.log('current', queryParam);
+        // if (queryString.stringify(originQueryObj) !== queryString.stringify(currentQueryObj)) {
+
+        //     // this.router.navigate([urlArr[0]], { queryParams: currentQueryObj });
+        //     // this.location.go(`${urlArr[0]}?${queryString.stringify(currentQueryObj)}`);
+        // }
     }
 
     private byGrid(): any {

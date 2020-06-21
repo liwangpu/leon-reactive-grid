@@ -12,7 +12,7 @@ export class StudentService {
     private uri: string = 'http://127.0.0.1:3000/student';
     public constructor(private http: HttpClient) { }
 
-    public query(param?: fromDGrid.IHistory): Observable<fromDGrid.IQueryResult> {
+    public query(param?: fromDGrid.IQueryParam): Observable<fromDGrid.IQueryResult> {
         // console.log('query param', param);
         let limit = param?.pagination?.limit || 20;
         let page = param?.pagination?.page || 1;
@@ -24,6 +24,11 @@ export class StudentService {
 
         if (param.keyword) {
             query.q = param.keyword;
+        }
+
+        if (param.sorting && param.sorting.field && param.sorting.direction) {
+            query._sort = param.sorting.field;
+            query._order = param.sorting.direction;
         }
 
         return this.http.get<any>(`${this.uri}?${fromQueryString.stringify(query)}`, { observe: 'response' }).pipe(map(res => {

@@ -1,5 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output, Renderer2 } from '@angular/core';
-import  * as fromModel from '../models';
+import * as fromModel from '../models';
 
 const ASCENDINGFLAG: string = 'asc';
 const DESCENDINGFLAG: string = 'desc';
@@ -8,8 +8,10 @@ const DESCENDINGFLAG: string = 'desc';
     selector: '[sortTableColumn]'
 })
 export class SortTableColumnDirective {
+
     @HostBinding('attr.sort') public sortIndicator: string;
-    @Output() public readonly sort: EventEmitter<fromModel.ISortEvent> = new EventEmitter<fromModel.ISortEvent>();
+    @Output()
+    public readonly sort: EventEmitter<fromModel.ISortEvent> = new EventEmitter<fromModel.ISortEvent>();
     public columnField: string;
     private _column: fromModel.ITableColumn;
     private direction: string;
@@ -37,6 +39,15 @@ export class SortTableColumnDirective {
     public get column(): fromModel.ITableColumn {
         return this._column;
     }
+
+    @Input()
+    public set state(val: fromModel.ISortEvent) {
+        if (!val || val.field !== this.column.field) {
+            this.clearSort();
+            return;
+        }
+        this.markDirection(val.direction);
+    }
     @HostListener('click', ['$event']) public onClick(e: any): void {
         e.stopPropagation();
         if (!this.column || !this.column.sort) { return; }
@@ -52,12 +63,12 @@ export class SortTableColumnDirective {
         this.sort.next({ field: this.columnField, direction: this.direction });
     }
 
-    public clearSort(): void {
+    private clearSort(): void {
         this.direction = '';
         this.sortIndicator = '';
     }
 
-    public markDirection(direction: string): void {
+    private markDirection(direction: string): void {
         if (!direction) { return; }
         if (direction === ASCENDINGFLAG) {
             this.markAsc();
@@ -66,6 +77,7 @@ export class SortTableColumnDirective {
 
         this.markDesc();
     }
+
     private markAsc(): void {
         this.direction = ASCENDINGFLAG;
         this.sortIndicator = ASCENDINGFLAG;

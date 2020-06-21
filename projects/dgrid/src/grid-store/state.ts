@@ -18,6 +18,7 @@ export interface IGridPagination {
 
 
 export enum gridParamEnum {
+    startupOption = 'startupOption',
     views = 'views',
     activeColumns = 'activeColumns',
     pagination = 'pagination',
@@ -27,5 +28,6 @@ export enum gridParamEnum {
     advanceSettingPanel = 'advanceSettingPanel',
     enableFilterView = 'enableFilterView',
     searchKeyword = 'searchKeyword',
+    sort = 'sort',
     rowsPerPageOptions = 'rowsPerPageOptions'
 }

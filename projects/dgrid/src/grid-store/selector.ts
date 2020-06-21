@@ -20,6 +20,11 @@ export const selectPagination = (id: string) => createSelector(
     grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.pagination))]
 );
 
+export const selectRowsPerPageOptions = (id: string) => createSelector(
+    selectDGridData,
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.rowsPerPageOptions))]
+);
+
 export const selectAdvanceSettingPanel = (id: string) => createSelector(
     selectDGridData,
     grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.advanceSettingPanel))]
@@ -53,4 +58,9 @@ export const selectViewMode = (id: string) => createSelector(
 export const selectSearchKeyword = (id: string) => createSelector(
     selectDGridData,
     grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.searchKeyword))]
+);
+
+export const selectSort = (id: string) => createSelector(
+    selectDGridData,
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.sort))]
 );

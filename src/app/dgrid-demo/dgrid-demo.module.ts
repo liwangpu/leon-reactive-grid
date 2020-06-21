@@ -13,13 +13,7 @@ import { HomeComponent } from './home/home.component';
         fromDGrid.DGridModule
     ],
     providers: [
-        {
-            provide: fromDGrid.GRIDCONFIG,
-            useValue: {
-                idProperty: 'id',
-                rowsPerPageOptions: [20, 50, 100]
-            }
-        }
+
     ]
 })
 export class DGridDemoModule { }
