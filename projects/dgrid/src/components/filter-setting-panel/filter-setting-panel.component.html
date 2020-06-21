@@ -2,8 +2,8 @@
     <dgrid-setting-panel-keyword-search [(keyword)]='keyword'></dgrid-setting-panel-keyword-search>
 </div>
 <div class="content">
-    <dgrid-filter-setting-item class="fitem" *ngFor='let col of columns;trackBy:trackByColumnFn'
-        [keywordFilterItem]='col.name' [keyword]='keyword' [column]='col'>
+    <dgrid-filter-setting-item class="fitem" *ngFor='let f of filters;trackBy:trackByFilterFn'
+        [keywordFilterItem]='f.name' [keyword]='keyword' [name]='f.name' [field]='f.field' [fieldType]='f.type' [value]='f.value' [operator]='f.operator'>
     </dgrid-filter-setting-item>
 </div>
 <div class="footer" #footer>

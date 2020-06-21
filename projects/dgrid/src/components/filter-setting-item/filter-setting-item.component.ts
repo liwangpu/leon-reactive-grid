@@ -13,22 +13,26 @@ import * as  fromEnum from '../../enums';
 export class FilterSettingItemComponent {
 
     @Input()
-    public set column(col: fromModel.ITableColumn) {
-        this._column = col;
-        if (col.fieldType === fromEnum.ColumnTypeEnum.Number) {
+    public field: string;
+    @Input()
+    public name: string;
+    @Input()
+    public set fieldType(type: fromEnum.ColumnTypeEnum) {
+        if (type === fromEnum.ColumnTypeEnum.Number) {
             this.settingNumberOperations();
         } else {
             this.settingStringOperations();
         }
     }
-    public get column(): fromModel.ITableColumn {
-        return this._column;
-    }
-    public expand: boolean;
+    @Input()
     public value: any;
+    @Input()
     public operator: string;
-    public operators: Array<fromOrion.SelectItem>
-    private _column: fromModel.ITableColumn;
+    public expand: boolean;
+    public operators: Array<fromOrion.SelectItem>;
+    public getFilter(): fromModel.IFilter {
+        return { field: this.field, operator: this.operator, value: this.value };
+    }
 
     public operatorChange(): void {
         if (!this.operator) {

@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { GridStoreService } from '../../services';
 import { SubSink } from 'subsink';
 import { SelectItem } from '@byzan/orion2';
-import { take } from 'rxjs/operators';
 
 @Component({
     selector: 'dgrid-header',
@@ -12,8 +10,8 @@ import { take } from 'rxjs/operators';
 })
 export class GridHeaderComponent implements OnInit, OnDestroy {
 
-    public displayMode: string = 'browser';
-    public enableFilterView: boolean = true;
+    public displayMode = 'browser';
+    public enableFilterView: boolean;
     public allViews: Array<SelectItem> = [];
     public activeViewId: string;
     public keyword: string;

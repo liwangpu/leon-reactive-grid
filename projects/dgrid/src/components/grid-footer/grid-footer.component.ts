@@ -12,8 +12,8 @@ export class GridFooterComponent implements OnInit, OnDestroy {
 
     public displayMode: string;
     public rows: number;
-    public dataTotal: number = 0;
-    public paginatorFirst: number = 0;
+    public dataTotal = 0;
+    public paginatorFirst = 0;
     public rowsPerPageOptions: Array<number>;
     private subs = new SubSink();
     public constructor(

@@ -23,6 +23,7 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
     public ngOnInit(): void {
         this.gridStartup({
             rowsPerPageOptions: [10, 30, 50],
+            enableView: true,
             enableUrlHistory: true
         });
         // this.gridStartup();
@@ -83,7 +84,7 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
     }
 
     public onQuery(queryParam?: { [key: string]: any; }): Promise<fromDGrid.IQueryResult<any>> {
-        // console.log('query', JSON.stringify(queryParam));
+        console.log('query', JSON.stringify(queryParam));
         return this.studentSrv.query(queryParam).toPromise();
     }
 

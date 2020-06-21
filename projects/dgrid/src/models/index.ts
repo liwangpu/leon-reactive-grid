@@ -1,5 +1,6 @@
 export * from './dstore';
 export * from './i-dstore';
+export * from './i-filter';
 export * from './i-filter-view';
 export * from './local-view-dstore';
 export * from './no-view-dstore';

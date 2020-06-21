@@ -27,6 +27,12 @@ function getViews(state: {}, id): Array<fromModel.IFilterView> {
     return [...value];
 }
 
+function getActiveView(state: {}, id): fromModel.IFilterView {
+    let value = state[generatePropertyKey(id, fromState.gridParamEnum.activeView)];
+    if (!value) { return null; }
+    return { ...value };
+}
+
 function getActiveColumns(state: {}, id): Array<fromModel.ITableColumn> {
     let value = state[generatePropertyKey(id, fromState.gridParamEnum.activeColumns)];
     if (!value) { return null; }
@@ -71,30 +77,26 @@ export const gridReducer = createReducer(
         if (queryParams.sort) {
             sort = { field: queryParams.sort, direction: queryParams.direction };
         }
-        // console.log(111, sort);
         return {
             ...state
             , ...generatePropertyValue(id, fromState.gridParamEnum.startupOption, option)
             , ...generatePropertyValue(id, fromState.gridParamEnum.rowsPerPageOptions, option.rowsPerPageOptions)
             , ...generatePropertyValue(id, fromState.gridParamEnum.pagination, pagination)
             , ...generatePropertyValue(id, fromState.gridParamEnum.sort, sort)
-            , ...generatePropertyValue(id, fromState.gridParamEnum.searchKeyword, queryParams.keyword)
+            , ...generatePropertyValue(id, fromState.gridParamEnum.searchKeyword, queryParams.keyword),
+            ...generatePropertyValue(id, fromState.gridParamEnum.enableFilterView, option.enableView)
         };
     }),
     on(fromAction.refreshGrid, (state: {}, { id, queryParams }) => {
         queryParams = queryParams || {};
-        // if (!Object.keys(queryParams).length) { return { ...state }; }
         let rowsPerPageOptions = getRowsPerPageOptions(state, id);
         let pagination = getPagination(state, id);
         pagination.page = queryParams.page || 1;
         pagination.limit = queryParams.limit || rowsPerPageOptions[0];
-
         let sorting: fromModel.ISortEvent = null;
         if (queryParams.sort && queryParams.direction) {
             sorting = { field: queryParams.sort, direction: queryParams.direction };
         }
-        // let rowsPerPageOptions = getRowsPerPageOptions(state, id);
-        // console.log(11111, sorting);
         return {
             ...state
             , ...generatePropertyValue(id, fromState.gridParamEnum.pagination, pagination)
@@ -179,9 +181,6 @@ export const gridReducer = createReducer(
         });
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, columns) };
     }),
-    on(fromAction.changeViewMode, (state: {}, { id, enable }) => {
-        return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.enableFilterView, enable) };
-    }),
     on(fromAction.setSearchKeyword, (state: {}, { id, keyword }) => {
         let pagination = getPagination(state, id);
         pagination.page = 1;
@@ -204,6 +203,14 @@ export const gridReducer = createReducer(
             , ...generatePropertyValue(id, fromState.gridParamEnum.pagination, { page: 1, limit: rowsPerPageOptions[0] })
             , ...generatePropertyValue(id, fromState.gridParamEnum.sort, null)
             , ...generatePropertyValue(id, fromState.gridParamEnum.searchKeyword, null)
+        };
+    }),
+    on(fromAction.saveViewAndLoadData, (state: {}, { id, filters }) => {
+        let activeView = getActiveView(state, id);
+        activeView.filters = filters;
+        return { 
+            ...state
+            , ...generatePropertyValue(id, fromState.gridParamEnum.activeView, activeView)
         };
     })
 );

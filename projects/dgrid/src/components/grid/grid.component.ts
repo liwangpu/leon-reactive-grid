@@ -8,6 +8,7 @@ import * as fromUtils from '../../utils';
 
 
 @Component({
+    // tslint:disable-next-line: component-selector
     selector: 'dgrid',
     templateUrl: './grid.component.html',
     styleUrls: ['./grid.component.scss'],
@@ -18,7 +19,7 @@ import * as fromUtils from '../../utils';
 export class GridComponent implements OnInit, OnDestroy {
 
     private enableUrlHistory: boolean;
-    private initialized: boolean = false;
+    private initialized: boolean;
     private subs = new SubSink();
     public constructor(
         private dstore: DStore,
@@ -50,7 +51,7 @@ export class GridComponent implements OnInit, OnDestroy {
         if (this.enableUrlHistory) {
             this.subs.sink = this.acr.queryParams.pipe(skip(1)).subscribe(queryParams => {
                 // console.log('url query change', queryParams);
-                this.storeSrv.refreshGrid(queryParams)
+                this.storeSrv.refreshGrid(queryParams);
             });
         }
     }

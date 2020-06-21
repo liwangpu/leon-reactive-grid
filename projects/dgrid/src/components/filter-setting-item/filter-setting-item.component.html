@@ -1,6 +1,6 @@
 <div class="bar" [class.dirty]='operator' (click)='expand=!expand'>
     <span class="byz-icon bi-chevron-right" [class.expand]='expand'></span>
-    <p class="title">{{column?.name}}</p>
+    <p class="title">{{name}}</p>
 </div>
 <div class="filter" [class.hidden]='!expand'>
     <byz-select [options]="operators" [ngModel]="operator" (ngModelChange)='operator=$event;operatorChange()'

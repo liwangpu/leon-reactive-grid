@@ -13,6 +13,7 @@ export class SettingPanelKeywordSearchComponent implements OnInit, OnDestroy {
     public keyword: string;
     @Output()
     public readonly keywordChange: EventEmitter<string> = new EventEmitter<string>();
+    // tslint:disable-next-line: variable-name
     public _keywordChange = new Subject<string>();
     public constructor() { }
 

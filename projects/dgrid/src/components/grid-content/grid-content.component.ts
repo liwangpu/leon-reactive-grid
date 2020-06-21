@@ -12,7 +12,7 @@ import { FilterSettingPanelComponent } from '../filter-setting-panel/filter-sett
 })
 export class GridContentComponent implements OnInit, OnDestroy {
 
-    public showFilterView: boolean = false;
+    public showFilterView: boolean;
     public columns: Array<fromModel.ITableColumn>;
     public datas: Array<any>;
     public advanceSettingPanel: string;
@@ -59,7 +59,7 @@ export class GridContentComponent implements OnInit, OnDestroy {
 
         setTimeout(() => {
             // this.changeAdvanceSettingPanel('column-seting');
-            // this.changeAdvanceSettingPanel('filter-seting');
+            this.changeAdvanceSettingPanel('filter-seting');
         }, 50);
     }
 

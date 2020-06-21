@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { MenuItem as OrionMenuItem } from '@byzan/orion2';
 import { GridStoreService } from '../../services';
 import * as fromModel from '../../models';
 import * as fromConst from '../../consts';
 import { SubSink } from 'subsink';
+import { FilterSettingItemComponent } from '../filter-setting-item/filter-setting-item.component';
 
 @Component({
     selector: 'dgrid-filter-setting-panel',
@@ -13,11 +14,13 @@ import { SubSink } from 'subsink';
 export class FilterSettingPanelComponent implements OnInit, OnDestroy {
 
     public keyword: string;
-    public enableFilterView: boolean = true;
+    public enableFilterView: boolean;
     public operationMenus: Array<OrionMenuItem>;
-    public columns: Array<fromModel.ITableColumn>;
     public showViewPanel: boolean;
     public viewName: string;
+    public filters: Array<fromModel.IFilter>;
+    @ViewChildren(FilterSettingItemComponent)
+    private filterItems: QueryList<FilterSettingItemComponent>;
     private viewId: string;
     private subs = new SubSink();
     public constructor(
@@ -44,8 +47,21 @@ export class FilterSettingPanelComponent implements OnInit, OnDestroy {
             }
         ];
         this.subs.sink = this.storeSrv.viewMode$.subscribe(enable => this.enableFilterView = enable);
-        this.subs.sink = this.storeSrv.activeViewId$.subscribe(id => this.viewId = id);
-        this.subs.sink = this.storeSrv.activeColumns$.subscribe(cols => this.columns = cols);
+        this.subs.sink = this.storeSrv.activeView$.subscribe(view => {
+            this.viewId = view.id;
+            this.filters = [];
+            const filters = view.filters || [];
+            view.columns.forEach(col => {
+                // tslint:disable-next-line: max-line-length
+                let filter: fromModel.IFilter = filters.filter(f => f.field === col.field)[0] || { field: col.field, operator: null, value: null };
+                filter = { ...filter };
+                // tslint:disable-next-line: no-string-literal
+                filter['name'] = col.name;
+                // tslint:disable-next-line: no-string-literal
+                filter['type'] = col.fieldType;
+                this.filters.push(filter);
+            });
+        });
     }
 
     public query(): void {
@@ -63,11 +79,12 @@ export class FilterSettingPanelComponent implements OnInit, OnDestroy {
             this.query();
             return;
         }
-
-        this.storeSrv.saveViewAndLoadData();
+        const filters: Array<fromModel.IFilter> = [];
+        this.filterItems.forEach(it => filters.push(it.getFilter()));
+        this.storeSrv.saveViewAndLoadData(filters);
     }
 
-    public trackByColumnFn(inde: number, it: { field: string }): string {
+    public trackByFilterFn(it: fromModel.IFilter): string {
         return it.field;
     }
 }
