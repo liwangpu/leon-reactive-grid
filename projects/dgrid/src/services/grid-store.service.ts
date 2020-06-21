@@ -8,9 +8,10 @@ import { filter, map, first, skip } from 'rxjs/operators';
 import * as fromConst from '../consts';
 import { Actions, ofType } from '@ngrx/effects';
 import { SubSink } from 'subsink';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as queryString from 'query-string';
 import { Location } from '@angular/common';
+import * as fromUtils from '../utils';
 
 function snapshot(obs: Observable<any>): Promise<any> {
     return obs.pipe(first()).toPromise();
@@ -29,6 +30,7 @@ export class GridStoreService implements OnDestroy {
         private dstore: fromModel.DStore,
         private store: Store<fromStore.IGridState>,
         private router: Router,
+        private acr: ActivatedRoute,
         private location: Location,
         private actions$: Actions
     ) {
@@ -263,36 +265,21 @@ export class GridStoreService implements OnDestroy {
             queryParam.sorting = sorting;
         }
         let result = await this.dstore.onQuery(queryParam);
-        // if (this.enableUrlHistory) { this.recordUrlHistory(queryParam); }
+        if (this.enableUrlHistory) { this.recordUrlHistory(queryParam); }
         this.setDatas(result.items, result.count);
     }
 
     private async recordUrlHistory(queryParam: fromModel.IQueryParam): Promise<void> {
-        let url = this.router.url;
+        let url = fromUtils.UrlTool.getPathAndQuery(location.href);
         let urlArr = url.split('?');
-        let originQueryStr = urlArr[1];
-        let originQueryObj = queryString.parse(originQueryStr);
-        // let currentQueryObj: { [key: string]: any } = {
-        //     ...this.urlQueryObj
-        //     , page: `${queryParam.pagination.page}`
-        //     , limit: `${queryParam.pagination.limit}`
-
-        // };
-
-        // if (queryParam.viewId) {
-        //     currentQueryObj.viewId = queryParam.viewId;
-        // }
-        // if (queryParam.keyword) {
-        //     currentQueryObj.keyword = queryParam.keyword;
-        // }
-
-        console.log('origin', originQueryObj);
-        console.log('current', queryParam);
-        // if (queryString.stringify(originQueryObj) !== queryString.stringify(currentQueryObj)) {
-
-        //     // this.router.navigate([urlArr[0]], { queryParams: currentQueryObj });
-        //     // this.location.go(`${urlArr[0]}?${queryString.stringify(currentQueryObj)}`);
-        // }
+        let originQueryObj = fromUtils.parseUrlQueryParams(url);
+        let currentQueryObj = fromUtils.tranferQueryParams(queryParam)
+        // console.log('origin', originQueryObj, queryString.stringify(originQueryObj));
+        // console.log('current', currentQueryObj, queryString.stringify(currentQueryObj));
+        if (queryString.stringify(originQueryObj) !== queryString.stringify(currentQueryObj)) {
+            // console.log('不一样');
+            this.location.go(`${urlArr[0]}?${queryString.stringify(currentQueryObj)}`);
+        }
     }
 
     private byGrid(): any {

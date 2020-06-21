@@ -83,7 +83,7 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
     }
 
     public onQuery(queryParam?: { [key: string]: any; }): Promise<fromDGrid.IQueryResult<any>> {
-        console.log('query', JSON.stringify(queryParam));
+        // console.log('query', JSON.stringify(queryParam));
         return this.studentSrv.query(queryParam).toPromise();
     }
 

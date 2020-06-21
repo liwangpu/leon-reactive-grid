@@ -5,7 +5,7 @@
         <a class="nav" routerLink="/dgrid-demo/student-list"
             [queryParams]='{page:2,limit:10,keyword:"blue",sort:"name",direction:"asc"}'
             routerLinkActive="active">学生列表[带参数]</a>
-        <a class="nav" routerLink="/test" routerLinkActive="active">Test</a>
+        <a class="nav" routerLink="/test" [queryParams]='{name:"Hellen"}' routerLinkActive="active">Test</a>
     </div>
     <div class="content">
         <router-outlet></router-outlet>

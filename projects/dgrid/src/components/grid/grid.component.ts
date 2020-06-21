@@ -1,7 +1,6 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DStore } from '../../models';
 import * as fromService from '../../services';
-import * as fromConst from '../../consts';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubSink } from 'subsink';
 import { skip } from 'rxjs/operators';
@@ -27,7 +26,6 @@ export class GridComponent implements OnInit, OnDestroy {
         private acr: ActivatedRoute,
         private router: Router
     ) {
-
         this.dstore.registryGridStartup((option = { rowsPerPageOptions: [25, 50, 100] }) => {
             if (this.initialized) {
                 console.warn('dgrid已经初始化,多余的startup将不生效');
@@ -55,7 +53,6 @@ export class GridComponent implements OnInit, OnDestroy {
                 this.storeSrv.refreshGrid(queryParams)
             });
         }
-
     }
 
 }

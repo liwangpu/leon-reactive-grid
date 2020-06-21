@@ -84,14 +84,10 @@ export const gridReducer = createReducer(
     on(fromAction.refreshGrid, (state: {}, { id, queryParams }) => {
         queryParams = queryParams || {};
         // if (!Object.keys(queryParams).length) { return { ...state }; }
-
+        let rowsPerPageOptions = getRowsPerPageOptions(state, id);
         let pagination = getPagination(state, id);
-        if (queryParams.page) {
-            pagination.page = queryParams.page;
-        }
-        if (queryParams.limit) {
-            pagination.limit = queryParams.limit;
-        }
+        pagination.page = queryParams.page || 1;
+        pagination.limit = queryParams.limit || rowsPerPageOptions[0];
 
         let sorting: fromModel.ISortEvent = null;
         if (queryParams.sort && queryParams.direction) {
