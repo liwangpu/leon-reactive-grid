@@ -18,6 +18,7 @@ export const setSearchKeyword = createAction('[DGrid] set search keyword', props
 export const changeSort = createAction('[DGrid] change sort', props<{ id: string, sort: fromModel.ISortEvent }>());
 export const resetView = createAction('[DGrid] reset view', props<{ id: string }>());
 export const saveView = createAction('[DGrid] save view', props<{ id: string }>());
+export const updateFilters = createAction('[DGrid] update filters', props<{ id: string, filters: Array<fromModel.IFilter> }>());
 export const saveViewAndLoadData = createAction('[DGrid] save view and load data', props<{ id: string, filters: Array<fromModel.IFilter> }>());
 export const saveViewAs = createAction('[DGrid] save view as', props<{ id: string, viewName: string }>());
 export const clearStoreData = createAction('[DGrid] clear store data', props<{ id: string }>());

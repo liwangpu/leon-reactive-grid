@@ -43,6 +43,8 @@ export class GridStoreService implements OnDestroy {
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.resetView)).subscribe(() => this.loadData());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveViewAs)).subscribe(async ({ viewName }) => await this._saveAsView(viewName));
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changeColumnWidth)).subscribe(async () => await this._saveCurrentView());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.freezenColumn)).subscribe(async () => await this._saveCurrentView());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.unFreezenColumn)).subscribe(async () => await this._saveCurrentView());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveView)).subscribe(async () => await this._saveCurrentView());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveViewAndLoadData)).subscribe(async () => {
             await this._saveCurrentView();
@@ -178,6 +180,10 @@ export class GridStoreService implements OnDestroy {
 
     public resetView(): void {
         this.store.dispatch(fromStore.resetView({ id: this.gridId }));
+    }
+
+    public updateFilters(filters: Array<fromModel.IFilter>): void {
+        this.store.dispatch(fromStore.updateFilters({ id: this.gridId, filters }));
     }
 
     private async _saveCurrentView(): Promise<void> {

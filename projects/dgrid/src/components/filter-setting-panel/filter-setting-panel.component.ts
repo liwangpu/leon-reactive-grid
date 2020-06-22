@@ -65,6 +65,8 @@ export class FilterSettingPanelComponent implements OnInit, OnDestroy {
     }
 
     public query(): void {
+        const filters: Array<fromModel.IFilter> = this.getFilters();
+        this.storeSrv.updateFilters(filters);
         this.storeSrv.loadData();
     }
 
@@ -79,12 +81,17 @@ export class FilterSettingPanelComponent implements OnInit, OnDestroy {
             this.query();
             return;
         }
-        const filters: Array<fromModel.IFilter> = [];
-        this.filterItems.forEach(it => filters.push(it.getFilter()));
+        const filters: Array<fromModel.IFilter> = this.getFilters();
         this.storeSrv.saveViewAndLoadData(filters);
     }
 
     public trackByFilterFn(it: fromModel.IFilter): string {
         return it.field;
+    }
+
+    private getFilters(): Array<fromModel.IFilter> {
+        const filters: Array<fromModel.IFilter> = [];
+        this.filterItems.forEach(it => filters.push(it.getFilter()));
+        return filters;
     }
 }

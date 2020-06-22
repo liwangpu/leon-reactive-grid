@@ -31,6 +31,40 @@ export class StudentService {
             query._order = param.sorting.direction;
         }
 
+        if (param.filters) {
+            param.filters.forEach(f => {
+                if (f.operator === fromDGrid.EQ_OPERATOR) {
+                    query[`${f.field}`] = f.value;
+                    return;
+                }
+
+                if (f.operator === fromDGrid.LIKE_OPERATOR) {
+                    query[`${f.field}_like`] = f.value;
+                    return;
+                }
+
+                if (f.operator === fromDGrid.LT_OPERATOR) {
+                    query[`${f.field}_lt`] = f.value;
+                    return;
+                }
+
+                if (f.operator === fromDGrid.LTE_OPERATOR) {
+                    query[`${f.field}_lte`] = f.value;
+                    return;
+                }
+
+                if (f.operator === fromDGrid.GT_OPERATOR) {
+                    query[`${f.field}_gt`] = f.value;
+                    return;
+                }
+
+                if (f.operator === fromDGrid.GTE_OPERATOR) {
+                    query[`${f.field}_gte`] = f.value;
+                    return;
+                }
+            });
+        }
+
         return this.http.get<any>(`${this.uri}?${fromQueryString.stringify(query)}`, { observe: 'response' }).pipe(map(res => {
             let total = Number(res.headers.get('X-Total-Count'));
             return { count: total, items: res.body };

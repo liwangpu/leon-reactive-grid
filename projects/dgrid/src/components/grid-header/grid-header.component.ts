@@ -34,6 +34,7 @@ export class GridHeaderComponent implements OnInit, OnDestroy {
         });
 
         this.subs.sink = this.storeSrv.searchKeyword$.subscribe(keyword => this.keyword = keyword);
+        this.subs.sink = this.storeSrv.viewMode$.subscribe(enable => this.enableFilterView = enable);
     }
 
     public changeActiveView(): void {

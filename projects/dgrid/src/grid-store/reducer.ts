@@ -196,6 +196,14 @@ export const gridReducer = createReducer(
             , ...generatePropertyValue(id, fromState.gridParamEnum.sort, sort)
         };
     }),
+    on(fromAction.updateFilters, (state: {}, { id, filters }) => {
+        let activeView = getActiveView(state, id);
+        activeView.filters = filters;
+        return {
+            ...state
+            , ...generatePropertyValue(id, fromState.gridParamEnum.activeView, activeView)
+        };
+    }),
     on(fromAction.resetView, (state: {}, { id }) => {
         let rowsPerPageOptions = getRowsPerPageOptions(state, id);
         return {
