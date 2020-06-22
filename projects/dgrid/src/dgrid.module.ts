@@ -9,6 +9,7 @@ import * as fromOrion from '@byzan/orion2';
 import * as fromDirective from './directives';
 import * as fromComponent from './components';
 
+
 @NgModule({
     declarations: [...fromComponent.components, fromDirective.directives],
     imports: [

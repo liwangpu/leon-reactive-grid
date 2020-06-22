@@ -1,0 +1,12 @@
+div.container {
+    width: 100%;
+    height: 500px;
+    border: 1px solid gray;
+    overflow: auto;
+
+    div.box {
+        width: 100%;
+        // height: 100%;
+        height: auto;
+    }
+}

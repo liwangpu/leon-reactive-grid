@@ -22,7 +22,8 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
 
     public ngOnInit(): void {
         this.gridStartup({
-            rowsPerPageOptions: [10, 30, 50],
+            // rowsPerPageOptions: [10, 30, 50],
+            rowsPerPageOptions: [30, 50, 100],
             enableView: true,
             enableUrlHistory: true
         });
@@ -51,29 +52,29 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
                 fieldType: fromDGrid.ColumnTypeEnum.String,
                 sort: true
             },
-            {
-                field: 'city',
-                name: '城市',
-                fieldType: fromDGrid.ColumnTypeEnum.String,
-                sort: true
-            },
-            {
-                field: 'department',
-                name: '部门',
-                fieldType: fromDGrid.ColumnTypeEnum.String,
-                sort: true
-            },
-            {
-                field: 'color',
-                name: '颜色',
-                fieldType: fromDGrid.ColumnTypeEnum.String,
-                sort: true
-            },
-            {
-                field: 'address',
-                name: '地址',
-                fieldType: fromDGrid.ColumnTypeEnum.String
-            },
+            // {
+            //     field: 'city',
+            //     name: '城市',
+            //     fieldType: fromDGrid.ColumnTypeEnum.String,
+            //     sort: true
+            // },
+            // {
+            //     field: 'department',
+            //     name: '部门',
+            //     fieldType: fromDGrid.ColumnTypeEnum.String,
+            //     sort: true
+            // },
+            // {
+            //     field: 'color',
+            //     name: '颜色',
+            //     fieldType: fromDGrid.ColumnTypeEnum.String,
+            //     sort: true
+            // },
+            // {
+            //     field: 'address',
+            //     name: '地址',
+            //     fieldType: fromDGrid.ColumnTypeEnum.String
+            // },
             {
                 field: 'remark',
                 name: '备注',

@@ -1,0 +1,45 @@
+<div class="table" #table>
+    <div class="group frozen">
+        <div class="column" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn'>
+            <div class="cell header">
+                <ng-container *ngTemplateOutlet='headerCellTpl;context:{column:col,type:"frozen"}'></ng-container>
+            </div>
+            <div class="cell body" *ngFor='let rowData of datas'>
+                <span>{{rowData[col.field]}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="group unfrozen">
+        <div class="column" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn'>
+            <div class="cell header">
+                <ng-container *ngTemplateOutlet='headerCellTpl;context:{column:col,type:"unfrozen"}'></ng-container>
+            </div>
+            <div class="cell body" *ngFor='let rowData of datas'>
+                <span>{{rowData[col.field]}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-slideMenu styleClass='table-advance-setting-slide-menu' appendTo="body" #frozenAdvanceColSettingMenuCt
+    [model]="frozenAdvanceColSettingMenu" [popup]="true">
+</p-slideMenu>
+
+<p-slideMenu styleClass='table-advance-setting-slide-menu' appendTo="body" #unFrozenAdvanceColSettingMenuCt
+    [model]="unFrozenAdvanceColSettingMenu" [popup]="true">
+</p-slideMenu>
+
+<ng-template let-col='column' let-type='type' #headerCellTpl>
+    <div class="cell-wrapper" #cellWrapper>
+        <p class="title">{{col.name}}</p>
+        <div class="indicator">
+            <span class="sort"></span>
+            <div class="advance-setting">
+                <span class="byz-icon col-setting bi-chevron-down"
+                    (click)='currentEditColumn=col.field;openAdvanceMenu(type,$event);$event.stopPropagation();'></span>
+            </div>
+            <div class="resizer-handler" [columnResizerHandler]='cellWrapper' [snapline]='snapline' [columnType]='type'>
+            </div>
+        </div>
+    </div>
+</ng-template>

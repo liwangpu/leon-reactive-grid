@@ -9,35 +9,18 @@ import { Location } from '@angular/common';
     templateUrl: './test.component.html',
     styleUrls: ['./test.component.scss']
 })
-export class TestComponent implements OnDestroy {
+export class TestComponent {
 
-    public name: string = 'Leon';
-    private subs = new SubSink();
+    contents = [];
     public constructor(
-        private acr: ActivatedRoute,
-        private router: Router,
-        private location: Location
     ) {
-        this.subs.sink = this.acr.queryParams.subscribe(q => {
-            console.log('acr query', q);
-        });
-        console.log('ctor');
+
     }
 
-    public ngOnDestroy(): void {
-        this.subs.unsubscribe();
-    }
-
-    public goto(): void {
-        let url = this.router.url;
-        let urlArr = url.split('?');
-        let queryStr = urlArr[1];
-        let query = queryString.parse(queryStr);
-        query.name = this.name;
-        // console.log(1, query);
-        // this.router.navigate([urlArr[0]], { queryParams: query, replaceUrl: false });
-        this.location.go(`${urlArr[0]}?${queryString.stringify(query)}`);
-
+    public addContent(): void {
+        for (let idx = 50; idx >= 0; idx--) {
+            this.contents.push(Date.now().toString());
+        }
     }
 
 }

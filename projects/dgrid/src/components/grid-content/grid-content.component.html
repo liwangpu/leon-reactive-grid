@@ -1,13 +1,17 @@
-<dgrid-table [columns]='columns' [datas]='datas' [snapline]='snapline'></dgrid-table>
+<!-- <dgrid-table [columns]='columns' [datas]='datas' [snapline]='snapline'></dgrid-table> -->
+<dgrid-table-1 [snapline]='snapline'></dgrid-table-1>
+
 <div class="advance-setting-panel" [class.show]='advanceSettingPanel'>
     <div #advancePanelAnchor></div>
 </div>
 <div class="table-bar">
-    <div class="setting" [class.active]='advanceSettingPanel==="column-seting"' (click)='changeAdvanceSettingPanel("column-seting")'>
+    <div class="setting" [class.active]='advanceSettingPanel==="column-seting"'
+        (click)='changeAdvanceSettingPanel("column-seting")'>
         <span class="byz-icon bi-menu"></span>
         <span>列设置</span>
     </div>
-    <div class="setting" [class.active]='advanceSettingPanel==="filter-seting"' (click)='changeAdvanceSettingPanel("filter-seting")'>
+    <div class="setting" [class.active]='advanceSettingPanel==="filter-seting"'
+        (click)='changeAdvanceSettingPanel("filter-seting")'>
         <span class="byz-icon bi-funnel"></span>
         <span>筛选器</span>
     </div>

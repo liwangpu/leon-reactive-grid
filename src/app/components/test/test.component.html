@@ -1,5 +1,6 @@
-<p>test works!</p>
-
-
-<input type="text" [(ngModel)]='name'>
-<button (click)='goto()'>跳转姓名参数</button>
+<div class="container">
+    <div class="box">
+        <p *ngFor='let c of contents'>{{c}}</p>
+    </div>
+</div>
+<button (click)='addContent()'>添加内容</button>
