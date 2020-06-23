@@ -33,6 +33,11 @@ export class GridTableComponent implements OnInit, OnDestroy {
         return this.columns?.filter(x => !x['frozen']);
     }
 
+    public get tableMinWidth(): number {
+        let wds = this.columns.map(x => x.width > 0 ? x.width : 100);
+        return wds.reduce(function (a, b) { return a + b; });
+    }
+
     public ngOnDestroy(): void {
         this.subs.unsubscribe();
     }

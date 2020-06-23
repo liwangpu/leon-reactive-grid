@@ -82,7 +82,7 @@ export class ColumnResizerHanderDirective {
             if (!this.size || this.size === thNodeClientRect.width) { return; }
             let tableWidth: number = tableNodeClientRect.width + (this.size - thNodeClientRect.width);
             // tslint:disable-next-line: restrict-plus-operands
-            this.renderer2.setStyle(this.tableNodeEl, 'min-width', `${tableWidth}px`);
+            // this.renderer2.setStyle(this.tableNodeEl, 'min-width', `${tableWidth}px`);
             // this.renderer2.setAttribute(this.tableNodeEl, 'sign-width', `${tableWidth}`);
             // this.renderer2.setStyle(this.columnNodeEl, 'flex', `0 0 ${this.size}px`);
             if (this.columnType === 'unfrozen') {

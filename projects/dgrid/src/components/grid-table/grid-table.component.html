@@ -1,4 +1,4 @@
-<div class="table" #table>
+<div class="table" #table [style.minWidth.px]='tableMinWidth'>
     <div class="range frozen">
         <div class="column" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn' columnType='frozen'
             [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' [class.hidden]='col.hidden' #headerCell>
