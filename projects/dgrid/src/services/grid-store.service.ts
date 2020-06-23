@@ -46,6 +46,7 @@ export class GridStoreService implements OnDestroy {
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.freezenColumn)).subscribe(async () => await this._saveCurrentView());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.unFreezenColumn)).subscribe(async () => await this._saveCurrentView());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.toggleColumnVisible)).subscribe(async () => await this._saveCurrentView());
+        this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.changeColumnOrder)).subscribe(async () => await this._saveCurrentView());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveView)).subscribe(async () => await this._saveCurrentView());
         this.subs.sink = this.actions$.pipe(this.byGrid(), ofType(fromStore.saveViewAndLoadData)).subscribe(async () => {
             await this._saveCurrentView();

@@ -43,17 +43,22 @@
             display: flex;
             flex-flow: row nowrap;
 
-
             &.frozen {
                 display: block;
-                border-right: 1px solid #D5D8E1;
+                // border-right: 1px solid #D5D8E1;
                 position: sticky;
                 left: 0;
                 z-index: 9 !important;
 
-                &>div.column {
+                div.column {
                     width: 100px;
                     display: inline-block;
+
+                    &:last-of-type {
+                        div.cell:not(.header) {
+                            border-right: 1px solid #D5D8E1;
+                        }
+                    }
 
                     div.cell {
                         z-index: 10 !important;
@@ -103,11 +108,12 @@
                             align-items: center;
                             height: $cell_height - 1;
 
-                            &.sortable{
-                                &:hover{
+                            &.sortable {
+                                &:hover {
                                     cursor: pointer;
                                 }
                             }
+
                             &[sort=asc] {
                                 div.indicator {
                                     span.sort {

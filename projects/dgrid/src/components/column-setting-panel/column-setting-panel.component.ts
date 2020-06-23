@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { GridStoreService } from '../../services';
+import * as fromService from '../../services';
 import * as fromModel from '../../models';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import * as fromDragDrop from '@angular/cdk/drag-drop';
 import { SubSink } from 'subsink';
 
 @Component({
@@ -18,7 +18,7 @@ export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
     public keyword: string;
     private subs = new SubSink();
     public constructor(
-        private storeSrv: GridStoreService,
+        private storeSrv: fromService.GridStoreService,
     ) { }
 
     public ngOnInit(): void {
@@ -37,11 +37,11 @@ export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
         this.subs.unsubscribe();
     }
 
-    public drop(event: CdkDragDrop<Array<fromModel.ITableColumn>>) {
+    public drop(event: fromDragDrop.CdkDragDrop<Array<fromModel.ITableColumn>>) {
         if (event.previousContainer === event.container) {
-            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+            fromDragDrop.moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
-            transferArrayItem(event.previousContainer.data,
+            fromDragDrop.transferArrayItem(event.previousContainer.data,
                 event.container.data,
                 event.previousIndex,
                 event.currentIndex);
@@ -49,7 +49,7 @@ export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
         this.storeSrv.changeColumnOrder(this.frozenColumns.map(c => {
             c.frozen = true;
             return c;
-        }).concat(this.unfrozenColumns.map(c=>{
+        }).concat(this.unfrozenColumns.map(c => {
             c.frozen = false;
             return c;
         })));

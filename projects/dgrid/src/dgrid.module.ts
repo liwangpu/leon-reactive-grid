@@ -11,7 +11,7 @@ import * as fromComponent from './components';
 
 
 @NgModule({
-    declarations: [...fromComponent.components, fromDirective.directives],
+    declarations: [...fromComponent.components, ...fromDirective.directives],
     imports: [
         CommonModule,
         GridStoreModule,

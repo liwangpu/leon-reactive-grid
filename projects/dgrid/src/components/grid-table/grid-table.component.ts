@@ -1,14 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ViewChildren, QueryList, ElementRef, AfterViewInit, Renderer2, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChildren, QueryList, ElementRef, OnDestroy } from '@angular/core';
 import * as fromModel from '../../models';
 import { MenuItem } from '@byzan/orion2';
-import { GridStoreService } from '../../services';
+import * as fromService from '../../services';
 import { SubSink } from 'subsink';
-import { BehaviorSubject } from 'rxjs';
-import { filter, delay } from 'rxjs/operators';
-import * as fromDirective from '../../directives';
 
 @Component({
-    selector: 'dgrid-table-1',
+    selector: 'dgrid-table',
     templateUrl: './grid-table.component.html',
     styleUrls: ['./grid-table.component.scss']
 })
@@ -22,19 +19,11 @@ export class GridTableComponent implements OnInit, OnDestroy {
     public frozenAdvanceColSettingMenu: Array<MenuItem>;
     public currentEditColumn: string;
     public sort: fromModel.ISortEvent;
-    @ViewChild('unFrozenAdvanceColSettingMenuCt', { static: false })
-    private unFrozenAdvanceColSettingMenuCt: any;
-    @ViewChild('frozenAdvanceColSettingMenuCt', { static: false })
-    private frozenAdvanceColSettingMenuCt: any;
-    @ViewChild('table')
-    private table: ElementRef;
     @ViewChildren('headerCell')
     private headerCells: QueryList<ElementRef>;
     private subs = new SubSink();
     public constructor(
-        private storeSrv: GridStoreService,
-        private renderer2: Renderer2
-    ) { }
+        private storeSrv: fromService.GridStoreService) { }
 
     public get frozenColumns(): Array<fromModel.ITableColumn> {
         return this.columns?.filter(x => x['frozen']);

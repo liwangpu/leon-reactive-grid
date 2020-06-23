@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { MenuItem as OrionMenuItem } from '@byzan/orion2';
-import { GridStoreService } from '../../services';
+import * as fromService from '../../services';
 import * as fromModel from '../../models';
 import * as fromConst from '../../consts';
 import { SubSink } from 'subsink';
@@ -24,7 +24,7 @@ export class FilterSettingPanelComponent implements OnInit, OnDestroy {
     private viewId: string;
     private subs = new SubSink();
     public constructor(
-        private storeSrv: GridStoreService,
+        private storeSrv: fromService.GridStoreService,
     ) { }
 
     public get defaultView(): boolean {

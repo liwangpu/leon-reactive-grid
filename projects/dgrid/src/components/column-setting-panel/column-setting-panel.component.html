@@ -6,8 +6,9 @@
     <div class="group frozen" [class.dragging]='columnDragging' [class.fill]='frozenColumns?.length' cdkDropList
         #frozenList="cdkDropList" [cdkDropListData]="frozenColumns" [cdkDropListConnectedTo]="[unfrozenList]"
         (cdkDropListDropped)="drop($event)">
-        <div class="column-setting-panel-column-item" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn' cdkDrag
-            (cdkDragStarted)='columnDragging=true' (cdkDragEnded)='columnDragging=false'>
+        <div class="column-setting-panel-column-item" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn'
+            [keywordFilterItem]='col.name' [keyword]='keyword' cdkDrag (cdkDragStarted)='columnDragging=true'
+            (cdkDragEnded)='columnDragging=false'>
             <!-- <div class="placeholder" *cdkDragPlaceholder></div> -->
             <byz-checkbox [ngModel]="!col.hidden" (click)='toggleColumnVisible(col.field)'>{{col.name}}
             </byz-checkbox>
@@ -16,7 +17,8 @@
     <div class="group unfrozen" cdkDropList #unfrozenList="cdkDropList" [cdkDropListData]="unfrozenColumns"
         [cdkDropListConnectedTo]="[frozenList]" (cdkDropListDropped)="drop($event)">
         <div class="column-setting-panel-column-item" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn'
-            cdkDrag (cdkDragStarted)='columnDragging=true' (cdkDragEnded)='columnDragging=false'>
+            [keywordFilterItem]='col.name' [keyword]='keyword' cdkDrag (cdkDragStarted)='columnDragging=true'
+            (cdkDragEnded)='columnDragging=false'>
             <!-- <div class="placeholder" *cdkDragPlaceholder></div> -->
             <byz-checkbox [ngModel]="!col.hidden" (click)='toggleColumnVisible(col.field)'>{{col.name}}
             </byz-checkbox>
