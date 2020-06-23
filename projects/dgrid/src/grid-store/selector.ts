@@ -64,3 +64,8 @@ export const selectSort = (id: string) => createSelector(
     selectDGridData,
     grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.sort))]
 );
+
+export const selectMode = (id: string) => createSelector(
+    selectDGridData,
+    grid => grid[(fromReducer.generatePropertyKey(id, fromState.gridParamEnum.selectMode))]
+);

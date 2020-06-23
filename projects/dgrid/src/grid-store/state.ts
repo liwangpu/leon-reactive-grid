@@ -29,5 +29,6 @@ export enum gridParamEnum {
     enableFilterView = 'enableFilterView',
     searchKeyword = 'searchKeyword',
     sort = 'sort',
-    rowsPerPageOptions = 'rowsPerPageOptions'
+    rowsPerPageOptions = 'rowsPerPageOptions',
+    selectMode = 'selectMode'
 }

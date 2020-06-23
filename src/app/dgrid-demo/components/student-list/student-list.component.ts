@@ -25,7 +25,8 @@ export class StudentListComponent extends fromDGrid.LocalViewDStore implements O
             // rowsPerPageOptions: [10, 30, 50],
             rowsPerPageOptions: [30, 50, 100],
             enableView: true,
-            enableUrlHistory: true
+            enableUrlHistory: true,
+            selectMode: 'multiple'
         });
         // this.gridStartup();
         // this.gridRefresh();

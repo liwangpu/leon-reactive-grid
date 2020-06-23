@@ -108,6 +108,10 @@ export class GridStoreService implements OnDestroy {
         return this.store.select(fromStore.selectRowsPerPageOptions(this.gridId)).pipe(filter(x => x));
     }
 
+    public get selectMode$(): Observable<string> {
+        return this.store.select(fromStore.selectMode(this.gridId));
+    }
+
     public initGrid(option?: fromModel.DStoreOption, queryParams?: { [key: string]: any }): void {
         this.store.dispatch(fromStore.initGrid({ id: this.gridId, option, queryParams }));
     }

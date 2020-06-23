@@ -83,8 +83,9 @@ export const gridReducer = createReducer(
             , ...generatePropertyValue(id, fromState.gridParamEnum.rowsPerPageOptions, option.rowsPerPageOptions)
             , ...generatePropertyValue(id, fromState.gridParamEnum.pagination, pagination)
             , ...generatePropertyValue(id, fromState.gridParamEnum.sort, sort)
-            , ...generatePropertyValue(id, fromState.gridParamEnum.searchKeyword, queryParams.keyword),
-            ...generatePropertyValue(id, fromState.gridParamEnum.enableFilterView, option.enableView)
+            , ...generatePropertyValue(id, fromState.gridParamEnum.searchKeyword, queryParams.keyword)
+            , ...generatePropertyValue(id, fromState.gridParamEnum.enableFilterView, option.enableView)
+            , ...generatePropertyValue(id, fromState.gridParamEnum.selectMode, option.selectMode)
         };
     }),
     on(fromAction.refreshGrid, (state: {}, { id, queryParams }) => {
@@ -174,11 +175,6 @@ export const gridReducer = createReducer(
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, activeColumns) };
     }),
     on(fromAction.changeColumnOrder, (state: {}, { id, columns }) => {
-        // let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
-        // let columns: Array<fromModel.ITableColumn> = [];
-        // fields.forEach(field => {
-        //     columns.push(activeColumns.filter(x => x.field === field)[0]);
-        // });
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, columns) };
     }),
     on(fromAction.setSearchKeyword, (state: {}, { id, keyword }) => {
@@ -216,7 +212,7 @@ export const gridReducer = createReducer(
     on(fromAction.saveViewAndLoadData, (state: {}, { id, filters }) => {
         let activeView = getActiveView(state, id);
         activeView.filters = filters;
-        return { 
+        return {
             ...state
             , ...generatePropertyValue(id, fromState.gridParamEnum.activeView, activeView)
         };

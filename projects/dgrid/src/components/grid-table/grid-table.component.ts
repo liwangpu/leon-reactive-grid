@@ -19,6 +19,7 @@ export class GridTableComponent implements OnInit, OnDestroy {
     public frozenAdvanceColSettingMenu: Array<MenuItem>;
     public currentEditColumn: string;
     public sort: fromModel.ISortEvent;
+    public selectMode: string;
     @ViewChildren('headerCell')
     private headerCells: QueryList<ElementRef>;
     private subs = new SubSink();
@@ -52,9 +53,8 @@ export class GridTableComponent implements OnInit, OnDestroy {
             this.datas = datas;
         });
 
-        this.subs.sink = this.storeSrv.sort$.subscribe(sort => {
-            this.sort = sort;
-        });
+        this.subs.sink = this.storeSrv.sort$.subscribe(sort => this.sort = sort);
+        this.subs.sink = this.storeSrv.selectMode$.subscribe(model => this.selectMode = model);
     }
 
     public onSort(sort: fromModel.ISortEvent): void {

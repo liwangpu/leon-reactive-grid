@@ -1,12 +1,20 @@
 <div class="table" [style.minWidth.px]='tableMinWidth' *ngIf='columns?.length'>
     <div class="range frozen">
+        <div class="column select">
+            <div class="cell header">
+           
+            </div>
+            <div class="cell body" *ngFor='let rowData of datas;trackBy:trackByDataFn'>
+            
+            </div>
+        </div>
         <div class="column" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn' columnType='frozen'
             [dynamicStyleWidth]='col.width' [attr.field-name]='col.field' [class.hidden]='col.hidden' #headerCell>
             <div class="cell header">
                 <ng-container *ngTemplateOutlet='headerCellTpl;context:{column:col,type:"frozen"}'></ng-container>
             </div>
             <div class="cell body" *ngFor='let rowData of datas;trackBy:trackByDataFn'>
-                <span>{{rowData[col.field]}}</span>
+                <ng-container *ngTemplateOutlet='bodyCellTpl;context:{column:col,data:rowData}'></ng-container>
             </div>
         </div>
     </div>
@@ -17,7 +25,7 @@
                 <ng-container *ngTemplateOutlet='headerCellTpl;context:{column:col,type:"unfrozen"}'></ng-container>
             </div>
             <div class="cell body" *ngFor='let rowData of datas;trackBy:trackByDataFn'>
-                <span>{{rowData[col.field]}}</span>
+                <ng-container *ngTemplateOutlet='bodyCellTpl;context:{column:col,data:rowData}'></ng-container>
             </div>
         </div>
     </div>
@@ -33,4 +41,8 @@
             </div>
         </div>
     </div>
+</ng-template>
+
+<ng-template let-col='column' let-data='data' #bodyCellTpl>
+    <span>{{data[col.field]}}</span>
 </ng-template>

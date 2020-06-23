@@ -80,6 +80,10 @@
                     display: none;
                 }
 
+                &.select{
+                    width: 68px;
+                }
+
                 div.cell {
                     $cell_height: 48px;
                     height: $cell_height;
@@ -216,10 +220,11 @@
                     &.body {
                         overflow: hidden;
                         text-overflow: ellipsis;
-                        // white-space: nowrap;
+                        white-space: nowrap;
                         word-break: break-all;
                         padding: 0 12px;
                         background-color: #fff;
+                        line-height: $cell_height;
 
                         &:nth-last-of-type(odd) {
                             background-color: #FCFDFE;
