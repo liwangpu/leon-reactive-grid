@@ -34,6 +34,7 @@ export class GridTableComponent implements OnInit, OnDestroy {
     }
 
     public get tableMinWidth(): number {
+        if (!this.columns?.length) { return 0; }
         let wds = this.columns.map(x => x.width > 0 ? x.width : 100);
         return wds.reduce(function (a, b) { return a + b; });
     }
