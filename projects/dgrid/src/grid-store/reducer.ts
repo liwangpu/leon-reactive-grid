@@ -173,12 +173,12 @@ export const gridReducer = createReducer(
         activeColumns[index] = col;
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, activeColumns) };
     }),
-    on(fromAction.changeColumnOrder, (state: {}, { id, fields }) => {
-        let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
-        let columns: Array<fromModel.ITableColumn> = [];
-        fields.forEach(field => {
-            columns.push(activeColumns.filter(x => x.field === field)[0]);
-        });
+    on(fromAction.changeColumnOrder, (state: {}, { id, columns }) => {
+        // let activeColumns: Array<fromModel.ITableColumn> = getActiveColumns(state, id);
+        // let columns: Array<fromModel.ITableColumn> = [];
+        // fields.forEach(field => {
+        //     columns.push(activeColumns.filter(x => x.field === field)[0]);
+        // });
         return { ...state, ...generatePropertyValue(id, fromState.gridParamEnum.activeColumns, columns) };
     }),
     on(fromAction.setSearchKeyword, (state: {}, { id, keyword }) => {

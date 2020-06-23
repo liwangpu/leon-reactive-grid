@@ -39,7 +39,7 @@
             user-select: none;
         }
 
-        div.group {
+        div.range {
             display: flex;
             flex-flow: row nowrap;
 
@@ -50,6 +50,7 @@
                 position: sticky;
                 left: 0;
                 z-index: 9 !important;
+
                 &>div.column {
                     width: 100px;
                     display: inline-block;
@@ -69,6 +70,10 @@
                 height: auto;
                 min-width: 100px;
                 align-self: stretch;
+
+                &.hidden {
+                    display: none;
+                }
 
                 div.cell {
                     $cell_height: 48px;
@@ -98,6 +103,31 @@
                             align-items: center;
                             height: $cell_height - 1;
 
+                            &.sortable{
+                                &:hover{
+                                    cursor: pointer;
+                                }
+                            }
+                            &[sort=asc] {
+                                div.indicator {
+                                    span.sort {
+                                        &::before {
+                                            content: '\21BE';
+                                        }
+                                    }
+                                }
+                            }
+
+                            &[sort=desc] {
+                                div.indicator {
+                                    span.sort {
+                                        &::before {
+                                            content: '\21C2';
+                                        }
+                                    }
+                                }
+                            }
+
                             p {
                                 height: 100%;
                                 line-height: $cell_height - 2px;
@@ -106,6 +136,7 @@
                                 font-weight: bold;
                                 white-space: nowrap;
                                 text-overflow: ellipsis;
+                                user-select: none;
                             }
 
 
@@ -183,6 +214,10 @@
                         word-break: break-all;
                         padding: 0 12px;
                         background-color: #fff;
+
+                        &:nth-last-of-type(odd) {
+                            background-color: #FCFDFE;
+                        }
                     }
                 }
             }

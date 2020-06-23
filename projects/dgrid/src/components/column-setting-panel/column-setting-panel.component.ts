@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GridStoreService } from '../../services';
 import * as fromModel from '../../models';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SubSink } from 'subsink';
 
 @Component({
@@ -11,7 +11,10 @@ import { SubSink } from 'subsink';
 })
 export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
 
+    public frozenColumns: Array<fromModel.ITableColumn>;
+    public unfrozenColumns: Array<fromModel.ITableColumn>;
     public columns: Array<fromModel.ITableColumn>;
+    public columnDragging: boolean;
     public keyword: string;
     private subs = new SubSink();
     public constructor(
@@ -23,10 +26,10 @@ export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
             // console.log('cols', cols);
             const ncols: Array<fromModel.ITableColumn> = [];
             // columns因为要给drag list使用改变属性,所以这里对columns展开,允许修改
-            cols.forEach(col => {
-                ncols.push({ ...col });
-            });
+            cols.forEach(col => ncols.push({ ...col }));
             this.columns = ncols;
+            this.frozenColumns = this.columns.filter(x => x['frozen']);
+            this.unfrozenColumns = this.columns?.filter(x => !x['frozen']);
         });
     }
 
@@ -34,10 +37,22 @@ export class ColumnSettingPanelComponent implements OnInit, OnDestroy {
         this.subs.unsubscribe();
     }
 
-    public dropTarget(event: CdkDragDrop<string>): void {
-        moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
-        // console.log('drag', this.columns);
-        this.storeSrv.changeColumnOrder(this.columns.map(x => x.field));
+    public drop(event: CdkDragDrop<Array<fromModel.ITableColumn>>) {
+        if (event.previousContainer === event.container) {
+            moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        } else {
+            transferArrayItem(event.previousContainer.data,
+                event.container.data,
+                event.previousIndex,
+                event.currentIndex);
+        }
+        this.storeSrv.changeColumnOrder(this.frozenColumns.map(c => {
+            c.frozen = true;
+            return c;
+        }).concat(this.unfrozenColumns.map(c=>{
+            c.frozen = false;
+            return c;
+        })));
     }
 
     public toggleColumnVisible(field: string): void {

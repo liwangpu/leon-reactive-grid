@@ -21,12 +21,15 @@ export class GridTableComponent implements OnInit, OnDestroy {
     public unFrozenAdvanceColSettingMenu: Array<MenuItem>;
     public frozenAdvanceColSettingMenu: Array<MenuItem>;
     public currentEditColumn: string;
+    public sort: fromModel.ISortEvent;
     @ViewChild('unFrozenAdvanceColSettingMenuCt', { static: false })
     private unFrozenAdvanceColSettingMenuCt: any;
     @ViewChild('frozenAdvanceColSettingMenuCt', { static: false })
     private frozenAdvanceColSettingMenuCt: any;
     @ViewChild('table')
     private table: ElementRef;
+    @ViewChildren('headerCell')
+    private headerCells: QueryList<ElementRef>;
     private subs = new SubSink();
     public constructor(
         private storeSrv: GridStoreService,
@@ -34,16 +37,11 @@ export class GridTableComponent implements OnInit, OnDestroy {
     ) { }
 
     public get frozenColumns(): Array<fromModel.ITableColumn> {
-        // let cols = this.columns?.filter(x => x['frozen'] && !x['hidden'] && x.field !== this.currentEditColumn);
-        // if (this.currentEditColumn && this.columns.some(x => x.field === this.currentEditColumn && x['frozen'])) {
-        //     cols.push(this.columns.filter(x => x.field === this.currentEditColumn)[0]);
-        // }
-        // return cols;
-        return this.columns?.filter(x => x['frozen'] && !x['hidden']);
+        return this.columns?.filter(x => x['frozen']);
     }
 
     public get unfrozenColumns(): Array<fromModel.ITableColumn> {
-        return this.columns?.filter(x => !x['frozen'] && !x['hidden']);
+        return this.columns?.filter(x => !x['frozen']);
     }
 
     public ngOnDestroy(): void {
@@ -51,27 +49,6 @@ export class GridTableComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.unFrozenAdvanceColSettingMenu = [
-            {
-                id: 'freezen-column',
-                label: '冻结此列',
-                command: () => {
-                    this.unFrozenAdvanceColSettingMenuCt.hide();
-                    this.storeSrv.freezenColumn(this.currentEditColumn);
-                }
-            }
-        ];
-
-        this.frozenAdvanceColSettingMenu = [
-            {
-                id: 'unfreezen-column',
-                label: '取消冻结',
-                command: () => {
-                    this.frozenAdvanceColSettingMenuCt.hide();
-                    this.storeSrv.unFreezenColumn(this.currentEditColumn);
-                }
-            }
-        ];
         this.subs.sink = this.storeSrv.activeColumns$.subscribe(cols => {
             this.columns = cols;
         });
@@ -79,15 +56,18 @@ export class GridTableComponent implements OnInit, OnDestroy {
         this.subs.sink = this.storeSrv.datas$.subscribe(datas => {
             this.datas = datas;
         });
+
+        this.subs.sink = this.storeSrv.sort$.subscribe(sort => {
+            this.sort = sort;
+        });
     }
 
-    public openAdvanceMenu(type: string, event: any): void {
-        console.log(1, type);
-        if (type === 'unfrozen') {
-            this.unFrozenAdvanceColSettingMenuCt.toggle(event);
-        }else{
-            this.frozenAdvanceColSettingMenuCt.toggle(event);
-        }
+    public onSort(sort: fromModel.ISortEvent): void {
+        this.storeSrv.changeSort(sort);
+    }
+
+    public afterColumnResize(): void {
+        this.calculateAndStoreColumnWidth();
     }
 
     public trackByDataFn(it: { id: any }): string {
@@ -96,6 +76,16 @@ export class GridTableComponent implements OnInit, OnDestroy {
 
     public trackByColumnFn(it: { field: string }): string {
         return it.field;
+    }
+
+    private calculateAndStoreColumnWidth(): void {
+        let obj: any = {};
+        this.headerCells.forEach(it => {
+            const rect: any = it.nativeElement.getBoundingClientRect();
+            let field = it.nativeElement.getAttribute('field-name');
+            obj[field] = rect.width;
+        });
+        this.storeSrv.changeColumnWidth(obj);
     }
 
 }

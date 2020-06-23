@@ -155,8 +155,8 @@ export class GridStoreService implements OnDestroy {
         this.store.dispatch(fromStore.toggleColumnVisible({ id: this.gridId, field }));
     }
 
-    public changeColumnOrder(fields: Array<string>): void {
-        this.store.dispatch(fromStore.changeColumnOrder({ id: this.gridId, fields }));
+    public changeColumnOrder(columns: Array<fromModel.ITableColumn>): void {
+        this.store.dispatch(fromStore.changeColumnOrder({ id: this.gridId, columns }));
     }
 
     public changeSort(sort: fromModel.ISortEvent): void {

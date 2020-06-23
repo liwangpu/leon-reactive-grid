@@ -1,12 +1,25 @@
 <div class="header">
     <dgrid-setting-panel-keyword-search [(keyword)]='keyword'></dgrid-setting-panel-keyword-search>
 </div>
-<div class="content" cdkDropList (cdkDropListDropped)="dropTarget($event)">
-    <div class="column-setting-panel-column-item" *ngFor='let col of columns;trackBy:trackByColumnFn'
-        [keywordFilterItem]='col.name' [keyword]='keyword' cdkDrag>
-        <div class="placeholder" *cdkDragPlaceholder></div>
-        <span class="byz-icon bi-menu drag-handler" cdkDragHandle></span>
-        <byz-checkbox [ngModel]="!col.hidden" (click)='toggleColumnVisible(col.field)'>{{col.name}}
-        </byz-checkbox>
+<div class="content">
+    <p class="title">冻结列</p>
+    <div class="group frozen" [class.dragging]='columnDragging' [class.fill]='frozenColumns?.length' cdkDropList
+        #frozenList="cdkDropList" [cdkDropListData]="frozenColumns" [cdkDropListConnectedTo]="[unfrozenList]"
+        (cdkDropListDropped)="drop($event)">
+        <div class="column-setting-panel-column-item" *ngFor='let col of frozenColumns;trackBy:trackByColumnFn' cdkDrag
+            (cdkDragStarted)='columnDragging=true' (cdkDragEnded)='columnDragging=false'>
+            <!-- <div class="placeholder" *cdkDragPlaceholder></div> -->
+            <byz-checkbox [ngModel]="!col.hidden" (click)='toggleColumnVisible(col.field)'>{{col.name}}
+            </byz-checkbox>
+        </div>
+    </div>
+    <div class="group unfrozen" cdkDropList #unfrozenList="cdkDropList" [cdkDropListData]="unfrozenColumns"
+        [cdkDropListConnectedTo]="[frozenList]" (cdkDropListDropped)="drop($event)">
+        <div class="column-setting-panel-column-item" *ngFor='let col of unfrozenColumns;trackBy:trackByColumnFn'
+            cdkDrag (cdkDragStarted)='columnDragging=true' (cdkDragEnded)='columnDragging=false'>
+            <!-- <div class="placeholder" *cdkDragPlaceholder></div> -->
+            <byz-checkbox [ngModel]="!col.hidden" (click)='toggleColumnVisible(col.field)'>{{col.name}}
+            </byz-checkbox>
+        </div>
     </div>
 </div>
