@@ -1,36 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
-import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StudentService } from './services/student.service';
-import { TestComponent } from './components/test/test.component';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
-        AppComponent,
-        HomeComponent,
-        TestComponent
+        AppComponent
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule,
         BrowserAnimationsModule,
-        HttpClientModule,
-        FormsModule,
+        AppRoutingModule,
         StoreModule.forRoot({}),
         EffectsModule.forRoot(),
-        StoreDevtoolsModule.instrument()
+        StoreDevtoolsModule.instrument({
+            maxAge: 25
+        })
     ],
-    providers: [
-        StudentService
-    ],
+    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

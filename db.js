@@ -1,23 +1,14 @@
 const faker = require('faker');
 
 module.exports = () => {
-    const data = { student: [] };
-
-    // 生成200个学生信息
+    const data = { users: [], companies: [] }
+    // 创建一些初始数据
+    for (let i = 0; i < 300; i++) {
+        data.users.push({ id: faker.datatype.uuid(), name: faker.name.findName(), age: faker.datatype.number({ min: 5, max: 20 }), info: faker.lorem.words(20) });
+    }
     for (let i = 0; i < 200; i++) {
-        let s = {
-            id: `${Date.now()}@${i}@${faker.random.uuid()}`,
-            name: faker.name.findName(),
-            age: faker.random.number({ min: 5, max: 35 }),
-            country: faker.address.country(),
-            city: faker.address.city(),
-            address: faker.address.streetAddress(),
-            department: faker.commerce.department(),
-            color: faker.commerce.color(),
-            remark: faker.random.words()
-        };
-        data.student.push(s);
+        data.companies.push({ id: faker.datatype.uuid(), name: faker.company.companyName() });
     }
 
-    return data
+    return data;
 }

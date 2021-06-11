@@ -1,41 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { SlideMenuModule } from 'primeng/slidemenu';
-import { PaginatorModule } from 'primeng/paginator';
-import { GridStoreModule } from './grid-store';
-import * as fromOrion from '@byzan/orion2';
-import * as fromDirective from './directives';
-import * as fromComponent from './components';
-
+import { NgModule } from '@angular/core';
+import * as fromComponent from './components/public-api';
 
 @NgModule({
-    declarations: [...fromComponent.components, ...fromDirective.directives],
+    declarations: [...fromComponent.components],
     imports: [
-        CommonModule,
-        GridStoreModule,
-        ReactiveFormsModule,
-        FormsModule,
-        SlideMenuModule,
-        DragDropModule,
-        PaginatorModule,
-        fromOrion.InputModule,
-        fromOrion.DynamicDialogModule,
-        fromOrion.FormModule,
-        fromOrion.SelectModule,
-        fromOrion.ButtonModule,
-        fromOrion.CheckboxModule,
-        fromOrion.RadioButtonModule,
-        fromOrion.SplitButtonModule,
-        fromOrion.TooltipModule
+        CommonModule
     ],
-    exports: [
-        fromComponent.GridComponent
-    ],
-    entryComponents: [
-        fromComponent.ColumnSettingPanelComponent,
-        fromComponent.FilterSettingPanelComponent
-    ]
+    exports: [fromComponent.GridComponent]
 })
-export class DGridModule { }
+export class DgridModule { }

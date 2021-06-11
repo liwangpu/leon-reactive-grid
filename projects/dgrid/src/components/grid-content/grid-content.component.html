@@ -1,18 +1,26 @@
-<dgrid-table [snapline]='snapline'></dgrid-table>
-
-<div class="advance-setting-panel" [class.show]='advanceSettingPanel'>
-    <div #advancePanelAnchor></div>
-</div>
-<div class="table-bar">
-    <div class="setting" [class.active]='advanceSettingPanel==="column-seting"'
-        (click)='changeAdvanceSettingPanel("column-seting")'>
-        <span class="byz-icon bi-menu"></span>
-        <span>列设置</span>
-    </div>
-    <div class="setting" [class.active]='advanceSettingPanel==="filter-seting"'
-        (click)='changeAdvanceSettingPanel("filter-seting")'>
-        <span class="byz-icon bi-funnel"></span>
-        <span>筛选器</span>
-    </div>
-</div>
+<table class="table">
+    <thead>
+        <tr class="row head">
+            <!-- 常规列 -->
+            <th class="cell head" *ngFor='let col of columns;trackBy:trackByColumnFn'>
+                <mirror-table-head-cell [snapline]='snapline' [title]='col.name'
+                    (beforeResize)='beforeResizeColumnWidth()' (afterResize)='afterResizeColumnWidth(col.field,$event)'>
+                </mirror-table-head-cell>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="row content" [class.even]='isOdd'
+            *ngFor='let rowData of datas;odd as isOdd;trackBy:trackByDataFn'>
+            <td class="cell content" *ngFor='let col of columns;trackBy:trackByColumnFn'>
+                <mirror-table-content-cell [column]='col' [data]='rowData'></mirror-table-content-cell>
+            </td>
+        </tr>
+        <!-- <tr class="row content">
+            <td class="cell content">1</td>
+            <td class="cell content">小明</td>
+            <td class="cell content">12</td>
+        </tr> -->
+    </tbody>
+</table>
 <div class="snapline" #snapline></div>

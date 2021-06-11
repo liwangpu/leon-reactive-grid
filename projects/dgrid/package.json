@@ -2,10 +2,10 @@
   "name": "dgrid",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^9.1.9",
-    "@angular/core": "^9.1.9"
+    "@angular/common": "^10.2.4",
+    "@angular/core": "^10.2.4"
   },
   "dependencies": {
-    "tslib": "^1.10.0"
+    "tslib": "^2.0.0"
   }
 }

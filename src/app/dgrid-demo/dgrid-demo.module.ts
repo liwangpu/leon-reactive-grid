@@ -1,19 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DgridDemoRoutingModule } from './dgrid-demo-routing.module';
-import { StudentListComponent } from './components/student-list/student-list.component';
-import * as fromDGrid from 'dgrid';
-import { HomeComponent } from './home/home.component';
+import { UsersComponent } from './components/users/users.component';
+import { DgridModule } from 'dgrid';
 
 @NgModule({
-    declarations: [StudentListComponent, HomeComponent],
+    declarations: [UsersComponent],
     imports: [
         CommonModule,
         DgridDemoRoutingModule,
-        fromDGrid.DGridModule
-    ],
-    providers: [
-
+        DgridModule
     ]
 })
-export class DGridDemoModule { }
+export class DgridDemoModule { }

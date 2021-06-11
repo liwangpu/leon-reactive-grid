@@ -1,69 +1,42 @@
 :host {
     position: relative;
-    display: flex;
-    flex-flow: row;
-    border-bottom: none;
-    border: 1px solid #D5D8E1;
-    overflow: hidden;
+    display: block;
+    width: 100%;
+    height: 100%;
+    $borderColor: #D5D8E1;
 
-    dgrid-sync-scroll-panel {
-        flex: 1;
-        height: 100%;
+    &.disable-user-select {
+        user-select: none !important;
     }
 
-    dgrid-table {
-        flex: 1;
-        height: 100%;
-    }
+    .table {
+        width: 100%;
+        table-layout: fixed;
+        border-spacing: 0;
+        border: 1px solid $borderColor;
 
-    dgrid-table-1 {
-        flex: 1;
-        height: 100%;
-    }
+        .row {
+            width: 100%;
 
-    div.advance-setting-panel {
-        width: 0;
-        height: 100%;
-        z-index: 100;
-        overflow: hidden;
-        background-color: #F8F9FB;
-        z-index: 2;
-        &.show {
-            border-left: 1px solid #D5D8E1;
-            width: 248px;
-        }
-    }
+            &.head {}
 
-    div.table-bar {
-        $s: 30px;
-        width: $s;
-        border-left: 1px solid #D5D8E1;
-        background-color: #F8F9FB;
-        padding-top: 48px;
-        z-index: 2;
-        div.setting {
-            position: relative;
-            width: $s;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            writing-mode: vertical-rl;
-            margin-bottom: 1.5em;
-            user-select: none;
+            .cell {
+                border-bottom: 1px solid $borderColor;
+                text-align: left;
 
-            &.active {
-                border-left: 2px solid var(--byz-button-default-hover-foreground);
+                &.head {
+                    height: 48px;
+                    background-color: #F8F9FB;
+                }
+
+                &.content {
+                    height: 48px;
+                }
             }
 
-            &:hover {
-                cursor: pointer;
-                color: var(--byz-button-default-hover-foreground);
-            }
-
-            &>span {
-                &:first-of-type {
-                    margin-bottom: 8px;
+            &.content{
+                &.even{
+                   background-color: #FCFDFE; 
                 }
             }
         }
@@ -78,9 +51,5 @@
         background-color: #608CE0;
         z-index: 9999;
         opacity: 0;
-    }
-
-    .hidden {
-        width: 0;
     }
 }

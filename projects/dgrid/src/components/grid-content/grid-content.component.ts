@@ -1,71 +1,69 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, HostListener, Injector, NgZone, OnInit } from '@angular/core';
 import * as fromModel from '../../models';
-import { GridStoreService } from '../../services';
-import { SubSink } from 'subsink';
-import { ColumnSettingPanelComponent } from '../column-setting-panel/column-setting-panel.component';
-import { FilterSettingPanelComponent } from '../filter-setting-panel/filter-setting-panel.component';
+import { LazyService } from '../../utils';
+import * as faker from "faker";
 
 @Component({
-    selector: 'dgrid-content',
+    selector: 'mirror-grid-content',
     templateUrl: './grid-content.component.html',
-    styleUrls: ['./grid-content.component.scss']
+    styleUrls: ['./grid-content.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridContentComponent implements OnInit, OnDestroy {
+export class GridContentComponent implements OnInit {
 
-    public showFilterView: boolean;
+    @HostBinding('class.disable-user-select')
+    public disableUserSelect: boolean;
     public columns: Array<fromModel.ITableColumn>;
     public datas: Array<any>;
-    public advanceSettingPanel: string;
-    @ViewChild('advancePanelAnchor', { static: false, read: ViewContainerRef })
-    private advancePanelAnchor: ViewContainerRef;
-    private subs = new SubSink();
+    @LazyService(ChangeDetectorRef)
+    private readonly cdr: ChangeDetectorRef;
+    @LazyService(NgZone)
+    private readonly zone: NgZone;
     public constructor(
-        private storeSrv: GridStoreService,
-        private cfr: ComponentFactoryResolver
-    ) { }
-
-    public ngOnDestroy(): void {
-        this.subs.unsubscribe();
+        protected injector: Injector
+    ) {
+        this.columns = [
+            {
+                field: 'name',
+                name: '名称'
+            },
+            {
+                field: 'age',
+                name: '年纪'
+            },
+            {
+                field: 'info',
+                name: '备注'
+            }
+        ];
+        this.datas = [];
+        for (let i = 0; i < 10; i++) {
+            this.datas.push({ id: faker.datatype.uuid(), name: faker.name.findName(), age: faker.datatype.number({ min: 5, max: 20 }), info: faker.lorem.words(20) });
+        }
     }
 
     public ngOnInit(): void {
-        this.subs.sink = this.storeSrv.activeColumns$.subscribe(cols => {
-            // console.log('cols', cols);
-            this.columns = cols;
-        });
 
-        this.subs.sink = this.storeSrv.datas$.subscribe(datas => {
-            // console.log('datas', datas);
-            this.datas = datas;
-        });
-
-        this.subs.sink = this.storeSrv.advanceSettingPanel$.subscribe(panel => {
-            // console.log('panel', panel);
-            if (!this.advancePanelAnchor) { return; }
-            this.advanceSettingPanel = panel;
-            this.advancePanelAnchor.clear();
-            if (panel === 'column-seting') {
-                const fac: any = this.cfr.resolveComponentFactory(ColumnSettingPanelComponent);
-                this.advancePanelAnchor.createComponent(fac);
-                return;
-            }
-
-            if (panel === 'filter-seting') {
-                const fac: any = this.cfr.resolveComponentFactory(FilterSettingPanelComponent);
-                this.advancePanelAnchor.createComponent(fac);
-                return;
-            }
-        });
-
-        setTimeout(() => {
-            // this.changeAdvanceSettingPanel('column-seting');
-            // this.changeAdvanceSettingPanel('filter-seting');
-        }, 50);
     }
 
-    public changeAdvanceSettingPanel(panel: string) {
-        if (this.advanceSettingPanel === panel) { panel = null; }
-        this.storeSrv.changeAdvanceSettingPanel(panel);
+    public beforeResizeColumnWidth(): void {
+        this.disableUserSelect = true;
+    }
+
+    public afterResizeColumnWidth(field, size: number): void {
+        this.disableUserSelect = false;
+        this.cdr.markForCheck();
+
+        console.log('after resize:', field, size);
+
+    }
+
+    public trackByColumnFn(index: number, it: fromModel.ITableColumn): string {
+        return it.field;
+    }
+
+    public trackByDataFn(index: number, it: { id: any }): string {
+        return it.id;
     }
 
 }

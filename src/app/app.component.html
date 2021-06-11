@@ -1,13 +1,8 @@
-<div class="container">
-    <div class="navbar">
-        <p class="title" routerLink="/">表格演示</p>
-        <a class="nav" routerLink="/dgrid-demo/student-list" routerLinkActive="active">学生列表</a>
-        <a class="nav" routerLink="/dgrid-demo/student-list"
-            [queryParams]='{page:2,limit:10,keyword:"blue",sort:"name",direction:"asc"}'
-            routerLinkActive="active">学生列表[带参数]</a>
-        <a class="nav" routerLink="/test" [queryParams]='{name:"Hellen"}' routerLinkActive="active">Test</a>
-    </div>
-    <div class="content">
-        <router-outlet></router-outlet>
-    </div>
+<div class="navbar">
+    <p class="title" routerLink="/">Angular Tutoiral</p>
+    <a class="nav" routerLink="/dgrid-demo" routerLinkActive="active">DGrid</a>
+    <!-- <a class="nav" routerLink="/school" routerLinkActive="active">School</a> -->
+</div>
+<div class="content">
+    <router-outlet></router-outlet>
 </div>

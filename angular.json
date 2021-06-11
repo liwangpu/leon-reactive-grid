@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "leon-reactive-grid": {
+        "tutorial": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -41,7 +41,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/leon-reactive-grid",
+                        "outputPath": "dist/tutorial",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -52,9 +52,6 @@
                             "src/assets"
                         ],
                         "styles": [
-                            "node_modules/@byzan/orion2/resources/orion.scss",
-                            "node_modules/@byzan/orion2/resources/orionicons.css",
-                            "projects/dgrid/src/resources/dgrid.scss",
                             "src/styles.scss"
                         ],
                         "scripts": []
@@ -93,31 +90,19 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "port": 8767,
-                        "browserTarget": "leon-reactive-grid:build"
+                        "port": 8300,
+                        "browserTarget": "tutorial:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "leon-reactive-grid:build:production"
+                            "browserTarget": "tutorial:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "leon-reactive-grid:build"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "tsconfig.app.json",
-                            "e2e/tsconfig.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "browserTarget": "tutorial:build"
                     }
                 }
             }
@@ -126,9 +111,11 @@
             "projectType": "library",
             "root": "projects/dgrid",
             "sourceRoot": "projects/dgrid/src",
-            "prefix": "dgrid",
+            "prefix": "mirror",
             "schematics": {
                 "@schematics/angular:component": {
+                    "inlineTemplate": false,
+                    "inlineStyle": false,
                     "style": "scss",
                     "skipTests": true
                 },
@@ -139,6 +126,9 @@
                     "skipTests": true
                 },
                 "@schematics/angular:guard": {
+                    "skipTests": true
+                },
+                "@schematics/angular:interceptor": {
                     "skipTests": true
                 },
                 "@schematics/angular:module": {
@@ -153,7 +143,7 @@
             },
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-ng-packagr:build",
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
                     "options": {
                         "tsConfig": "projects/dgrid/tsconfig.lib.json",
                         "project": "projects/dgrid/ng-package.json"
@@ -187,7 +177,7 @@
             }
         }
     },
-    "defaultProject": "leon-reactive-grid",
+    "defaultProject": "tutorial",
     "cli": {
         "analytics": false
     }
