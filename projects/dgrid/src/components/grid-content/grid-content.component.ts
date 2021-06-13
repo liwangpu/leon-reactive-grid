@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, HostListener, Injector, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, Component, HostBinding, QueryList, ViewChildren, HostListener, Injector, NgZone, OnInit } from '@angular/core';
 import * as fromModel from '../../models';
 import { LazyService } from '../../utils';
 import * as faker from "faker";
+import { TableHeadTdDirective } from '../../directives/public-api';
 
 @Component({
     selector: 'mirror-grid-content',
@@ -13,10 +14,15 @@ export class GridContentComponent implements OnInit {
 
     @HostBinding('class.disable-user-select')
     public disableUserSelect: boolean;
+    public tableWidth: number;
     public columns: Array<fromModel.ITableColumn>;
     public datas: Array<any>;
+    @ViewChildren(TableHeadTdDirective)
+    public tableHeadThs: QueryList<TableHeadTdDirective>;
     @LazyService(ChangeDetectorRef)
     private readonly cdr: ChangeDetectorRef;
+    @LazyService(ElementRef)
+    private readonly el: ElementRef;
     @LazyService(NgZone)
     private readonly zone: NgZone;
     public constructor(
@@ -43,7 +49,8 @@ export class GridContentComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-
+        this.refreshTableWidth(true);
+        // console.log('rect:', contentRect, colTotalWidth);
     }
 
     public beforeResizeColumnWidth(): void {
@@ -52,9 +59,24 @@ export class GridContentComponent implements OnInit {
 
     public afterResizeColumnWidth(field, size: number): void {
         this.disableUserSelect = false;
+
+        // const col = this.columns.find(c => c.field === field);
+        // col.width = size;
+        const ths = this.tableHeadThs.toArray();
+        this.columns.forEach(c => {
+            if (c.field === field) {
+                c.width = size;
+            } else {
+                let th = ths.find(t => t.field === c.field);
+                const rect: DOMRect = th.el.nativeElement.getBoundingClientRect();
+                c.width = rect.width;
+            }
+        });
+
+        this.refreshTableWidth();
+        // console.log(1, this.tableHeadThs.length);
+
         this.cdr.markForCheck();
-        const col = this.columns.find(c => c.field === field);
-        col.width = size;
         // console.log('after resize:', field, size);
     }
 
@@ -64,6 +86,16 @@ export class GridContentComponent implements OnInit {
 
     public trackByDataFn(index: number, it: { id: any }): string {
         return it.id;
+    }
+
+    private refreshTableWidth(init?: boolean): void {
+        const contentRect: DOMRect = this.el.nativeElement.getBoundingClientRect();
+
+
+        const widths = this.columns.map(c => c.width ? c.width : 100);
+        const colTotalWidth: number = widths.reduce((a, b) => a + b, 0);
+        this.tableWidth = colTotalWidth > contentRect.width ? colTotalWidth : contentRect.width;
+        this.cdr.markForCheck();
     }
 
 }

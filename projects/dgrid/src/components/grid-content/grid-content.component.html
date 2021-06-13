@@ -1,8 +1,9 @@
-<table class="table">
+<table class="table" [style.width.px]='tableWidth'>
     <thead>
         <tr class="row head">
             <!-- 常规列 -->
-            <th class="cell head" *ngFor='let col of columns;trackBy:trackByColumnFn' [style.width.px]='col.width'>
+            <th class="cell head" *ngFor='let col of columns;trackBy:trackByColumnFn' [mirrorTableHeadTd]='col.field'
+                [style.width.px]='col.width'>
                 <mirror-table-head-cell [snapline]='snapline' [title]='col.name'
                     (beforeResize)='beforeResizeColumnWidth()' (afterResize)='afterResizeColumnWidth(col.field,$event)'>
                 </mirror-table-head-cell>

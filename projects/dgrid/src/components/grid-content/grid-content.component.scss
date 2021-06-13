@@ -3,6 +3,7 @@
     display: block;
     width: 100%;
     height: 100%;
+    overflow: auto;
     $borderColor: #D5D8E1;
 
     &.disable-user-select {
@@ -34,9 +35,9 @@
                 }
             }
 
-            &.content{
-                &.even{
-                   background-color: #FCFDFE; 
+            &.content {
+                &.even {
+                    background-color: #FCFDFE;
                 }
             }
         }
