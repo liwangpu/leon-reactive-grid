@@ -2,7 +2,7 @@
     <thead>
         <tr class="row head">
             <!-- 常规列 -->
-            <th class="cell head" *ngFor='let col of columns;trackBy:trackByColumnFn'>
+            <th class="cell head" *ngFor='let col of columns;trackBy:trackByColumnFn' [style.width.px]='col.width'>
                 <mirror-table-head-cell [snapline]='snapline' [title]='col.name'
                     (beforeResize)='beforeResizeColumnWidth()' (afterResize)='afterResizeColumnWidth(col.field,$event)'>
                 </mirror-table-head-cell>
@@ -10,8 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr class="row content" [class.even]='isOdd'
-            *ngFor='let rowData of datas;odd as isOdd;trackBy:trackByDataFn'>
+        <tr class="row content" [class.even]='isOdd' *ngFor='let rowData of datas;odd as isOdd;trackBy:trackByDataFn'>
             <td class="cell content" *ngFor='let col of columns;trackBy:trackByColumnFn'>
                 <mirror-table-content-cell [column]='col' [data]='rowData'></mirror-table-content-cell>
             </td>

@@ -44,7 +44,7 @@ export class TableHeadCellComponent implements OnDestroy {
         evt.stopPropagation();
         this.beforeResize.emit();
         this.zone.runOutsideAngular(() => {
-            console.log('down');
+            // console.log('down');
 
             const cellRect: DOMRect = this.el.nativeElement.getBoundingClientRect();
             const snaplineClientRect: DOMRect = this.snapline.getBoundingClientRect();

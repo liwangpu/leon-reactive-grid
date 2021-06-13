@@ -53,9 +53,9 @@ export class GridContentComponent implements OnInit {
     public afterResizeColumnWidth(field, size: number): void {
         this.disableUserSelect = false;
         this.cdr.markForCheck();
-
-        console.log('after resize:', field, size);
-
+        const col = this.columns.find(c => c.field === field);
+        col.width = size;
+        // console.log('after resize:', field, size);
     }
 
     public trackByColumnFn(index: number, it: fromModel.ITableColumn): string {
