@@ -90,8 +90,6 @@ export class GridContentComponent implements OnInit {
 
     private refreshTableWidth(init?: boolean): void {
         const contentRect: DOMRect = this.el.nativeElement.getBoundingClientRect();
-
-
         const widths = this.columns.map(c => c.width ? c.width : 100);
         const colTotalWidth: number = widths.reduce((a, b) => a + b, 0);
         this.tableWidth = colTotalWidth > contentRect.width ? colTotalWidth : contentRect.width;
